@@ -66,16 +66,16 @@ print(price_after_discount(120, 15));</code></pre>
 <p>All numeric arguments must be GSVE numbers. Numeric strings are not automatically parsed by this module. Convert text deliberately with the language's numeric conversion facilities before calling a numerical API.</p>
 
 <h2 id="financial">3. Financial and percentage APIs</h2>
-<div class="api"><h3><code>percent(value, percentage)</code></h3><p>Returns <code>value * percentage / 100</code>. The percentage may be negative or greater than 100; both inputs must be finite numbers.</p><pre><code>print(gs_compute.percent(250, 12)); // 30</code></pre></div>
-<div class="api"><h3><code>percent_change(before, after)</code></h3><p>Returns the signed percentage change: <code>(after - before) / abs(before) * 100</code>. Returns <code>null</code> when <code>before</code> is zero.</p><pre><code>print(gs_compute.percent_change(80, 100));  // 25
-print(gs_compute.percent_change(100, 80));  // -20</code></pre></div>
+<div class="api"><h3><code>percent(value, percentage)</code></h3><p>Returns <code>value * percentage / 100</code>. The percentage may be negative or greater than 100; both inputs must be finite numbers.</p><pre><code>print(gs_compute.percent(250, 12)); # 30</code></pre></div>
+<div class="api"><h3><code>percent_change(before, after)</code></h3><p>Returns the signed percentage change: <code>(after - before) / abs(before) * 100</code>. Returns <code>null</code> when <code>before</code> is zero.</p><pre><code>print(gs_compute.percent_change(80, 100));  # 25
+print(gs_compute.percent_change(100, 80));  # -20</code></pre></div>
 <div class="api"><h3><code>discount(price, percentage)</code></h3><p>Returns the price after applying a discount. Requires <code>price >= 0</code> and <code>0 <= percentage <= 100</code>.</p><pre><code>define sale_price = gs_compute.discount(250, 20);
-print(sale_price); // 200</code></pre></div>
-<div class="api"><h3><code>tax(price, percentage)</code></h3><p>Returns price including the percentage tax: <code>price * (1 + percentage / 100)</code>. Requires a non-negative price and percentage.</p><pre><code>print(gs_compute.tax(200, 5)); // 210</code></pre></div>
+print(sale_price); # 200</code></pre></div>
+<div class="api"><h3><code>tax(price, percentage)</code></h3><p>Returns price including the percentage tax: <code>price * (1 + percentage / 100)</code>. Requires a non-negative price and percentage.</p><pre><code>print(gs_compute.tax(200, 5)); # 210</code></pre></div>
 <div class="api"><h3><code>tip(bill, percentage, people?)</code></h3><p>Calculates a tip and split. <code>people</code> defaults to 1 and, when supplied, must be a positive integer. Returns an object with <code>tip</code>, <code>total</code>, and <code>per_person</code>.</p><pre><code>define split = gs_compute.tip(120, 15, 4);
-print(split.tip);         // 18
-print(split.total);       // 138
-print(split.per_person);  // 34.5</code></pre></div>
+print(split.tip);         # 18
+print(split.total);       # 138
+print(split.per_person);  # 34.5</code></pre></div>
 <div class="api"><h3><code>compound(principal, annual_rate_percent, years)</code></h3><p>Calculates compound growth with annual compounding. The four-argument overload <code>compound(principal, annual_rate_percent, periods_per_year, years)</code> selects the compounding frequency. Principal must be non-negative; rate must be greater than -100%; periods must be a positive integer; years must be between 0 and 100000.</p><pre><code>define annual = gs_compute.compound(1000, 5, 3);
 define monthly = gs_compute.compound(1000, 5, 12, 3);
 print(annual);
@@ -84,31 +84,31 @@ print(monthly);</code></pre></div>
 print(payment);</code></pre></div>
 
 <h2 id="scalar">4. Scalar and numeric helpers</h2>
-<div class="api"><h3><code>clamp(value, lower, upper)</code></h3><p>Constrains a number to the inclusive bounds. If lower is greater than upper, the implementation swaps the bounds.</p><pre><code>print(gs_compute.clamp(125, 0, 100)); // 100</code></pre></div>
-<div class="api"><h3><code>lerp(start, end, t)</code></h3><p>Linear interpolation or extrapolation: <code>start + (end - start) * t</code>. Values of <code>t</code> outside 0–1 extrapolate.</p><pre><code>print(gs_compute.lerp(10, 20, 0.25)); // 12.5</code></pre></div>
-<div class="api"><h3><code>map_range(value, input_min, input_max, output_min, output_max)</code></h3><p>Maps a value linearly from one range to another. The input range endpoints must differ; the value is not clamped to the input range.</p><pre><code>print(gs_compute.map_range(5, 0, 10, 0, 100)); // 50</code></pre></div>
-<div class="api"><h3><code>sum(numbers)</code></h3><p>Returns the sum of a non-empty or empty numeric array (an empty array sums to zero). Every element must be a finite number; the array limit for this function is 1,000,000 values.</p><pre><code>print(gs_compute.sum([10, 20, 30])); // 60</code></pre></div>
+<div class="api"><h3><code>clamp(value, lower, upper)</code></h3><p>Constrains a number to the inclusive bounds. If lower is greater than upper, the implementation swaps the bounds.</p><pre><code>print(gs_compute.clamp(125, 0, 100)); # 100</code></pre></div>
+<div class="api"><h3><code>lerp(start, end, t)</code></h3><p>Linear interpolation or extrapolation: <code>start + (end - start) * t</code>. Values of <code>t</code> outside 0–1 extrapolate.</p><pre><code>print(gs_compute.lerp(10, 20, 0.25)); # 12.5</code></pre></div>
+<div class="api"><h3><code>map_range(value, input_min, input_max, output_min, output_max)</code></h3><p>Maps a value linearly from one range to another. The input range endpoints must differ; the value is not clamped to the input range.</p><pre><code>print(gs_compute.map_range(5, 0, 10, 0, 100)); # 50</code></pre></div>
+<div class="api"><h3><code>sum(numbers)</code></h3><p>Returns the sum of a non-empty or empty numeric array (an empty array sums to zero). Every element must be a finite number; the array limit for this function is 1,000,000 values.</p><pre><code>print(gs_compute.sum([10, 20, 30])); # 60</code></pre></div>
 <div class="api"><h3><code>quadratic(a, b, c)</code></h3><p>Solves <code>a*x*x + b*x + c = 0</code> for real roots. Returns a two-element array in minus-root then plus-root order. Returns <code>null</code> if <code>a</code> is zero or the discriminant is negative.</p><pre><code>define roots = gs_compute.quadratic(1, -5, 6);
-print(roots[0]); // 2
-print(roots[1]); // 3</code></pre></div>
+print(roots[0]); # 2
+print(roots[1]); # 3</code></pre></div>
 
 <h2 id="statistics">5. Statistics APIs</h2>
 <div class="api"><h3><code>stats(numbers)</code></h3><p>Returns a descriptive-statistics object: <code>count</code>, <code>sum</code>, <code>mean</code>, <code>min</code>, <code>max</code>, <code>median</code>, <code>range</code>, <code>variance</code>, and <code>stddev</code>. Variance is population variance (divisor <code>N</code>), and standard deviation is its square root. Median sorts a copy of the input values.</p><pre><code>define s = gs_compute.stats([2, 4, 4, 4, 5, 5, 7, 9]);
-print(s.count);     // 8
-print(s.mean);      // 5
-print(s.median);    // 4.5
-print(s.variance);  // 4
+print(s.count);     # 8
+print(s.mean);      # 5
+print(s.median);    # 4.5
+print(s.variance);  # 4
 print(s.stddev);</code></pre></div>
-<div class="api"><h3><code>mean(numbers)</code></h3><p>Returns the arithmetic mean using an incremental mean update. Requires at least one finite numeric value.</p><pre><code>print(gs_compute.mean([2, 4, 6, 8])); // 5</code></pre></div>
+<div class="api"><h3><code>mean(numbers)</code></h3><p>Returns the arithmetic mean using an incremental mean update. Requires at least one finite numeric value.</p><pre><code>print(gs_compute.mean([2, 4, 6, 8])); # 5</code></pre></div>
 <div class="api"><h3><code>variance(numbers)</code></h3><p>Returns population variance using Welford's online update. Requires at least one finite numeric value.</p><pre><code>print(gs_compute.variance([2, 4, 6, 8]));</code></pre></div>
 
 <h2 id="vectors">6. Vector APIs</h2>
 <p>Vectors are one-dimensional GSVE arrays of finite numbers. Operations that combine two vectors require equal lengths.</p>
-<div class="api"><h3><code>dot(vector_a, vector_b)</code></h3><p>Returns the dot product, the sum of pairwise products. Both vectors must have the same non-zero length.</p><pre><code>print(gs_compute.dot([1, 2, 3], [4, 5, 6])); // 32</code></pre></div>
-<div class="api"><h3><code>vector_add(vector_a, vector_b)</code></h3><p>Returns element-wise addition of two equally sized vectors.</p><pre><code>print(gs_compute.vector_add([1, 2], [10, 20])); // [11, 22]</code></pre></div>
-<div class="api"><h3><code>vector_sub(vector_a, vector_b)</code></h3><p>Returns element-wise subtraction <code>a - b</code>.</p><pre><code>print(gs_compute.vector_sub([10, 20], [1, 2])); // [9, 18]</code></pre></div>
-<div class="api"><h3><code>vector_scale(vector, scalar)</code></h3><p>Multiplies every vector element by a finite scalar.</p><pre><code>print(gs_compute.vector_scale([1, 2, 3], 2)); // [2, 4, 6]</code></pre></div>
-<div class="api"><h3><code>norm(vector)</code></h3><p>Returns the Euclidean (L2) norm. Uses a scaled sum-of-squares algorithm to reduce overflow and underflow risk. The vector must be non-empty.</p><pre><code>print(gs_compute.norm([3, 4])); // 5</code></pre></div>
+<div class="api"><h3><code>dot(vector_a, vector_b)</code></h3><p>Returns the dot product, the sum of pairwise products. Both vectors must have the same non-zero length.</p><pre><code>print(gs_compute.dot([1, 2, 3], [4, 5, 6])); # 32</code></pre></div>
+<div class="api"><h3><code>vector_add(vector_a, vector_b)</code></h3><p>Returns element-wise addition of two equally sized vectors.</p><pre><code>print(gs_compute.vector_add([1, 2], [10, 20])); # [11, 22]</code></pre></div>
+<div class="api"><h3><code>vector_sub(vector_a, vector_b)</code></h3><p>Returns element-wise subtraction <code>a - b</code>.</p><pre><code>print(gs_compute.vector_sub([10, 20], [1, 2])); # [9, 18]</code></pre></div>
+<div class="api"><h3><code>vector_scale(vector, scalar)</code></h3><p>Multiplies every vector element by a finite scalar.</p><pre><code>print(gs_compute.vector_scale([1, 2, 3], 2)); # [2, 4, 6]</code></pre></div>
+<div class="api"><h3><code>norm(vector)</code></h3><p>Returns the Euclidean (L2) norm. Uses a scaled sum-of-squares algorithm to reduce overflow and underflow risk. The vector must be non-empty.</p><pre><code>print(gs_compute.norm([3, 4])); # 5</code></pre></div>
 
 <h2 id="matrices">7. Matrix APIs</h2>
 <p>Matrices are rectangular arrays of equally sized row arrays. Every cell must be a finite number. Matrix operations reject ragged rows and incompatible dimensions.</p>
@@ -122,33 +122,33 @@ print(gs_compute.matrix_sub(b, a));</code></pre></div>
     [[1, 2], [3, 4]],
     [[5, 6], [7, 8]]
 );
-print(product); // [[19, 22], [43, 50]]</code></pre></div>
+print(product); # [[19, 22], [43, 50]]</code></pre></div>
 <div class="api"><h3><code>matrix_vector(matrix, vector)</code></h3><p>Multiplies an <code>r × c</code> matrix by a vector of length <code>c</code>; returns a vector of length <code>r</code>.</p><pre><code>print(gs_compute.matrix_vector([[1, 2], [3, 4]], [5, 6]));
 // [17, 39]</code></pre></div>
-<div class="api"><h3><code>matrix_determinant(matrix)</code></h3><p>Computes the determinant of a square matrix using Gaussian elimination with partial pivoting. A singular matrix returns numeric zero; malformed or non-square input returns <code>null</code>.</p><pre><code>print(gs_compute.matrix_determinant([[1, 2], [3, 4]])); // -2</code></pre></div>
+<div class="api"><h3><code>matrix_determinant(matrix)</code></h3><p>Computes the determinant of a square matrix using Gaussian elimination with partial pivoting. A singular matrix returns numeric zero; malformed or non-square input returns <code>null</code>.</p><pre><code>print(gs_compute.matrix_determinant([[1, 2], [3, 4]])); # -2</code></pre></div>
 <div class="api"><h3><code>matrix_inverse(matrix)</code></h3><p>Computes the inverse of a square non-singular matrix using Gauss–Jordan elimination with scaled partial pivoting. Singular or numerically rejected matrices return <code>null</code>.</p><pre><code>define inverse = gs_compute.matrix_inverse([[4, 7], [2, 6]]);
 print(inverse);</code></pre></div>
-<div class="api"><h3><code>zeros(rows, columns)</code></h3><p>Creates a matrix of the requested positive integer dimensions, filled with zeros.</p><pre><code>print(gs_compute.zeros(2, 3)); // [[0, 0, 0], [0, 0, 0]]</code></pre></div>
+<div class="api"><h3><code>zeros(rows, columns)</code></h3><p>Creates a matrix of the requested positive integer dimensions, filled with zeros.</p><pre><code>print(gs_compute.zeros(2, 3)); # [[0, 0, 0], [0, 0, 0]]</code></pre></div>
 <div class="api"><h3><code>identity(size)</code></h3><p>Creates a square identity matrix of the requested positive integer size. The current implementation accepts sizes up to 3162.</p><pre><code>print(gs_compute.identity(3));
 // [[1, 0, 0], [0, 1, 0], [0, 0, 1]]</code></pre></div>
 <div class="api"><h3><code>solve(matrix_a, vector_b)</code></h3><p>Solves the square linear system <code>A*x = b</code> using Gaussian elimination with scaled partial pivoting. The vector length must equal the matrix dimension. Singular or numerically unstable systems return <code>null</code>.</p><pre><code>define solution = gs_compute.solve(
     [[2, 1], [1, 3]],
     [8, 13]
 );
-print(solution); // [2.2, 3.6]</code></pre></div>
+print(solution); # [2.2, 3.6]</code></pre></div>
 
 <h2 id="numerical">8. Numerical methods</h2>
 <div class="api"><h3><code>integrate(x_values, y_values)</code></h3><p>Approximates the definite integral for sampled data using the composite trapezoidal rule. The two arrays must have equal length of at least two. X values must be non-decreasing; repeated x values contribute zero width.</p><pre><code>define area = gs_compute.integrate(
     [0, 1, 2, 3],
     [0, 1, 2, 3]
 );
-print(area); // 4.5</code></pre></div>
+print(area); # 4.5</code></pre></div>
 <div class="api"><h3><code>differentiate(x_values, y_values)</code></h3><p>Returns a derivative estimate at every sample. It uses forward difference at the first point, backward difference at the last point, and a two-point central difference for interior points. X coordinates must be strictly increasing wherever a stencil is evaluated; duplicate or decreasing coordinates return <code>null</code>.</p><pre><code>define slope = gs_compute.differentiate(
     [0, 1, 2, 3],
     [0, 1, 4, 9]
 );
 print(slope);</code></pre></div>
-<div class="api"><h3><code>linspace(start, end, count)</code></h3><p>Creates <code>count</code> evenly spaced numbers including both endpoints when count is greater than one. When count is one, the result contains only <code>start</code>. Count must be a positive integer.</p><pre><code>print(gs_compute.linspace(0, 1, 5)); // [0, 0.25, 0.5, 0.75, 1]</code></pre></div>
+<div class="api"><h3><code>linspace(start, end, count)</code></h3><p>Creates <code>count</code> evenly spaced numbers including both endpoints when count is greater than one. When count is one, the result contains only <code>start</code>. Count must be a positive integer.</p><pre><code>print(gs_compute.linspace(0, 1, 5)); # [0, 0.25, 0.5, 0.75, 1]</code></pre></div>
 
 <h2 id="conversion">9. Unit conversion</h2>
 <div class="api"><h3><code>convert(value, from_unit, to_unit)</code></h3><p>Converts a number between supported units in the same dimension. Unit strings are case-sensitive. Identical unit strings return the input value.</p>
@@ -160,9 +160,9 @@ print(slope);</code></pre></div>
 <tr><td>Binary data size</td><td><code>KiB</code>, <code>MiB</code>, <code>GiB</code> (base 1024)</td></tr>
 <tr><td>Temperature</td><td><code>C</code>, <code>F</code>, <code>K</code></td></tr>
 </tbody></table></div>
-<pre><code>print(gs_compute.convert(5, "km", "m"));   // 5000
-print(gs_compute.convert(32, "F", "C"));   // 0
-print(gs_compute.convert(1, "GiB", "MB")); // 1073.741824</code></pre>
+<pre><code>print(gs_compute.convert(5, "km", "m"));   # 5000
+print(gs_compute.convert(32, "F", "C"));   # 0
+print(gs_compute.convert(1, "GiB", "MB")); # 1073.741824</code></pre>
 <p>Temperature conversions use Celsius as the intermediate scale. Kelvin values below absolute zero are rejected. Unsupported units and cross-dimension conversions return <code>null</code>.</p></div>
 
 <h2 id="validation">10. Validation and benchmarking</h2>
@@ -179,8 +179,8 @@ print(result.workload);</code></pre><p class="muted">This benchmarks the module'
 <div class="notice warning">The random generator is deterministic and intended for simulation, sampling and reproducible experiments. It is not cryptographically secure. Do not use it for passwords, tokens, keys, authentication secrets or security-sensitive identifiers.</div>
 <div class="api"><h3><code>random_seed(seed)</code></h3><p>Sets the module's deterministic pseudo-random generator state and returns <code>true</code> on success. The seed must be a finite number with absolute value no greater than 9007199254740991. A zero seed is mapped to the generator's non-zero default state.</p><pre><code>print(gs_compute.random_seed(12345));</code></pre></div>
 <div class="api"><h3><code>random(minimum?, maximum?)</code></h3><p>Returns a pseudo-random floating-point value in the half-open interval from the lower bound up to (but not including) the upper bound. Defaults are 0 and 1. If bounds are reversed, they are swapped.</p><pre><code>gs_compute.random_seed(7);
-print(gs_compute.random());       // [0, 1)
-print(gs_compute.random(10, 20));  // [10, 20)</code></pre></div>
+print(gs_compute.random());       # [0, 1)
+print(gs_compute.random(10, 20));  # [10, 20)</code></pre></div>
 <div class="api"><h3><code>random_array(count, minimum?, maximum?)</code></h3><p>Returns an array of pseudo-random floating-point values. Count must be an integer from 0 through 10,000,000. Bounds default to 0 and 1 and are swapped when supplied in reverse order.</p><pre><code>gs_compute.random_seed(42);
 define samples = gs_compute.random_array(5, -1, 1);
 print(samples);</code></pre></div>
