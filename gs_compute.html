@@ -117,20 +117,20 @@ define b = [[5, 6], [7, 8]];
 print(gs_compute.matrix_add(a, b));
 print(gs_compute.matrix_sub(b, a));</code></pre></div>
 <div class="api"><h3><code>transpose(matrix)</code></h3><p>Returns a new matrix with rows and columns exchanged. Rectangular matrices are supported.</p><pre><code>print(gs_compute.transpose([[1, 2, 3], [4, 5, 6]]));
-// [[1, 4], [2, 5], [3, 6]]</code></pre></div>
+# [[1, 4], [2, 5], [3, 6]]</code></pre></div>
 <div class="api"><h3><code>matmul(matrix_a, matrix_b)</code></h3><p>Performs matrix multiplication. If A has shape <code>r × k</code>, B must have shape <code>k × c</code>, and the result has shape <code>r × c</code>. The C implementation uses cache-friendly blocked multiplication.</p><pre><code>define product = gs_compute.matmul(
     [[1, 2], [3, 4]],
     [[5, 6], [7, 8]]
 );
 print(product); # [[19, 22], [43, 50]]</code></pre></div>
 <div class="api"><h3><code>matrix_vector(matrix, vector)</code></h3><p>Multiplies an <code>r × c</code> matrix by a vector of length <code>c</code>; returns a vector of length <code>r</code>.</p><pre><code>print(gs_compute.matrix_vector([[1, 2], [3, 4]], [5, 6]));
-// [17, 39]</code></pre></div>
+# [17, 39]</code></pre></div>
 <div class="api"><h3><code>matrix_determinant(matrix)</code></h3><p>Computes the determinant of a square matrix using Gaussian elimination with partial pivoting. A singular matrix returns numeric zero; malformed or non-square input returns <code>null</code>.</p><pre><code>print(gs_compute.matrix_determinant([[1, 2], [3, 4]])); # -2</code></pre></div>
 <div class="api"><h3><code>matrix_inverse(matrix)</code></h3><p>Computes the inverse of a square non-singular matrix using Gauss–Jordan elimination with scaled partial pivoting. Singular or numerically rejected matrices return <code>null</code>.</p><pre><code>define inverse = gs_compute.matrix_inverse([[4, 7], [2, 6]]);
 print(inverse);</code></pre></div>
 <div class="api"><h3><code>zeros(rows, columns)</code></h3><p>Creates a matrix of the requested positive integer dimensions, filled with zeros.</p><pre><code>print(gs_compute.zeros(2, 3)); # [[0, 0, 0], [0, 0, 0]]</code></pre></div>
 <div class="api"><h3><code>identity(size)</code></h3><p>Creates a square identity matrix of the requested positive integer size. The current implementation accepts sizes up to 3162.</p><pre><code>print(gs_compute.identity(3));
-// [[1, 0, 0], [0, 1, 0], [0, 0, 1]]</code></pre></div>
+# [[1, 0, 0], [0, 1, 0], [0, 0, 1]]</code></pre></div>
 <div class="api"><h3><code>solve(matrix_a, vector_b)</code></h3><p>Solves the square linear system <code>A*x = b</code> using Gaussian elimination with scaled partial pivoting. The vector length must equal the matrix dimension. Singular or numerically unstable systems return <code>null</code>.</p><pre><code>define solution = gs_compute.solve(
     [[2, 1], [1, 3]],
     [8, 13]
@@ -256,6 +256,140 @@ gs_compute.random_seed(2026);
 define samples = gs_compute.random_array(8, 0, 100);
 print(samples);
 print(gs_compute.stats(samples));</code></pre>
+
+
+<h2 id="api-catalog">16. Complete exported API catalogue</h2>
+<p>The following catalogue is cross-checked against the native module initializer in <code>gs_compute.c</code>. These are the complete 41 exported members in version <code>2.1.0</code>; names are case-sensitive and are called as <code>gs_compute.name(...)</code>.</p>
+<div class="table-wrap"><table><thead><tr><th>Group</th><th>Exported API</th><th>Purpose / result</th></tr></thead><tbody>
+<tr><td>Metadata</td><td><code>info()</code></td><td>Module name, version, backend, numeric representation and capability status.</td></tr>
+<tr><td>Finance</td><td><code>percent(value, percentage)</code>, <code>percent_change(before, after)</code>, <code>discount(price, percentage)</code>, <code>tax(price, percentage)</code>, <code>tip(bill, percentage, people?)</code>, <code>compound(...)</code>, <code>loan_payment(principal, annual_rate_percent, months)</code></td><td>Percentage amounts, changes, sale prices, tax-inclusive totals, tip splits, compound growth and amortizing loan payments.</td></tr>
+<tr><td>Scalar math</td><td><code>clamp(value, lower, upper)</code>, <code>lerp(start, end, t)</code>, <code>map_range(value, input_min, input_max, output_min, output_max)</code>, <code>sum(numbers)</code>, <code>quadratic(a, b, c)</code></td><td>Bounds, interpolation, range mapping, summation and real quadratic roots.</td></tr>
+<tr><td>Statistics</td><td><code>stats(numbers)</code>, <code>mean(numbers)</code>, <code>variance(numbers)</code></td><td>Descriptive summary, arithmetic mean and population variance.</td></tr>
+<tr><td>Vectors</td><td><code>dot(vector_a, vector_b)</code>, <code>vector_add(vector_a, vector_b)</code>, <code>vector_sub(vector_a, vector_b)</code>, <code>vector_scale(vector, scalar)</code>, <code>norm(vector)</code></td><td>Dot product, element-wise operations, scaling and Euclidean norm.</td></tr>
+<tr><td>Matrices</td><td><code>matrix_add(a, b)</code>, <code>matrix_sub(a, b)</code>, <code>transpose(matrix)</code>, <code>matmul(a, b)</code>, <code>matrix_vector(matrix, vector)</code>, <code>matrix_determinant(matrix)</code>, <code>matrix_inverse(matrix)</code>, <code>zeros(rows, columns)</code>, <code>identity(size)</code>, <code>solve(matrix, vector)</code></td><td>Rectangular matrix arithmetic, multiplication, determinant, inverse, construction and linear-system solving.</td></tr>
+<tr><td>Numerical methods</td><td><code>integrate(x_values, y_values)</code>, <code>differentiate(x_values, y_values)</code>, <code>linspace(start, end, count)</code></td><td>Sampled-data trapezoidal integration, finite-difference derivatives and evenly spaced samples.</td></tr>
+<tr><td>Units</td><td><code>convert(value, from_unit, to_unit)</code></td><td>Length, mass, time, decimal/binary data sizes and temperature conversion.</td></tr>
+<tr><td>Validation / measurement</td><td><code>is_close(a, b, absolute_tolerance?, relative_tolerance?)</code>, <code>is_null(value)</code>, <code>benchmark_stats(count)</code></td><td>Tolerance-aware comparison, explicit null testing and a native statistics workload benchmark.</td></tr>
+<tr><td>Random sampling</td><td><code>random_seed(seed)</code>, <code>random(minimum?, maximum?)</code>, <code>random_array(count, minimum?, maximum?)</code></td><td>Repeatable pseudo-random scalar and array samples; not cryptographic randomness.</td></tr>
+</tbody></table></div>
+<p class="muted">The catalogue groups 41 exported functions. <code>compound</code> accepts exactly either three or four arguments: <code>compound(principal, annual_rate_percent, years)</code> or <code>compound(principal, annual_rate_percent, periods_per_year, years)</code>.</p>
+
+<h2 id="units">17. Exact unit identifiers</h2>
+<p><code>convert(value, from_unit, to_unit)</code> requires unit identifiers to be strings and matches them exactly, including capitalization. Conversions are permitted only within the same physical group, except temperature, which uses Celsius as its intermediate base.</p>
+<div class="table-wrap"><table><thead><tr><th>Group</th><th>Accepted identifiers</th></tr></thead><tbody>
+<tr><td>Length</td><td><code>m</code>, <code>km</code>, <code>cm</code>, <code>mm</code>, <code>mi</code>, <code>ft</code>, <code>in</code>, <code>yd</code></td></tr>
+<tr><td>Mass</td><td><code>kg</code>, <code>g</code>, <code>mg</code>, <code>lb</code>, <code>oz</code></td></tr>
+<tr><td>Time</td><td><code>s</code>, <code>ms</code>, <code>min</code>, <code>h</code>, <code>day</code></td></tr>
+<tr><td>Data size (decimal)</td><td><code>B</code>, <code>KB</code>, <code>MB</code>, <code>GB</code> (base 1000)</td></tr>
+<tr><td>Data size (binary)</td><td><code>KiB</code>, <code>MiB</code>, <code>GiB</code> (base 1024)</td></tr>
+<tr><td>Temperature</td><td><code>C</code>, <code>F</code>, <code>K</code></td></tr>
+</tbody></table></div>
+<pre><code>import gs_compute;
+
+print(gs_compute.convert(5, "km", "m"));       # 5000
+print(gs_compute.convert(2, "lb", "kg"));
+print(gs_compute.convert(90, "min", "h"));     # 1.5
+print(gs_compute.convert(1, "MiB", "B"));     # 1048576
+print(gs_compute.convert(32, "F", "C"));      # 0
+print(gs_compute.convert(0, "C", "K"));       # 273.15</code></pre>
+<p class="notice">Unsupported identifiers, cross-group conversions (for example metres to kilograms), negative Kelvin input, or a result that is not finite return <code>null</code>. Identical supported strings return the original numeric value.</p>
+
+<h2 id="semantics">18. Argument, array and result semantics</h2>
+<ul>
+<li><strong>Numbers:</strong> numeric parameters must be GSVE number values, not numeric strings. The module rejects NaN and infinity for numeric arguments.</li>
+<li><strong>Arrays:</strong> vector inputs are one-dimensional arrays of finite numbers. Matrix inputs are non-empty rectangular arrays whose rows are equally sized arrays of finite numbers.</li>
+<li><strong>Dimensions:</strong> paired vectors must have equal lengths; paired element-wise matrices must have equal shapes; matrix multiplication requires the left column count to equal the right row count; matrix-vector multiplication requires vector length to equal matrix columns.</li>
+<li><strong>Empty arrays:</strong> <code>sum([])</code> returns <code>0</code>. <code>stats([])</code>, <code>mean([])</code>, <code>variance([])</code>, <code>dot([], [])</code> and <code>norm([])</code> return <code>null</code>.</li>
+<li><strong>Null versus zero:</strong> a mathematically valid zero is returned as numeric zero. <code>null</code> signals rejected input, unsupported conversion, singular/unstable solve or inverse, or a non-finite computed result. A singular determinant is the exception: it returns <code>0</code>.</li>
+<li><strong>Extra arguments:</strong> most functions check that the required arguments exist and validate the arguments they use; do not rely on extra arguments being rejected. <code>compound</code> is strict and accepts exactly three or four arguments.</li>
+</ul>
+
+<h2 id="limits">19. Implementation limits and algorithm notes</h2>
+<div class="table-wrap"><table><thead><tr><th>Area</th><th>Implementation rule</th></tr></thead><tbody>
+<tr><td>Statistics / sum</td><td><code>stats</code> and <code>sum</code> accept at most 1,000,000 values. <code>stats</code> requires at least one value; <code>sum</code> accepts an empty array.</td></tr>
+<tr><td>Scientific arrays / matrices</td><td>General scientific vector and matrix helpers enforce a 10,000,000-element guard, along with allocation and shape checks.</td></tr>
+<tr><td>Identity matrix</td><td><code>identity(size)</code> accepts integer sizes from 1 through 3162.</td></tr>
+<tr><td>Loan duration</td><td><code>loan_payment</code> accepts integer month counts from 1 through 120,000.</td></tr>
+<tr><td>Compound growth</td><td>Principal must be non-negative; annual rate must be greater than -100%; periods per year must be an integer from 1 through 1,000,000; years must be from 0 through 100,000.</td></tr>
+<tr><td>Benchmark</td><td><code>benchmark_stats(count)</code> accepts integer counts from 1 through 10,000,000. Its milliseconds are machine-dependent CPU timings, not a performance guarantee.</td></tr>
+<tr><td>Seed range</td><td><code>random_seed</code> accepts finite seeds whose absolute value is at most 9,007,199,254,740,991.</td></tr>
+<tr><td>Random array</td><td><code>random_array</code> accepts integer counts from 0 through 10,000,000.</td></tr>
+</tbody></table></div>
+<p>Implementation details: descriptive statistics use Welford-style online updates; median sorts a copy of the data; dot products and sampled integration use compensated summation; the Euclidean norm uses a scaled sum-of-squares calculation; matrix multiplication is blocked in 32-element tiles; determinant uses Gaussian elimination with partial pivoting; inverse and linear solve use scaled partial pivoting. These choices improve numerical behavior but do not make IEEE-754 double arithmetic exact.</p>
+
+<h2 id="workflow">20. Complete practical usage: inventory, sales and analysis</h2>
+<p>This standalone program combines the finance, statistics, vectors, matrices, units, validation, numerical methods and seeded sampling APIs. It uses the language's actual <code>define</code>, <code>func</code>, <code>for/in</code>, array, object and module-call syntax.</p>
+<pre><code>import gs_compute;
+
+define products = [
+    {name: "Keyboard", price: 45, stock: 12, sold: 8},
+    {name: "Mouse", price: 25, stock: 20, sold: 14},
+    {name: "Monitor", price: 180, stock: 5, sold: 3}
+];
+
+define revenue = [];
+define total_stock = 0;
+define total_sold = 0;
+
+func sale_total(price, quantity, discount_rate, tax_rate) {
+    define subtotal = price * quantity;
+    define discounted = gs_compute.discount(subtotal, discount_rate);
+    return gs_compute.tax(discounted, tax_rate);
+}
+
+for product in products {
+    define item_revenue = sale_total(product.price, product.sold, 5, 3);
+    push(revenue, item_revenue);
+    total_stock = total_stock + product.stock;
+    total_sold = total_sold + product.sold;
+    print(product.name);
+    print(item_revenue);
+}
+
+define report = gs_compute.stats(revenue);
+print("Revenue mean:");
+print(report.mean);
+print("Revenue median:");
+print(report.median);
+print("Inventory remaining:");
+print(total_stock);
+print("Units sold:");
+print(total_sold);
+
+define unit_prices = [45, 25, 180];
+define quantities = [8, 14, 3];
+print("Gross sales:");
+print(gs_compute.dot(unit_prices, quantities));
+
+define sales_matrix = [[45, 25], [180, 60]];
+define forecast = gs_compute.matrix_vector(sales_matrix, [8, 3]);
+print(forecast);
+
+print("Five kilometres in metres:");
+print(gs_compute.convert(5, "km", "m"));
+
+define x = gs_compute.linspace(0, 4, 5);
+define y = [0, 1, 4, 9, 16];
+print(gs_compute.integrate(x, y));
+print(gs_compute.differentiate(x, y));
+
+if (gs_compute.is_close(report.mean, report.median, 0.000001, 0.000001)) {
+    print("Mean and median are close.");
+}
+
+define inverse = gs_compute.matrix_inverse([[4, 7], [2, 6]]);
+if (gs_compute.is_null(inverse)) {
+    print("The matrix could not be inverted.");
+} else {
+    print(inverse);
+}
+
+gs_compute.random_seed(2026);
+define trial_samples = gs_compute.random_array(6, 0, 100);
+print(trial_samples);
+print(gs_compute.benchmark_stats(10000));
+print(gs_compute.info());</code></pre>
+<p class="notice">The examples demonstrate API calls and data flow; they are not a substitute for domain validation. Round currency values explicitly at the presentation/business layer if the application requires a fixed decimal currency format. The module uses binary floating-point numbers and does not provide decimal-money arithmetic.</p>
 
 <h2 id="related">15. Related documentation</h2>
 <ul><li><a href="syntax.html">Complete language syntax</a></li><li><a href="language.html">GSVE language reference</a></li><li><a href="vm.html">Virtual machine reference</a></li><li><a href="modules.html">Native module catalog</a></li><li><a href="native-api.html">Native module ABI and loading</a></li></ul>
