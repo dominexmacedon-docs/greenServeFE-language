@@ -349,10 +349,121 @@ server.serve(".", 8080, {host: "0.0.0.0", static: false});</pre>
 <article class="card"><a href="gs_statistics.html"><strong>gs_statistics</strong></a><p>Statistical functions.</p></article>
 <article class="card"><a href="gs_test.html"><strong>gs_test</strong></a><p>Testing helpers.</p></article>
 <article class="card"><a href="gs_brain.html"><strong>gs_brain</strong></a><p>AI workspace and neural/optimizer/autograd facilities.</p></article>
+<article class="card"><strong>gs_xml</strong><p>XML module source; verify its build and install before importing.</p></article>
+<article class="card"><strong>gs_yaml</strong><p>YAML module source; verify its build and install before importing.</p></article>
 </div>
 <div class="notice"><strong>Security and trust:</strong> <code>gs_file</code> performs filesystem operations with the permissions of the running process; it is not a sandbox. <code>gs_random</code> and non-cryptographic hashes are not substitutes for cryptographic primitives. Only load native modules you trust.</div>
 
-<h2 id="diagnostics">14. Diagnostics and command-line modes</h2>
+
+<h2 id="grammar">14. Grammar and compiler-supported forms</h2>
+<p>This section describes the forms represented by the current lexer, parser and compiler. It is intentionally narrower than JavaScript, Python or C: syntax from those languages is not automatically accepted by GSVE.</p>
+<div class="table-wrap"><table><thead><tr><th>Construct</th><th>Accepted form</th><th>Notes</th></tr></thead><tbody>
+<tr><td>Declaration</td><td><code>define name = expression;</code></td><td>Introduces a binding in the current environment.</td></tr>
+<tr><td>Named function</td><td><code>func name(a, b) { ... }</code></td><td>Parameters are positional.</td></tr>
+<tr><td>Anonymous function</td><td><code>func(a, b) { ... }</code></td><td>Can be assigned, passed or returned.</td></tr>
+<tr><td>Conditional</td><td><code>if (condition) { ... } else { ... }</code></td><td><code>else if</code> is supported through nested conditional branches.</td></tr>
+<tr><td>Loop</td><td><code>while (condition) { ... }</code></td><td>Condition is evaluated before each iteration.</td></tr>
+<tr><td>Iteration</td><td><code>for (item in iterable) { ... }</code></td><td>Iterates arrays, object keys and string characters.</td></tr>
+<tr><td>Import</td><td><code>import module;</code></td><td>Loads a module namespace.</td></tr>
+<tr><td>Selected import</td><td><code>from module import name, other;</code></td><td>Copies named exports into the current lexical environment.</td></tr>
+<tr><td>Assignment</td><td><code>name = value;</code>, <code>obj.key = value;</code>, <code>arr[index] = value;</code></td><td>Assignment targets must be identifiers, member expressions or index expressions.</td></tr>
+<tr><td>Object literal</td><td><code>{key: value, "other-key": value}</code></td><td>Keys are identifiers or quoted strings.</td></tr>
+</tbody></table></div>
+<h3>Statement separators and blocks</h3>
+<p>Newlines and semicolons separate statements. Braces delimit blocks and object literals. Parentheses group expressions and surround conditions, loop headers and function arguments. Commas separate function parameters, call arguments, array items and object entries.</p>
+<h3>Current syntax exclusions</h3>
+<p>The current token and AST definitions do not define dedicated syntax for <code>let</code>, <code>const</code>, <code>var</code>, <code>function</code>, arrow functions, classes declared with a <code>class</code> keyword, ternary expressions, <code>switch</code>, <code>try/catch</code>, exceptions, <code>async/await</code>, generators, template literals, increment/decrement operators, compound assignment operators, or type annotations. Use the documented GSVE forms instead of assuming these constructs work.</p>
+
+<h2 id="bytecode">15. Bytecode instruction reference</h2>
+<p>The compiler emits <code>GSInstr</code> records. Each instruction stores an 8-bit opcode, a signed 32-bit argument and the source line. A <code>GSCode</code> object owns its instruction array, constants, name table, child function code objects and parameter count.</p>
+<div class="table-wrap"><table><thead><tr><th>Opcode family</th><th>Instructions</th><th>Role</th></tr></thead><tbody>
+<tr><td>Constants and names</td><td><code>NOP</code>, <code>LOAD_CONST</code>, <code>LOAD_NAME</code>, <code>STORE_NAME</code>, <code>POP_TOP</code></td><td>Load constants and lexical bindings, store values, and discard expression results.</td></tr>
+<tr><td>Arithmetic</td><td><code>ADD</code>, <code>SUB</code>, <code>MUL</code>, <code>DIV</code>, <code>MOD</code>, <code>NEG</code></td><td>Numeric operations and addition (which also supports string concatenation through the value layer).</td></tr>
+<tr><td>Comparisons and logic</td><td><code>NOT</code>, <code>EQ</code>, <code>NE</code>, <code>LT</code>, <code>LE</code>, <code>GT</code>, <code>GE</code>, <code>AND</code>, <code>OR</code></td><td>Unary truthiness negation, equality, ordering and logical operations.</td></tr>
+<tr><td>Control flow</td><td><code>JUMP</code>, <code>JUMP_IF_FALSE</code>, <code>JUMP_IF_TRUE</code></td><td>Implement branches, loops, break/continue targets and short-circuit evaluation.</td></tr>
+<tr><td>Calls and functions</td><td><code>CALL</code>, <code>RETURN</code>, <code>MAKE_FUNCTION</code></td><td>Invoke native/user functions, return from frames and create closures.</td></tr>
+<tr><td>Collections</td><td><code>BUILD_ARRAY</code>, <code>BUILD_OBJECT</code>, <code>GET_INDEX</code>, <code>SET_INDEX</code>, <code>GET_MEMBER</code>, <code>SET_MEMBER</code></td><td>Construct arrays/objects and read or update indexed/member values.</td></tr>
+<tr><td>Modules</td><td><code>IMPORT</code>, <code>FROM_IMPORT</code></td><td>Load a module object or selected exports.</td></tr>
+<tr><td>Iteration and termination</td><td><code>ITER_INIT</code>, <code>ITER_NEXT</code>, <code>HALT</code></td><td>Create an iterator, advance it or stop execution.</td></tr>
+</tbody></table></div>
+<p>Logical <code>&amp;&amp;</code> and <code>||</code> are compiled as conditional jumps so the right-hand expression is skipped when its result is unnecessary. The VM also has logical opcode handlers, but the compiler's short-circuit path uses jumps and boolean normalization. Use <code>greenServeFE --dump program.gsve</code> to inspect the actual instruction stream generated for a program.</p>
+
+<h2 id="runtime-model">16. Runtime values, environments and calls</h2>
+<ul>
+<li><strong>Value representation:</strong> the VM's tagged <code>GSValue</code> union represents <code>null</code>, double-precision numbers, booleans, strings, arrays, objects, user functions, native functions and iterators.</li>
+<li><strong>Lexical environments:</strong> each environment stores named bindings and may point to a parent environment. Name lookup and assignment walk this parent chain.</li>
+<li><strong>Closures:</strong> creating a function captures the current environment. Calling it creates a child environment, binds positional parameters, and executes the function's code object in a new VM frame.</li>
+<li><strong>Frames and stack:</strong> a frame tracks its code object, instruction pointer, operand-stack base and lexical environment. Calls to native functions use the native function pointer; user functions push VM frames.</li>
+<li><strong>Missing values:</strong> omitted positional arguments are bound to <code>null</code>. A function body receives an implicit <code>null</code> return if control reaches its end.</li>
+<li><strong>Iteration:</strong> array iterators yield values in index order, object iterators yield property names, and string iterators yield one character at a time.</li>
+<li><strong>Object access:</strong> a missing object property or out-of-range array/string index produces <code>null</code> in the current value access implementation.</li>
+<li><strong>Class model:</strong> class descriptors and instances are objects marked with runtime metadata. Inherited default fields are cloned for instances; methods remain ordinary function values and receive <code>self</code> explicitly.</li>
+</ul>
+<div class="notice">GSVE is dynamically typed. The VM does not provide static type checking, a garbage-collected heap, process isolation or a security sandbox. Treat scripts and native modules as trusted executable code.</div>
+
+<h2 id="native-abi">17. Native module ABI and loader</h2>
+<h3>Export contract</h3>
+<pre>#include "module.h"
+
+GSValue greenServeFE_module_init(const GSNativeAPI *api) {
+    GSValue exports = api-&gt;object();
+    /* Create native functions with api-&gt;native(...),
+       then add them to exports with api-&gt;object_set(...). */
+    return exports;
+}</pre>
+<p>The initializer symbol is <code>greenServeFE_module_init</code>; the current ABI version is <code>GSFE_MODULE_ABI_VERSION 1</code>. The initializer receives a <code>GSNativeAPI</code> function table. It returns one GSVE object whose properties form the module's public namespace. A module that returns a non-object or omits the initializer cannot be imported successfully.</p>
+<h3>Native API services</h3>
+<p>The ABI exposes constructors for null, number, boolean, string, object, array and native-function values; value copy/retain/release; array and object access; C-string, truthiness and numeric conversions; value printing; and a callback bridge for invoking GSVE functions from native code. Use the ABI table instead of depending on private VM structures.</p>
+<h3>Module lookup order</h3>
+<p>For a simple import such as <code>import gs_math;</code>, the loader tries the current-directory path <code>./gs_math.so</code>, then <code>./modules/gs_math.so</code>, then <code>gs_math.so</code> through the platform loader, followed by each colon-separated directory in <code>GREENSERVE_MODULE_PATH</code>. If the import string contains a slash or already ends in <code>.so</code>, it is treated as a direct path. Loaded modules are cached by import name for the lifetime of the VM.</p>
+<pre>export GREENSERVE_MODULE_PATH=/usr/local/lib/modules
+export LD_LIBRARY_PATH=/usr/local/lib/modules:$LD_LIBRARY_PATH
+
+# Example source file
+import gs_math;
+print(gs_math.sqrt(81));</pre>
+<p>The loader opens modules with <code>dlopen</code>, resolves the initializer with <code>dlsym</code>, and keeps the shared-library handle alive until VM teardown. A missing library, missing initializer or invalid return value is reported as a runtime module-loading error.</p>
+
+<h2 id="module-inventory">18. Build-source module inventory</h2>
+<p>The following names are represented by C module sources in the build repository. The presence of a source file does not by itself guarantee that a matching shared object is installed on a particular machine. Consult the module's own page and release/build workflow for its exact exports and availability.</p>
+<div class="table-wrap"><table><thead><tr><th>Import name</th><th>Build source</th><th>Documentation</th></tr></thead><tbody>
+<tr><td><code>server</code></td><td><code>server.c</code></td><td><a href="server.html">Server API</a></td></tr>
+<tr><td><code>construct</code></td><td><code>construct.c</code></td><td><a href="construct.html">Construct API</a></td></tr>
+<tr><td><code>gsnum</code></td><td><code>gsnum.c</code></td><td><a href="gsnum.html">gsnum</a></td></tr>
+<tr><td><code>gs_table</code></td><td><code>table.c</code></td><td><a href="gs_table.html">Tables</a></td></tr>
+<tr><td><code>gs_compute</code></td><td><code>gs_compute.c</code></td><td><a href="gs_compute.html">Compute</a></td></tr>
+<tr><td><code>gs_math</code></td><td><code>gs_math.c</code></td><td><a href="gs_math.html">Math</a></td></tr>
+<tr><td><code>gs_string</code></td><td><code>gs_string.c</code></td><td><a href="gs_string.html">Strings</a></td></tr>
+<tr><td><code>gs_json</code></td><td><code>gs_json.c</code></td><td><a href="gs_json.html">JSON</a></td></tr>
+<tr><td><code>gs_csv</code></td><td><code>gs_csv.c</code></td><td><a href="gs_csv.html">CSV</a></td></tr>
+<tr><td><code>gs_path</code></td><td><code>gs_path.c</code></td><td><a href="gs_path.html">Paths</a></td></tr>
+<tr><td><code>gs_time</code></td><td><code>gs_time.c</code></td><td><a href="gs_time.html">Time</a></td></tr>
+<tr><td><code>gs_random</code></td><td><code>gs_random.c</code></td><td><a href="gs_random.html">Random</a></td></tr>
+<tr><td><code>gs_uuid</code></td><td><code>gs_uuid.c</code></td><td><a href="gs_uuid.html">UUID</a></td></tr>
+<tr><td><code>gs_validate</code></td><td><code>gs_validate.c</code></td><td><a href="gs_validate.html">Validation</a></td></tr>
+<tr><td><code>gs_env</code></td><td><code>gs_env.c</code></td><td><a href="gs_env.html">Environment</a></td></tr>
+<tr><td><code>gs_hash</code></td><td><code>gs_hash.c</code></td><td><a href="gs_hash.html">Hashing</a></td></tr>
+<tr><td><code>gs_base64</code></td><td><code>gs_base64.c</code></td><td><a href="gs_base64.html">Base64</a></td></tr>
+<tr><td><code>gs_url</code></td><td><code>gs_url.c</code></td><td><a href="gs_url.html">URL</a></td></tr>
+<tr><td><code>gs_file</code></td><td><code>gs_file.c</code></td><td><a href="gs_file.html">Files</a></td></tr>
+<tr><td><code>gs_crypto</code></td><td><code>gs_crypto.c</code></td><td><a href="gs_crypto.html">Cryptography</a></td></tr>
+<tr><td><code>gs_db</code></td><td><code>gs_db.c</code></td><td><a href="gs_db.html">Database</a></td></tr>
+<tr><td><code>gs_http</code></td><td><code>gs_http.c</code></td><td><a href="gs_http.html">HTTP utilities</a></td></tr>
+<tr><td><code>gs_log</code></td><td><code>gs_log.c</code></td><td><a href="gs_log.html">Logging</a></td></tr>
+<tr><td><code>gs_form</code></td><td><code>gs_form.c</code></td><td><a href="gs_form.html">Forms</a></td></tr>
+<tr><td><code>gs_object</code></td><td><code>gs_object.c</code></td><td><a href="gs_object.html">Objects</a></td></tr>
+<tr><td><code>gs_plot</code></td><td><code>gs_plot.c</code></td><td><a href="gs_plot.html">Plotting</a></td></tr>
+<tr><td><code>gs_regex</code></td><td><code>gs_regex.c</code></td><td><a href="gs_regex.html">Regular expressions</a></td></tr>
+<tr><td><code>gs_statistics</code></td><td><code>gs_statistics.c</code></td><td><a href="gs_statistics.html">Statistics</a></td></tr>
+<tr><td><code>gs_test</code></td><td><code>gs_test.c</code></td><td><a href="gs_test.html">Testing</a></td></tr>
+<tr><td><code>gs_brain</code></td><td><code>ai-modules/gs_brain.c</code></td><td><a href="gs_brain.html">AI workspace</a></td></tr>
+<tr><td><code>gs_xml</code></td><td><code>gs_xml.c</code></td><td>XML module source</td></tr>
+<tr><td><code>gs_yaml</code></td><td><code>gs_yaml.c</code></td><td>YAML module source</td></tr>
+<tr><td><code>gs_compat</code></td><td><code>gs_compat.c</code></td><td>Compatibility source; check its build workflow before importing</td></tr>
+</tbody></table></div>
+<div class="notice"><strong>Module safety:</strong> native modules execute inside the same process as the VM and are not sandboxed. Filesystem and network modules operate with the process's operating-system permissions. Never load untrusted <code>.so</code> files.</div>
+
+<h2 id="diagnostics">20. Diagnostics and command-line modes</h2>
 <table><thead><tr><th>Command</th><th>Behavior</th></tr></thead><tbody>
 <tr><td><code>greenServeFE file.gsve</code></td><td>Compile and execute a GSVE program.</td></tr>
 <tr><td><code>greenServeFE --version</code></td><td>Print runtime version.</td></tr>
@@ -362,7 +473,7 @@ server.serve(".", 8080, {host: "0.0.0.0", static: false});</pre>
 </tbody></table>
 <p>Source diagnostics identify lexer, parser, compiler or runtime stages and include line/column positions where available. The CLI prints the relevant source line and a caret under the reported location.</p>
 
-<h2 id="limits">15. Current implementation boundaries</h2>
+<h2 id="limits">21. Current implementation boundaries</h2>
 <ul>
 <li>The accepted source extension is <code>.gsve</code>.</li>
 <li>The language is dynamically typed; numbers are represented as doubles.</li>
