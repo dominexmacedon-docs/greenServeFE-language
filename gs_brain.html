@@ -1,4 +1,414 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0b1120"><meta name="description" content="One native module groups array, neural, optimizer, dataset, learning, autograd, checkpoint and cortex capabilities."><meta name="keywords" content="greenServeFE, GSVE, native C module, array, neural, optimizer, dataset, learn, autograd, checkpoint, cortex"><meta name="author" content="Dominex Macedon"><meta name="robots" content="index,follow"><link rel="canonical" href="https://dominexmacedon-docs.github.io/greenServeFE-language/gs_brain.html"><link rel="icon" type="image/png" href="https://raw.githubusercontent.com/dominexmacedon-docs/greenServeFE-language/main/greenServeFE-logo.png"><meta property="og:type" content="article"><meta property="og:title" content="Unified Native AI and Machine-Learning Workspace | greenServeFE"><meta property="og:description" content="One native module groups array, neural, optimizer, dataset, learning, autograd, checkpoint and cortex capabilities."><meta property="og:url" content="https://dominexmacedon-docs.github.io/greenServeFE-language/gs_brain.html"><meta property="og:image" content="https://raw.githubusercontent.com/dominexmacedon-docs/greenServeFE-language/main/greenServeFE-logo.png"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Unified Native AI and Machine-Learning Workspace"><meta name="twitter:description" content="One native module groups array, neural, optimizer, dataset, learning, autograd, checkpoint and cortex capabilities."><title>Unified Native AI and Machine-Learning Workspace | greenServeFE API</title><script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Unified Native AI and Machine-Learning Workspace","description":"One native module groups array, neural, optimizer, dataset, learning, autograd, checkpoint and cortex capabilities.","author":{"@type":"Person","name":"Dominex Macedon"},"url":"https://dominexmacedon-docs.github.io/greenServeFE-language/gs_brain.html"}</script><style>:root{color-scheme:dark;--bg:#0b1120;--panel:#111c2e;--text:#e8eef8;--muted:#a8b6ca;--line:#293a52;--accent:#69e0bd;--link:#8bb8ff;--code:#080e19}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 12% 0%,#19314a 0,transparent 42%),var(--bg);color:var(--text);font:16px/1.7 system-ui,sans-serif}a{color:var(--link);text-decoration:none}.wrap{width:min(1080px,calc(100% - 36px));margin:auto}header,footer{border-bottom:1px solid var(--line);padding:20px 0}footer{border-top:1px solid var(--line);border-bottom:0;color:var(--muted)}.brand{display:flex;align-items:center;gap:12px}.brand img{width:42px;height:42px}nav{display:flex;flex-wrap:wrap;gap:15px;margin-top:14px}main{padding:42px 0 70px}.eyebrow{color:var(--accent);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:.75rem}h1{font-size:clamp(2rem,5vw,3.4rem);line-height:1.1}.lead,.muted{color:var(--muted)}pre{overflow:auto;background:var(--code);border:1px solid var(--line);border-radius:10px;padding:16px}code{color:#b8f3df;font-family:ui-monospace,Consolas,monospace}.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:17px;margin:18px 0}.notice{border-left:3px solid var(--accent);padding:12px 16px;background:#102333;color:var(--muted)}table{width:100%;border-collapse:collapse}td,th{text-align:left;padding:10px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--accent)}</style></head><body><header><div class="wrap"><a class="brand" href="index.html"><img src="https://raw.githubusercontent.com/dominexmacedon-docs/greenServeFE-language/main/greenServeFE-logo.png" alt="greenServeFE"><strong>greenServeFE</strong></a><nav><a href="index.html">Home</a><a href="language.html">Language</a><a href="vm.html">VM</a><a href="modules.html">Modules</a><a href="server.html">Server</a><a href="construct.html">Construct</a></nav></div></header><main class="wrap"><p class="muted"><a href="index.html">Documentation home</a> / Native Module API</p><div class="eyebrow">Native Module API</div><h1>Unified Native AI and Machine-Learning Workspace</h1><p class="lead">One native module groups array, neural, optimizer, dataset, learning, autograd, checkpoint and cortex capabilities.</p><h2>Purpose</h2><p>One native module groups array, neural, optimizer, dataset, learning, autograd, checkpoint and cortex capabilities.</p><h2>Exports registered by the module initializer</h2><table><tr><th>Export</th><th>Role</th></tr><tr><td><code>array</code></td><td>array exported function or value</td></tr><tr><td><code>neural</code></td><td>neural exported function or value</td></tr><tr><td><code>optimizer</code></td><td>optimizer exported function or value</td></tr><tr><td><code>dataset</code></td><td>dataset exported function or value</td></tr><tr><td><code>learn</code></td><td>learn exported function or value</td></tr><tr><td><code>autograd</code></td><td>autograd exported function or value</td></tr><tr><td><code>checkpoint</code></td><td>checkpoint exported function or value</td></tr><tr><td><code>cortex</code></td><td>cortex exported function or value</td></tr></table><h2>Usage example</h2><pre>import gs_brain;
-print(gs_brain.array.shape([[1, 2], [3, 4]]));
-print(gs_brain.array.matmul([[1, 2], [3, 4]], [[5, 6], [7, 8]]));
-print(gs_brain.cortex.workspace());</pre><div class="notice">CPU-first foundation, not parity with NumPy, PyTorch or scikit-learn. Current implementation includes bounded scalar reverse-mode autograd, optimizer kernels with explicit state, dataset batching/splitting, basic learning metrics and text/data workspace utilities. GPU and broad multi-layer training are not claimed.</div><h2>Related references</h2><p><a href="modules.html">Module catalog</a> · <a href="native-api.html">Native ABI</a> · <a href="language.html">GSVE language</a></p></main><footer><div class="wrap">greenServeFE · Developed by Dominex Macedon · <a href="index.html">Documentation home</a> · <a href="https://github.com/dominexmacedon-docs/greenServeFE-build">Runtime source</a></div></footer></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b1120">
+<meta name="description" content="Detailed gs_brain reference for greenServeFE: eight native AI and machine-learning namespaces, verified C APIs, GSVE examples, VM integration, data utilities, optimizers, autograd and checkpointing.">
+<meta name="keywords" content="greenServeFE, GSVE, gs_brain, native C AI module, machine learning, autograd, neural network, optimizer, dataset, tensor, VM">
+<meta name="author" content="Dominex Macedon"><meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://dominexmacedon-docs.github.io/greenServeFE-language/gs_brain.html">
+<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/dominexmacedon-docs/greenServeFE-language/main/greenServeFE-logo.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<meta property="og:type" content="article"><meta property="og:site_name" content="greenServeFE Language Guide"><meta property="og:title" content="gs_brain Native AI and Machine-Learning Workspace | greenServeFE">
+<meta property="og:description" content="Implementation-aligned reference for the eight namespaces in the unified CPU-first gs_brain native module.">
+<meta property="og:url" content="https://dominexmacedon-docs.github.io/greenServeFE-language/gs_brain.html">
+<meta property="og:image" content="https://raw.githubusercontent.com/dominexmacedon-docs/greenServeFE-language/main/greenServeFE-logo.png">
+<meta name="twitter:card" content="summary"><meta name="twitter:title" content="gs_brain Native AI Workspace">
+<meta name="twitter:description" content="Eight native namespaces for numerical computing, learning, optimization, autodiff, data and checkpoints.">
+<title>gs_brain Native AI Workspace | greenServeFE Documentation</title>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"gs_brain Native AI and Machine-Learning Workspace","description":"Implementation-aligned reference for the eight namespaces in the unified CPU-first gs_brain native module.","author":{"@type":"Person","name":"Dominex Macedon"},"publisher":{"@type":"Organization","name":"greenServeFE"},"url":"https://dominexmacedon-docs.github.io/greenServeFE-language/gs_brain.html"}</script>
+<style>
+:root{color-scheme:dark;--bg:#0b1120;--panel:#111c2e;--panel2:#16243a;--text:#e8eef8;--muted:#a8b6ca;--line:#293a52;--accent:#69e0bd;--link:#8bb8ff;--code:#080e19}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:20px}body{margin:0;background:radial-gradient(ellipse at 12% 0%,#19314a 0,transparent 42%),var(--bg);color:var(--text);font:16px/1.7 system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:var(--link);text-decoration:none}a:hover{text-decoration:underline}.wrap{width:min(1120px,calc(100% - 36px));margin:auto}
+header{border-bottom:1px solid var(--line);padding:20px 0;background:#0b1120dd}.brand{display:flex;align-items:center;gap:12px}.brand img{width:42px;height:42px;object-fit:contain}.brand small{display:block;color:var(--muted)}nav{display:flex;flex-wrap:wrap;gap:15px;margin-top:14px;font-size:.92rem}
+main{padding:42px 0 70px}.eyebrow{color:var(--accent);font-size:.75rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase}h1{font-size:clamp(2rem,5vw,3.5rem);line-height:1.1;letter-spacing:-.035em;margin:.45em 0}h2{font-size:1.55rem;margin:1.7em 0 .5em}h3{font-size:1.12rem;margin:1.25em 0 .4em}.lead{font-size:1.12rem;color:var(--muted);max-width:900px}.muted,.crumb{color:var(--muted)}
+.panel{background:linear-gradient(145deg,var(--panel),#0f1929);border:1px solid var(--line);border-radius:15px;padding:20px;margin:18px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.tile{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:15px}.tile strong{color:var(--accent);display:block}.tile span{color:var(--muted);font-size:.92rem}
+code,pre{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}pre{overflow:auto;background:var(--code);border:1px solid var(--line);border-radius:11px;padding:17px;color:#dce8f8;line-height:1.6}code{color:#b8f3df}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;margin:15px 0}th,td{text-align:left;vertical-align:top;padding:10px;border-bottom:1px solid var(--line)}th{color:var(--accent);font-size:.9rem}td:first-child{white-space:nowrap}
+.notice{border-left:3px solid var(--accent);padding:12px 16px;background:#102333;color:var(--muted);border-radius:0 9px 9px 0}.warning{border-left-color:#e9b96e;background:#2a2115}.toc{display:flex;flex-wrap:wrap;gap:9px}.toc a{border:1px solid var(--line);border-radius:999px;padding:5px 11px;font-size:.9rem}.signature{color:#d9e7ff}.tag{display:inline-block;border:1px solid var(--line);border-radius:6px;padding:1px 7px;color:var(--muted);font-size:.78rem}
+li{margin:.35em 0}footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--muted)}
+@media(max-width:600px){.wrap{width:calc(100% - 26px)}main{padding-top:28px}td:first-child{white-space:normal}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<a class="brand" href="index.html"><img src="https://raw.githubusercontent.com/dominexmacedon-docs/greenServeFE-language/main/greenServeFE-logo.png" alt="greenServeFE logo"><span><strong>greenServeFE</strong><small>Language, VM and Native Module Reference</small></span></a>
+<nav aria-label="Documentation"><a href="index.html">Home</a><a href="language.html">Language</a><a href="vm.html">Virtual Machine</a><a href="modules.html">Modules</a><a href="server.html">Server</a><a href="construct.html">Construct</a></nav>
+</div></header>
+<main class="wrap">
+<p class="crumb"><a href="index.html">Documentation home</a> / <a href="modules.html">Native modules</a> / gs_brain</p>
+<div class="eyebrow">Unified native AI module</div>
+<h1><i class="fa-solid fa-brain" aria-hidden="true"></i> gs_brain: Native AI and Machine-Learning Workspace</h1>
+<p class="lead">A single native C shared library that brings eight related numerical, neural, optimization, dataset, classical-learning, automatic-differentiation, checkpoint and data-workspace namespaces into greenServeFE. The public interface is ordinary GSVE objects, arrays and native functions—not a second language or a Python runtime.</p>
+<div class="notice"><strong>Implementation scope:</strong> this is a CPU-first foundation with concrete implemented kernels. It is not NumPy, PyTorch or scikit-learn compatibility, and it does not claim GPU execution or a general-purpose deep-learning framework.</div>
+<div class="grid">
+<div class="tile"><strong>One library</strong><span><code>gs_brain.so</code>, one module initializer</span></div>
+<div class="tile"><strong>Eight namespaces</strong><span>array · neural · optimizer · dataset · learn · autograd · checkpoint · cortex</span></div>
+<div class="tile"><strong>Native implementation</strong><span>C11, existing GSNativeAPI boundary, no Python dependency</span></div>
+<div class="tile"><strong>Execution target</strong><span>Linux x86-64 shared object built by a manual workflow</span></div>
+</div>
+<h2>On this page</h2>
+<div class="toc">
+<a href="#architecture">Architecture</a><a href="#install">Build and install</a><a href="#array">array</a><a href="#neural">neural</a><a href="#optimizer">optimizer</a><a href="#dataset">dataset</a><a href="#learn">learn</a><a href="#autograd">autograd</a><a href="#checkpoint">checkpoint</a><a href="#cortex">cortex</a><a href="#pipeline">End-to-end example</a><a href="#limits">Limits and status</a>
+</div>
+
+<h2 id="architecture">1. Architecture and integration</h2>
+<p><code>gs_brain</code> consolidates the eight AI/ML C implementations into <code>ai-modules/gs_brain.c</code> and exposes them through one <code>greenServeFE_module_init</code> entry point. The module is deliberately outside the core language and VM: importing it does not add keywords, opcodes, compiler rules or a new value type.</p>
+<pre>.gsve source
+   │
+   ▼
+lexer → tokens → parser / AST → bytecode compiler
+                                  │
+                                  ▼
+                         GSCode instruction stream
+                                  │
+                                  ▼
+                         greenServeFE virtual machine
+                                  │
+                         import gs_brain;
+                                  │
+                                  ▼
+                       native module loader (dlopen)
+                                  │
+                                  ▼
+                   greenServeFE_module_init(GSNativeAPI)
+                                  │
+                                  ▼
+             gs_brain.{array,neural,optimizer,dataset,
+                       learn,autograd,checkpoint,cortex}</pre>
+<p>The module loader resolves a shared object from the configured native-module search path, opens it dynamically and invokes the required initializer symbol. The initializer returns a GSVE object whose members are namespaces containing native function values. From GSVE, calls look like ordinary chained member calls such as <code>gs_brain.array.matmul(a, b)</code>.</p>
+<div class="panel">
+<h3>Native ABI boundary</h3>
+<p>The shared library uses <code>module.h</code> and <code>GSNativeAPI</code> with ABI version <code>GSFE_MODULE_ABI_VERSION 1</code>. The API supplies constructors for null, number, boolean, string, object, array and native-function values; value copy/retain/release; array and object access; string and numeric conversion; truthiness; printing; and a VM callback interface.</p>
+<p>The module initializer has the form <code>GSValue greenServeFE_module_init(const GSNativeAPI *native_api)</code>. The implementation returns a root object and registers each of the eight namespaces. The VM's value model remains unchanged: null, number, boolean, string, array, object, function, native function and iterator.</p>
+</div>
+<h3>Core language and VM context</h3>
+<p>GSVE source files use the <code>.gsve</code> extension. The language uses <code>define</code> for declarations, <code>func</code> for named functions, semicolon-terminated statements, object literals, nested arrays and explicit imports. The VM pipeline is lexer → parser/AST → compiler → <code>GSCode</code> bytecode → stack-based execution. A code object stores instructions, constants, names, child function code objects and parameter metadata; each instruction stores an opcode, integer argument and source line. Frames track an instruction pointer, operand-stack base and lexical environment. Function values retain their captured lexical environment.</p>
+<pre>import gs_brain;
+
+define matrix = [[1, 2], [3, 4]];
+define product = gs_brain.array.matmul(matrix, matrix);
+print(product);
+print(gs_brain.cortex.workspace());</pre>
+<p>Relevant VM features used by module examples include numbers, strings, booleans, null, arrays, objects, arithmetic and comparisons, logical short-circuiting, indexing and members, conditionals, loops, functions and recursion, native calls, <code>import</code> and <code>from ... import ...</code>. Use <a href="language.html">the language reference</a> and <a href="vm.html">the VM reference</a> for the complete language and execution model.</p>
+
+<h2 id="install">2. Build, package and install</h2>
+<p>The source repository provides a manual-only GitHub Actions workflow named <strong>Build gs_brain native AI module</strong>. Open the repository's Actions tab, select <code>Build gs_brain native AI module</code>, choose <strong>Run workflow</strong>, and download the resulting artifact when the job succeeds.</p>
+<div class="panel">
+<h3>Build configuration used by the workflow</h3>
+<pre>cc -D_POSIX_C_SOURCE=200809L -std=c11 -O2 \
+  -Wall -Wextra -Wpedantic -Wno-unused-parameter \
+  -fPIC -shared -I. $(pkg-config --cflags libcurl) \
+  -o dist/gs_brain.so ai-modules/gs_brain.c \
+  $(pkg-config --libs libcurl) -lm</pre>
+<p>Build dependencies on the workflow runner: GCC/build-essential, pkg-config, libcurl development headers/library, ZIP tooling and the C math library. The job checks the exported initializer and the presence of namespace/API markers, then packages the shared object, C source and ABI headers. It also creates SHA-256 checksums. Those checks are build/package checks; they are not a substitute for running the module inside the target VM and validating numerical results.</p>
+</div>
+<p>The workflow artifact is named <code>gs-brain-linux-x86_64.zip</code>. It contains <code>gs_brain.so</code>, <code>gs_brain.c</code>, <code>module.h</code>, <code>value.h</code> and <code>SHA256SUMS</code>. Install the shared object into a directory searched by the greenServeFE module loader. For example, if the chosen directory is <code>/usr/local/lib/modules</code>:</p>
+<pre>mkdir -p /usr/local/lib/modules
+cp gs_brain.so /usr/local/lib/modules/
+export GREENSERVE_MODULE_PATH=/usr/local/lib/modules
+greenServeFE ai-test.gsve</pre>
+<p class="muted">The exact copy/extraction command depends on where the downloaded ZIP was saved. The environment variable must point to the directory containing the shared object, not to the ZIP file.</p>
+<div class="notice warning"><strong>Platform note:</strong> this workflow builds Linux x86-64. A successful Linux shared object is not a Windows DLL or macOS dynamic library. Build and test a platform-specific artifact before using it on another operating system.</div>
+
+<h2 id="array">3. <code>gs_brain.array</code> — numerical and matrix foundation</h2>
+<p>The array namespace accepts ordinary GSVE nested arrays. Matrix routines validate rectangular row shapes and numeric elements, use checked temporary C buffers for computation, and return GSVE arrays or scalar values. The current implementation is a two-dimensional matrix/vector foundation rather than a general N-dimensional tensor engine.</p>
+<div class="table-wrap"><table><thead><tr><th>Export</th><th>Purpose and input shape</th><th>Result</th></tr></thead><tbody>
+<tr><td><code>info()</code></td><td>Returns module name, version, storage description and current status.</td><td>Metadata object.</td></tr>
+<tr><td><code>shape(matrix)</code></td><td>Inspect a rectangular numeric matrix.</td><td><code>[rows, columns]</code>; invalid input returns null.</td></tr>
+<tr><td><code>zeros(rows, columns)</code></td><td>Create a zero-filled matrix.</td><td>Nested numeric array.</td></tr>
+<tr><td><code>ones(rows, columns)</code></td><td>Create a one-filled matrix.</td><td>Nested numeric array.</td></tr>
+<tr><td><code>add(a, b)</code></td><td>Elementwise matrix addition; both shapes must match.</td><td>Matrix.</td></tr>
+<tr><td><code>multiply(a, b)</code></td><td>Elementwise matrix multiplication; both shapes must match.</td><td>Matrix.</td></tr>
+<tr><td><code>transpose(matrix)</code></td><td>Swap matrix rows and columns.</td><td>Transposed matrix.</td></tr>
+<tr><td><code>matmul(a, b)</code></td><td>Matrix multiplication; columns of <code>a</code> must equal rows of <code>b</code>.</td><td>Product matrix.</td></tr>
+<tr><td><code>dot(a, b)</code></td><td>Dot product of equal-length numeric vectors.</td><td>Number.</td></tr>
+<tr><td><code>sum(vector)</code>, <code>mean(vector)</code></td><td>Sum and arithmetic mean of a non-empty numeric vector.</td><td>Number.</td></tr>
+<tr><td><code>min(vector)</code>, <code>max(vector)</code></td><td>Minimum and maximum of a non-empty numeric vector.</td><td>Number.</td></tr>
+<tr><td><code>variance(vector)</code>, <code>std(vector)</code></td><td>Population variance and population standard deviation.</td><td>Number.</td></tr>
+<tr><td><code>abs(vector)</code></td><td>Absolute value of each numeric vector element.</td><td>Vector.</td></tr>
+</tbody></table></div>
+<pre>import gs_brain;
+
+define a = [[1, 2], [3, 4]];
+define b = [[5, 6], [7, 8]];
+
+print(gs_brain.array.info());
+print(gs_brain.array.shape(a));
+print(gs_brain.array.zeros(2, 3));
+print(gs_brain.array.ones(2, 2));
+print(gs_brain.array.add(a, b));
+print(gs_brain.array.multiply(a, b));
+print(gs_brain.array.transpose(a));
+print(gs_brain.array.matmul(a, b));
+print(gs_brain.array.dot([1, 2, 3], [4, 5, 6]));
+print(gs_brain.array.mean([1, 2, 3, 4]));
+print(gs_brain.array.std([1, 2, 3, 4]));</pre>
+<p class="muted">The implementation applies an element-count bound of one million to the array/matrix paths shown here and rejects malformed dimensions or incompatible shapes with null. Do not assume broadcasting, slicing, N-D strides, determinant/inverse, or arbitrary array views are implemented by this namespace.</p>
+
+<h2 id="neural">4. <code>gs_brain.neural</code> — CPU neural-network building blocks</h2>
+<p>The neural namespace contains a linear-regression training path, a one-hidden-layer ReLU regression path, inference helpers, activations and loss/gradient utilities. Training is CPU batch gradient descent. It is a practical starter engine, not a complete layer graph or general-purpose neural framework.</p>
+<div class="table-wrap"><table><thead><tr><th>Export</th><th>Role</th><th>Implementation note</th></tr></thead><tbody>
+<tr><td><code>info()</code></td><td>Neural subsystem metadata.</td><td>Reports CPU backend and current training scope.</td></tr>
+<tr><td><code>gsai_neural_train_linear(X, y, learning_rate, epochs)</code></td><td>Train a linear regression model.</td><td>Returns a model object with kind, weights, bias, loss, feature count, epoch count and optimizer label.</td></tr>
+<tr><td><code>gsai_neural_predict_linear(model, X)</code></td><td>Predict with the linear model.</td><td>Returns one prediction per input row.</td></tr>
+<tr><td><code>dense(X, weights, bias)</code></td><td>Dense-layer forward computation.</td><td>Forward operation only; not an automatic trainable layer object.</td></tr>
+<tr><td><code>relu(values)</code>, <code>sigmoid(values)</code></td><td>Activation functions.</td><td>Accept scalar numeric values or numeric vectors.</td></tr>
+<tr><td><code>softmax(vector)</code></td><td>Convert finite logits to normalized probabilities.</td><td>Uses max-shift stabilization.</td></tr>
+<tr><td><code>mse(predictions, targets)</code></td><td>Mean squared error.</td><td>Requires equal non-empty numeric vectors.</td></tr>
+<tr><td><code>mse_grad(predictions, targets)</code></td><td>MSE gradient helper.</td><td>Returns the implemented gradient vector.</td></tr>
+<tr><td><code>binary_cross_entropy(predictions, targets)</code></td><td>Binary cross-entropy loss helper.</td><td>For binary probability/target vectors.</td></tr>
+<tr><td><code>train_mlp(X, y, hidden, epochs, learning_rate)</code></td><td>Train a one-hidden-layer ReLU regression model.</td><td>CPU batch-gradient-descent path.</td></tr>
+<tr><td><code>predict_mlp(X, model)</code></td><td>Run inference with the trained MLP model.</td><td>Returns predictions for supplied rows.</td></tr>
+</tbody></table></div>
+<div class="notice warning">The C initializer currently registers the linear training/prediction exports under the literal names <code>gsai_neural_train_linear</code> and <code>gsai_neural_predict_linear</code>. Those names are intentionally shown exactly as exported; they are not shortened to <code>train_linear</code>/<code>predict_linear</code>.</div>
+<pre>import gs_brain;
+
+define X = [[0], [1], [2], [3]];
+define y = [1, 3, 5, 7];
+
+define linear_model =
+    gs_brain.neural.gsai_neural_train_linear(X, y, 0.01, 1000);
+define predicted =
+    gs_brain.neural.gsai_neural_predict_linear(linear_model, X);
+
+print(linear_model);
+print(predicted);
+print(gs_brain.neural.relu([-2, 0, 3]));
+print(gs_brain.neural.sigmoid([0, 1, -1]));
+print(gs_brain.neural.softmax([1, 2, 3]));
+print(gs_brain.neural.mse([1, 2], [1, 3]));</pre>
+
+<h2 id="optimizer">5. <code>gs_brain.optimizer</code> — explicit update kernels</h2>
+<p>Optimizer functions operate on numeric vectors and return new vectors or state objects. They do not secretly own a training loop. In particular, Adam's moment vectors and step are caller-supplied and returned, making optimizer state explicit and serializable by the calling program.</p>
+<div class="table-wrap"><table><thead><tr><th>Export</th><th>Inputs</th><th>Output</th></tr></thead><tbody>
+<tr><td><code>sgd(parameters, gradients, learning_rate)</code></td><td>Equal-length parameter and gradient vectors plus positive learning rate.</td><td>Updated parameter vector.</td></tr>
+<tr><td><code>momentum(parameters, gradients, velocity, learning_rate, momentum)</code></td><td>Equal-length vectors, learning rate and momentum coefficient.</td><td>Momentum update result/state as defined by the native kernel.</td></tr>
+<tr><td><code>adam(parameters, gradients, m, v, step, learning_rate, beta1, beta2, epsilon)</code></td><td>Parameter, gradient and first/second-moment vectors; step and Adam hyperparameters.</td><td>Object containing updated <code>parameters</code>, <code>m</code>, <code>v</code> and <code>step</code>.</td></tr>
+<tr><td><code>clip_grad_norm(gradients, max_norm)</code></td><td>Gradient vector and positive maximum norm.</td><td>Object with <code>gradients</code>, original <code>norm</code> and boolean <code>clipped</code>.</td></tr>
+<tr><td><code>info()</code></td><td>No arguments.</td><td>Backend and implementation status metadata.</td></tr>
+</tbody></table></div>
+<pre>import gs_brain;
+
+define parameters = [1, 2, 3];
+define gradients = [0.1, -0.2, 0.3];
+
+define next_parameters =
+    gs_brain.optimizer.sgd(parameters, gradients, 0.01);
+define clipped =
+    gs_brain.optimizer.clip_grad_norm(gradients, 0.25);
+
+print(next_parameters);
+print(clipped);</pre>
+<p class="muted">These are update kernels, not a complete optimizer lifecycle with parameter registration, learning-rate schedules, automatic gradient collection, weight decay or callbacks. The caller manages training state.</p>
+
+<h2 id="dataset">6. <code>gs_brain.dataset</code> — paired data preparation</h2>
+<p>The dataset namespace works with ordinary VM arrays for features and labels. Operations preserve feature/label row pairing when shuffling, splitting or batching.</p>
+<div class="table-wrap"><table><thead><tr><th>Export</th><th>Purpose</th><th>Result structure</th></tr></thead><tbody>
+<tr><td><code>shuffle(X, y, seed?)</code></td><td>Seeded paired-row shuffle.</td><td><code>{X: [...], y: [...], rows: n}</code></td></tr>
+<tr><td><code>batches(X, y, batch_size, drop_last?)</code></td><td>Partition paired rows into mini-batches.</td><td>Array of objects containing <code>X</code>, <code>y</code> and <code>size</code>.</td></tr>
+<tr><td><code>one_hot(labels, class_count)</code></td><td>Encode integer class labels.</td><td>Array of one-hot rows.</td></tr>
+<tr><td><code>train_test_split(X, y, test_fraction, seed?)</code></td><td>Seeded paired train/test split.</td><td>Object with <code>X_train</code>, <code>X_test</code>, <code>y_train</code>, <code>y_test</code>.</td></tr>
+<tr><td><code>info()</code></td><td>Subsystem status metadata.</td><td>Object.</td></tr>
+</tbody></table></div>
+<pre>import gs_brain;
+
+define X = [[1, 10], [2, 20], [3, 30], [4, 40]];
+define y = [0, 1, 0, 1];
+
+define split = gs_brain.dataset.train_test_split(X, y, 0.25, 42);
+define groups = gs_brain.dataset.batches(split.X_train, split.y_train, 2);
+define encoded = gs_brain.dataset.one_hot([0, 1, 2], 3);
+define shuffled = gs_brain.dataset.shuffle(X, y, 42);
+
+print(split);
+print(groups);
+print(encoded);
+print(shuffled);</pre>
+<p class="muted">This is an initial bounded utility set, not a full data-loader framework. Stratification, streaming datasets, image loaders, data augmentation and cross-validation orchestration are not implied.</p>
+
+<h2 id="learn">7. <code>gs_brain.learn</code> — classical learning and evaluation</h2>
+<p>The learn namespace combines preprocessing, binary logistic regression and evaluation metrics. The implemented estimator path uses CPU batch gradient descent, a stable sigmoid calculation, binary cross-entropy and optional L2 regularization.</p>
+<div class="table-wrap"><table><thead><tr><th>Export</th><th>Purpose</th><th>Notes</th></tr></thead><tbody>
+<tr><td><code>train_test_split(X, y, test_fraction, seed?)</code></td><td>Paired train/test split.</td><td>Returns the four train/test arrays.</td></tr>
+<tr><td><code>standardize(X)</code></td><td>Feature standardization.</td><td>Returns the transformed data and associated scaling information as implemented.</td></tr>
+<tr><td><code>train_logistic(X, y, epochs, learning_rate, l2?)</code></td><td>Train a binary logistic-regression model.</td><td>CPU batch gradient descent with optional L2 regularization.</td></tr>
+<tr><td><code>predict_proba(X, model)</code></td><td>Predict positive-class probabilities.</td><td>Uses the trained logistic model.</td></tr>
+<tr><td><code>predict_logistic(X, model, threshold?)</code></td><td>Predict binary class labels.</td><td>Optional decision threshold.</td></tr>
+<tr><td><code>mean_squared_error(y, predictions)</code></td><td>MSE metric.</td><td>Numeric target/prediction vectors.</td></tr>
+<tr><td><code>mean_absolute_error(y, predictions)</code></td><td>MAE metric.</td><td>Numeric target/prediction vectors.</td></tr>
+<tr><td><code>root_mean_squared_error(y, predictions)</code></td><td>RMSE metric.</td><td>Square root of MSE.</td></tr>
+<tr><td><code>r2_score(y, predictions)</code></td><td>Coefficient of determination.</td><td>Returns null for a zero-variance target set.</td></tr>
+<tr><td><code>accuracy_score(actual, predicted)</code></td><td>Classification accuracy.</td><td>Compares matching label vectors.</td></tr>
+<tr><td><code>classification_report(actual, predicted, positive_label?)</code></td><td>Binary classification summary.</td><td>Precision, recall, F1 and confusion counts for the selected positive label.</td></tr>
+<tr><td><code>info()</code></td><td>Subsystem status.</td><td>Reports that broad estimator parity is not implemented.</td></tr>
+</tbody></table></div>
+<pre>import gs_brain;
+
+define X = [[0], [1], [2], [3], [4], [5]];
+define y = [0, 0, 0, 1, 1, 1];
+
+define split = gs_brain.learn.train_test_split(X, y, 0.33, 7);
+define model = gs_brain.learn.train_logistic(
+    split.X_train, split.y_train, 1000, 0.05, 0.0
+);
+define probabilities = gs_brain.learn.predict_proba(split.X_test, model);
+define labels = gs_brain.learn.predict_logistic(split.X_test, model, 0.5);
+
+print(probabilities);
+print(labels);
+print(gs_brain.learn.accuracy_score(split.y_test, labels));
+print(gs_brain.learn.classification_report(split.y_test, labels));</pre>
+<p class="muted">The implemented scope is not a broad estimator catalog. Decision trees, random forests, SVM, k-nearest neighbors, naive Bayes, clustering, cross-validation, model-selection pipelines and general multiclass classification are not claimed as available here.</p>
+
+<h2 id="autograd">8. <code>gs_brain.autograd</code> — scalar reverse-mode automatic differentiation</h2>
+<p>The autograd namespace implements a bounded scalar computation graph. Each created value is represented by a numeric node handle. Operations append nodes referencing their input handles; <code>backward</code> propagates gradients through the recorded graph. This is scalar reverse-mode autodiff, not tensor-wide automatic differentiation and not yet connected to every neural training weight.</p>
+<div class="table-wrap"><table><thead><tr><th>Export</th><th>Role</th></tr></thead><tbody>
+<tr><td><code>reset()</code></td><td>Clear the current graph and release its node storage. Use between independent graphs.</td></tr>
+<tr><td><code>variable(number)</code></td><td>Create a leaf node and return its numeric handle.</td></tr>
+<tr><td><code>add(a, b)</code>, <code>mul(a, b)</code></td><td>Create addition or multiplication nodes from valid handles.</td></tr>
+<tr><td><code>neg(a)</code>, <code>pow(a, b)</code></td><td>Create negation or power nodes.</td></tr>
+<tr><td><code>exp(a)</code>, <code>log(a)</code></td><td>Create exponential or logarithm nodes.</td></tr>
+<tr><td><code>relu(a)</code>, <code>sigmoid(a)</code></td><td>Create activation nodes.</td></tr>
+<tr><td><code>backward(output)</code></td><td>Run reverse-mode gradient propagation from the selected output node.</td></tr>
+<tr><td><code>grad(handle)</code>, <code>value(handle)</code></td><td>Read a node's accumulated gradient or forward value.</td></tr>
+<tr><td><code>zero_grad()</code></td><td>Clear stored gradients without discarding the graph.</td></tr>
+<tr><td><code>info()</code></td><td>Report graph mode, supported operations, version and node count.</td></tr>
+</tbody></table></div>
+<pre>import gs_brain;
+
+gs_brain.autograd.reset();
+
+define x = gs_brain.autograd.variable(3);
+define y = gs_brain.autograd.variable(2);
+define product = gs_brain.autograd.mul(x, y);
+define result = gs_brain.autograd.add(product, x);
+
+gs_brain.autograd.backward(result);
+
+print(gs_brain.autograd.value(result));
+print(gs_brain.autograd.grad(x));
+print(gs_brain.autograd.grad(y));
+
+gs_brain.autograd.reset();</pre>
+<p>In this example, <code>result = x*y + x</code>; the expected forward value is 9, with gradients 3 for <code>x</code> and 3 for <code>y</code>. Node handles are valid only for the current graph lifetime. The implementation bounds graph size to one million nodes; reset before beginning a separate graph to avoid mixing independent calculations.</p>
+
+<h2 id="checkpoint">9. <code>gs_brain.checkpoint</code> — validated numeric-vector persistence</h2>
+<p>The checkpoint namespace saves and loads numeric parameter vectors using a versioned binary format. The format has a magic identifier, version and dtype fields, element count and checksum. Loading validates the header and checksum before returning data.</p>
+<div class="table-wrap"><table><thead><tr><th>Export</th><th>Signature</th><th>Result</th></tr></thead><tbody>
+<tr><td><code>save(path, vector)</code></td><td>File path and non-empty finite numeric vector.</td><td>Boolean success/failure.</td></tr>
+<tr><td><code>load(path)</code></td><td>Path to a compatible checkpoint.</td><td>Numeric vector or null on invalid/unreadable data.</td></tr>
+<tr><td><code>info()</code></td><td>No arguments.</td><td>Format and supported-scope metadata.</td></tr>
+</tbody></table></div>
+<pre>import gs_brain;
+
+define weights = [0.25, -0.5, 1.75];
+define saved = gs_brain.checkpoint.save("weights.gsckpt", weights);
+print(saved);
+
+define restored = gs_brain.checkpoint.load("weights.gsckpt");
+print(restored);</pre>
+<div class="notice warning">The current checkpoint format stores numeric vectors only. Model architecture, layer configuration, optimizer state, labels and training metadata remain caller-managed. It is not a complete model-file format or a cross-platform interchange guarantee. Treat checkpoint paths as filesystem access performed with the process's permissions.</div>
+
+<h2 id="cortex">10. <code>gs_brain.cortex</code> — data workspace and text utilities</h2>
+<p>The cortex namespace brings together content acquisition, text/HTML/JSON processing, file ingestion, JSONL dataset appending, token analysis, a small demonstration text baseline and a lightweight matrix/tensor helper namespace.</p>
+<h3>Data functions</h3>
+<div class="table-wrap"><table><thead><tr><th>Export</th><th>Purpose</th></tr></thead><tbody>
+<tr><td><code>fetch(url)</code></td><td>Fetch web content through libcurl and return a structured result.</td></tr>
+<tr><td><code>scrape(url)</code></td><td>Fetch a page and return its extracted text/result fields.</td></tr>
+<tr><td><code>html_text(html)</code></td><td>Extract readable text from HTML and decode supported entities.</td></tr>
+<tr><td><code>html_tags(html)</code></td><td>Extract HTML tag information.</td></tr>
+<tr><td><code>clean_text(text)</code></td><td>Normalize and clean text whitespace/content.</td></tr>
+<tr><td><code>json_text(value)</code></td><td>Flatten JSON-like text into a text representation for processing.</td></tr>
+<tr><td><code>tokenize(text)</code></td><td>Split text into tokens.</td></tr>
+<tr><td><code>word_counts(text)</code></td><td>Return token-frequency records.</td></tr>
+<tr><td><code>ingest_file(path)</code></td><td>Ingest a supported local file as text/data input.</td></tr>
+<tr><td><code>dataset_append(path, record)</code></td><td>Append a dataset record as JSON Lines.</td></tr>
+</tbody></table></div>
+<h3>Workspace and demonstration model</h3>
+<ul>
+<li><code>workspace()</code> returns the native workspace version and capability/status information.</li>
+<li><code>train(text)</code>, <code>generate(seed_text, count?)</code> and <code>model_info()</code> expose a small weighted-bigram text baseline.</li>
+<li>The baseline is a compact demonstration model based on observed token transitions; it is not a transformer, neural language model or deep-learning system.</li>
+</ul>
+<h3>Tensor helper functions</h3>
+<div class="table-wrap"><table><thead><tr><th>Namespace export</th><th>Purpose</th></tr></thead><tbody>
+<tr><td><code>tensor.shape(matrix)</code></td><td>Inspect matrix dimensions.</td></tr>
+<tr><td><code>tensor.zeros(rows, columns)</code></td><td>Create a zero matrix.</td></tr>
+<tr><td><code>tensor.add(a, b)</code></td><td>Elementwise matrix addition.</td></tr>
+<tr><td><code>tensor.matmul(a, b)</code></td><td>Matrix multiplication.</td></tr>
+<tr><td><code>tensor.transpose(matrix)</code></td><td>Transpose a matrix.</td></tr>
+<tr><td><code>tensor.dot(a, b)</code></td><td>Vector dot product.</td></tr>
+<tr><td><code>tensor.relu(values)</code>, <code>tensor.sigmoid(values)</code></td><td>Apply activation functions to numeric values.</td></tr>
+</tbody></table></div>
+<pre>import gs_brain;
+
+define html = "<main><h1>Native data workspace</h1><p>Learning with GSVE.</p></main>";
+define text_content = gs_brain.cortex.html_text(html);
+define cleaned = gs_brain.cortex.clean_text(text_content);
+define tokens = gs_brain.cortex.tokenize(cleaned);
+define counts = gs_brain.cortex.data.word_counts(cleaned);
+
+print(text_content);
+print(tokens);
+print(counts);
+print(gs_brain.cortex.workspace());
+print(gs_brain.cortex.tensor.matmul([[1, 2]], [[3], [4]]));</pre>
+<div class="notice warning">Network ingestion uses libcurl and is subject to remote availability, TLS/network behavior and implementation limits. File ingestion and dataset writing use the permissions of the greenServeFE process; they are not a sandbox. Use only trusted scripts and paths. Network access should be an explicit choice by the program operator.</div>
+
+<h2 id="pipeline">11. Combined workflow example</h2>
+<p>The following example demonstrates how the namespaces can be composed: split paired data, train a binary classifier, evaluate predictions, inspect a gradient graph and persist a numeric vector. It intentionally keeps each operation explicit so that the GSVE program owns its data and training flow.</p>
+<pre>import gs_brain;
+
+define X = [[0], [1], [2], [3], [4], [5], [6], [7]];
+define y = [0, 0, 0, 0, 1, 1, 1, 1];
+
+define split = gs_brain.learn.train_test_split(X, y, 0.25, 21);
+define model = gs_brain.learn.train_logistic(
+    split.X_train, split.y_train, 1200, 0.05, 0.0
+);
+define probabilities =
+    gs_brain.learn.predict_proba(split.X_test, model);
+define predictions =
+    gs_brain.learn.predict_logistic(split.X_test, model, 0.5);
+
+print("probabilities:");
+print(probabilities);
+print("predictions:");
+print(predictions);
+print("accuracy:");
+print(gs_brain.learn.accuracy_score(split.y_test, predictions));
+print(gs_brain.learn.classification_report(split.y_test, predictions));
+
+gs_brain.autograd.reset();
+define p = gs_brain.autograd.variable(4);
+define q = gs_brain.autograd.variable(5);
+define loss = gs_brain.autograd.mul(p, q);
+gs_brain.autograd.backward(loss);
+print(gs_brain.autograd.grad(p));
+print(gs_brain.autograd.grad(q));
+gs_brain.autograd.reset();
+
+define stored = gs_brain.checkpoint.save("parameters.gsckpt", [0.1, 0.2, 0.3]);
+print(stored);</pre>
+<p class="muted">This is an API-composition illustration. Validate convergence and metric values for the data and hyperparameters you choose; the example is not a benchmark or a guarantee of model quality.</p>
+
+<h2 id="limits">12. Capability boundaries and verification status</h2>
+<div class="table-wrap"><table><thead><tr><th>Area</th><th>Current implementation</th><th>Not established by this module</th></tr></thead><tbody>
+<tr><td>Backend</td><td>CPU native C routines.</td><td>GPU, distributed or multithreaded execution.</td></tr>
+<tr><td>Arrays</td><td>Checked nested-array matrix operations and selected vector reductions.</td><td>Full N-D array model, broadcasting and NumPy parity.</td></tr>
+<tr><td>Neural</td><td>Linear regression, one-hidden-layer ReLU regression, dense forward pass, activations and loss helpers.</td><td>General layer graph, convolution, broad multi-layer training or full tensor autograd integration.</td></tr>
+<tr><td>Optimization</td><td>SGD, momentum, Adam and gradient-norm clipping kernels.</td><td>Automatic optimizer lifecycle, schedulers and full trainer orchestration.</td></tr>
+<tr><td>Datasets</td><td>Paired shuffle, mini-batches, one-hot labels and train/test splitting.</td><td>Complete loader ecosystem, streaming and broad preprocessing pipelines.</td></tr>
+<tr><td>Classical ML</td><td>Binary logistic regression, standardization and regression/classification metrics.</td><td>Full scikit-learn estimator catalog, cross-validation and model-selection framework.</td></tr>
+<tr><td>Autograd</td><td>Bounded scalar reverse-mode graph.</td><td>General tensor graph or automatic MLP weight-gradient integration.</td></tr>
+<tr><td>Checkpoints</td><td>Versioned numeric-vector files with checksum validation.</td><td>Full model/optimizer serialization or portable model interchange.</td></tr>
+<tr><td>Cortex</td><td>Text/data ingestion helpers, tokenization, word counts, JSONL appending and weighted-bigram baseline.</td><td>Transformer models, general deep language models or unrestricted scraping.</td></tr>
+</tbody></table></div>
+<p>The AI ecosystem plan is staged: numerical foundations, classical learning, autograd, training utilities, a broader training engine, workspace orchestration and only then optional acceleration. A feature described as planned in that roadmap must not be mistaken for an exported and verified API.</p>
+<p>For source-level details, see the <a href="https://github.com/dominexmacedon-docs/greenServeFE-build/blob/main/ai-modules/gs_brain.c">unified native C implementation</a>, <a href="https://github.com/dominexmacedon-docs/greenServeFE-build/blob/main/module.h">native ABI header</a>, <a href="https://github.com/dominexmacedon-docs/greenServeFE-build/blob/main/docs/AI-ECOSYSTEM.md">AI ecosystem engineering plan</a>, <a href="https://github.com/dominexmacedon-docs/greenServeFE-build/blob/main/docs/AI-NEWS.md">AI implementation notes</a> and <a href="https://github.com/dominexmacedon-docs/greenServeFE-build/blob/main/.github/workflows/gs-ai-suite.yml">manual build workflow</a>.</p>
+<h2>Related documentation</h2>
+<ul><li><a href="language.html">GSVE language reference</a> — syntax, values, functions, loops, imports and class-like objects.</li><li><a href="vm.html">Virtual machine reference</a> — compiler, bytecode, frames, environments and native loading.</li><li><a href="bytecode.html">Bytecode reference</a> — instruction set and disassembly.</li><li><a href="native-api.html">Native module ABI</a> — module initializer and value API.</li><li><a href="modules.html">Native module catalog</a> — other greenServeFE modules.</li></ul>
+</main>
+<footer><div class="wrap"><strong>greenServeFE</strong><p>Developed by Dominex Macedon. <a href="index.html">Documentation home</a> · <a href="https://github.com/dominexmacedon-docs/greenServeFE-build">Runtime source and implementation reference</a></p><p class="muted">This page documents the unified native module source and the published runtime/AI reference material. API availability depends on the installed module build; use the matching source and workflow when verifying a specific release.</p></div></footer>
+</body></html>
