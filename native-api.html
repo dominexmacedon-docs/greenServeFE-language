@@ -368,14 +368,6 @@ sdk/greenServeFE hello_native.gsve</code></pre>
 <li><strong>Concurrency:</strong> design shared module state carefully if callbacks may be invoked from different execution contexts. Do not assume thread-safety guarantees that are not documented by the runtime.</li>
 <li><strong>Failure handling:</strong> check optional function pointers before use, check callback status values, and return valid GSVE values from native callbacks.</li>
 </ul>
-<h2 id="reference">Reference implementation and SDK</h2>
-<div class="panel">
-<p><strong>SDK:</strong> <a href="https://github.com/dominexmacedon-docs/greenServeFE-/releases/tag/greenServeFE-module-SDK-v1.0.0">greenServeFE-module-SDK-v1.0.0</a></p>
-<p><strong>Working C example:</strong> <a href="https://github.com/dominexmacedon-docs/examples/blob/main/test-g/test-g.c">test-g/test-g.c</a></p>
-<p><strong>Automated build and test:</strong> <a href="https://github.com/dominexmacedon-docs/examples/blob/main/.github/workflows/test-g.yml">test-g.yml</a></p>
-<p><strong>Runtime implementation reference:</strong> <a href="https://github.com/dominexmacedon-docs/greenServeFE-build/blob/main/module.h">Native module ABI header in greenServeFE-build</a></p>
-<p class="muted small">This guide documents the published Native API ABI 1 workflow and the SDK's exposed function table. Refer to the SDK header distributed with the release as the authoritative declaration when compiling a module.</p>
-</div>
 </main>
 <footer><div class="wrap"><strong>greenServeFE</strong><p>Developed by Dominex Macedon. <a href="index.html">Documentation home</a> · <a href="https://github.com/dominexmacedon-docs/greenServeFE-build">Runtime source and implementation reference</a></p><p class="muted">Native module documentation for developers building C extensions for the greenServeFE runtime.</p></div></footer>
 </body>
