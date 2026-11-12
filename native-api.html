@@ -1,24 +1,382 @@
 <!doctype html>
-<html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0b1120"><meta name="description" content="Reference for the GSFE_MODULE_ABI_VERSION 1 C interface used by native shared-object modules and VM callback integration.">
-<meta name="keywords" content="greenServeFE, GSVE, programming language, bytecode VM">
-<meta name="author" content="Dominex Macedon"><meta name="robots" content="index,follow,max-image-preview:large">
-<link rel="canonical" href="https://dominexmacedon-docs.github.io/greenServeFE-language/native-api.html"><link rel="icon" type="image/png" href="https://raw.githubusercontent.com/dominexmacedon-docs/greenServeFE-language/main/greenServeFE-logo.png">
-<meta property="og:type" content="article"><meta property="og:site_name" content="greenServeFE Language Guide"><meta property="og:title" content="greenServeFE Native Module API and ABI | greenServeFE"><meta property="og:description" content="Reference for the GSFE_MODULE_ABI_VERSION 1 C interface used by native shared-object modules and VM callback integration."><meta property="og:url" content="https://dominexmacedon-docs.github.io/greenServeFE-language/native-api.html"><meta property="og:image" content="https://raw.githubusercontent.com/dominexmacedon-docs/greenServeFE-language/main/greenServeFE-logo.png">
-<meta name="twitter:card" content="summary"><meta name="twitter:title" content="greenServeFE Native Module API and ABI | greenServeFE"><meta name="twitter:description" content="Reference for the GSFE_MODULE_ABI_VERSION 1 C interface used by native shared-object modules and VM callback integration.">
-<title>greenServeFE Native Module API and ABI | greenServeFE Documentation</title>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"greenServeFE Native Module API and ABI","description":"Reference for the GSFE_MODULE_ABI_VERSION 1 C interface used by native shared-object modules and VM callback integration.","author":{"@type":"Person","name":"Dominex Macedon"},"publisher":{"@type":"Organization","name":"greenServeFE"},"url":"https://dominexmacedon-docs.github.io/greenServeFE-language/native-api.html","about":{"@type":"SoftwareApplication","name":"greenServeFE","applicationCategory":"DeveloperApplication","programmingLanguage":"GSVE"}}</script>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b1120">
+<meta name="description" content="Complete developer guide to building greenServeFE native C modules with the greenServeFE-module-SDK-v1.0.0, Native API ABI 1, and Linux shared libraries.">
+<meta name="keywords" content="greenServeFE, native module, C API, module_api.h, shared library, .so, SDK, ABI">
+<meta name="author" content="Dominex Macedon">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://dominexmacedon-docs.github.io/greenServeFE-language/native-api.html">
+<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/dominexmacedon-docs/greenServeFE-language/main/greenServeFE-logo.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="greenServeFE Language Guide">
+<meta property="og:title" content="Native C Module Development | greenServeFE">
+<meta property="og:description" content="Build, compile, load, test, and distribute native C modules using the greenServeFE Native API SDK.">
+<meta property="og:url" content="https://dominexmacedon-docs.github.io/greenServeFE-language/native-api.html">
+<meta property="og:image" content="https://raw.githubusercontent.com/dominexmacedon-docs/greenServeFE-language/main/greenServeFE-logo.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Native C Module Development | greenServeFE">
+<meta name="twitter:description" content="A complete guide to the greenServeFE Native API SDK and C shared-library modules.">
+<title>Native C Module Development | greenServeFE Documentation</title>
 <style>
 :root{color-scheme:dark;--bg:#0b1120;--panel:#111c2e;--panel2:#16243a;--text:#e8eef8;--muted:#a8b6ca;--line:#293a52;--accent:#69e0bd;--link:#8bb8ff;--code:#080e19}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 12% 0%,#19314a 0,transparent 42%),var(--bg);color:var(--text);font:16px/1.7 system-ui,-apple-system,"Segoe UI",sans-serif}
-a{color:var(--link);text-decoration:none}a:hover{text-decoration:underline}.wrap{width:min(1080px,calc(100% - 36px));margin:auto}
-header{border-bottom:1px solid var(--line);padding:20px 0;background:#0b1120dd}.brand{display:flex;align-items:center;gap:12px}.brand img{width:42px;height:42px;object-fit:contain}.brand strong{font-size:1.1rem}.brand small{display:block;color:var(--muted)}nav{display:flex;flex-wrap:wrap;gap:15px;margin-top:14px;font-size:.92rem}
-main{padding:42px 0 70px}.eyebrow{color:var(--accent);text-transform:uppercase;font-size:.75rem;font-weight:800;letter-spacing:.13em}h1{font-size:clamp(2rem,5vw,3.5rem);line-height:1.1;letter-spacing:-.035em;margin:.45em 0}h2{font-size:1.55rem;margin:1.7em 0 .5em}h3{font-size:1.1rem;margin:1.25em 0 .4em}.lead{font-size:1.12rem;color:var(--muted);max-width:850px}
-.panel{background:linear-gradient(145deg,var(--panel),#0f1929);border:1px solid var(--line);border-radius:15px;padding:20px;margin:18px 0}.muted{color:var(--muted)}code,pre{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}pre{overflow:auto;background:var(--code);border:1px solid var(--line);border-radius:11px;padding:17px;color:#dce8f8;line-height:1.6}code{color:#b8f3df}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;margin:15px 0}th,td{text-align:left;vertical-align:top;padding:11px;border-bottom:1px solid var(--line)}th{color:var(--accent);font-size:.9rem}td:first-child{white-space:nowrap}li{margin:.35em 0}.notice{border-left:3px solid var(--accent);padding:12px 16px;background:#102333;color:var(--muted);border-radius:0 9px 9px 0}.crumb{color:var(--muted);font-size:.9rem}footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--muted)}
-@media(max-width:600px){.wrap{width:calc(100% - 26px)}main{padding-top:28px}td:first-child{white-space:normal}}
-</style></head><body><header><div class="wrap"><a class="brand" href="index.html"><img src="https://raw.githubusercontent.com/dominexmacedon-docs/greenServeFE-language/main/greenServeFE-logo.png" alt="greenServeFE logo"><span><strong>greenServeFE</strong><small>Language, VM and Native Module Reference</small></span></a><nav aria-label="Documentation"><a href="index.html">Home</a><a href="language.html">Language</a><a href="vm.html">Virtual Machine</a><a href="modules.html">Modules</a><a href="server.html">Server</a><a href="construct.html">Construct</a></nav></div></header>
-<main class="wrap"><p class="crumb"><a href="index.html">Documentation home</a> / Native Extension Reference</p><div class="eyebrow">Native Extension Reference</div><h1>greenServeFE Native Module API and ABI</h1><p class="lead">Reference for the GSFE_MODULE_ABI_VERSION 1 C interface used by native shared-object modules and VM callback integration.</p><h2>ABI contract</h2><p>The public native interface is defined in <code>module.h</code>. The current <code>GSFE_MODULE_ABI_VERSION</code> is <strong>1</strong>. A module exports the initializer symbol <code>greenServeFE_module_init</code> and must return a GSVE object.</p><pre>GSValue greenServeFE_module_init(const GSNativeAPI *api);</pre><h2>Value constructors</h2><p>Native modules can construct null, number, boolean, string, object, array and native-function values through the API table.</p><h2>Ownership and lifetime</h2><p>The API exposes copy, retain and release operations. Values placed into arrays and objects are retained by the container. Native code should follow the API's ownership rules and release temporary owned values.</p><h2>Collection access</h2><ul><li>Arrays: <code>array_push</code>, <code>array_count</code>, <code>array_get</code>, <code>array_set</code>.</li><li>Objects: <code>object_count</code>, <code>object_key</code>, <code>object_set</code>, <code>object_get</code>.</li></ul><h2>Conversions and output</h2><p>Conversion helpers include <code>cstring</code>, <code>truthy</code> and <code>number_value</code>. Output is available through <code>print</code>.</p><h2>Callback bridge</h2><p>The API provides a callback bridge so native code can invoke GSVE functions, which is used by the server's route handler integration.</p><pre>void *context;
-int (*call)(void *, GSValue, GSValue *, size_t, GSValue *);</pre><h2>Module loading</h2><p>The VM loads native shared objects through its module search path. Set <code>GREENSERVE_MODULE_PATH</code> to a directory containing the required <code>.so</code> files. Native modules are trusted native code and are not sandboxed.</p><pre>export GREENSERVE_MODULE_PATH=/usr/local/lib/modules
-import gs_math;</pre></main>
-<footer><div class="wrap"><strong>greenServeFE</strong><p>Developed by Dominex Macedon. <a href="index.html">Documentation home</a> · <a href="https://github.com/dominexmacedon-docs/greenServeFE-build">Runtime source and implementation reference</a></p><p class="muted">API descriptions follow the implementation and reference material available in the linked build repository. Availability can depend on the installed native module build.</p></div></footer></body></html>
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:18px}body{margin:0;background:radial-gradient(ellipse at 12% 0%,#19314a 0,transparent 42%),var(--bg);color:var(--text);font:16px/1.7 system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:var(--link);text-decoration:none}a:hover{text-decoration:underline}.wrap{width:min(1120px,calc(100% - 36px));margin:auto}
+header{border-bottom:1px solid var(--line);padding:20px 0;background:#0b1120ee}.brand{display:flex;align-items:center;gap:12px}.brand img{width:42px;height:42px;object-fit:contain}.brand strong{font-size:1.1rem}.brand small{display:block;color:var(--muted)}nav{display:flex;flex-wrap:wrap;gap:15px;margin-top:14px;font-size:.92rem}
+main{padding:42px 0 70px}.eyebrow{color:var(--accent);text-transform:uppercase;font-size:.75rem;font-weight:800;letter-spacing:.13em}h1{font-size:clamp(2rem,5vw,3.5rem);line-height:1.1;letter-spacing:-.035em;margin:.45em 0}h2{font-size:1.55rem;margin:1.8em 0 .5em;padding-bottom:8px;border-bottom:1px solid var(--line)}h3{font-size:1.1rem;margin:1.3em 0 .4em}.lead{font-size:1.12rem;color:var(--muted);max-width:900px}
+.panel{background:linear-gradient(145deg,var(--panel),#0f1929);border:1px solid var(--line);border-radius:15px;padding:20px;margin:18px 0}.muted{color:var(--muted)}code,pre{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}code{color:#b8f3df}pre{overflow:auto;background:var(--code);border:1px solid var(--line);border-radius:11px;padding:17px;color:#dce8f8;line-height:1.6;font-size:.9rem}pre code{color:inherit}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;margin:15px 0}th,td{text-align:left;vertical-align:top;padding:11px;border-bottom:1px solid var(--line)}th{color:var(--accent);font-size:.9rem}td:first-child{white-space:nowrap}li{margin:.35em 0}.notice{border-left:3px solid var(--accent);padding:12px 16px;background:#102333;color:var(--muted);border-radius:0 9px 9px 0}.warning{border-left-color:#e6b65c;background:#2a2418}.crumb{color:var(--muted);font-size:.9rem}.toc{columns:2;column-gap:30px}.toc li{break-inside:avoid}.step{color:var(--accent);font-weight:800}.pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:3px 9px;color:var(--muted);font-size:.8rem;margin:3px 5px 3px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.grid .panel{margin:0}.small{font-size:.9rem}footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--muted)}
+@media(max-width:650px){.wrap{width:calc(100% - 26px)}main{padding-top:28px}.toc{columns:1}td:first-child{white-space:normal}pre{font-size:.82rem}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<a class="brand" href="index.html"><img src="https://raw.githubusercontent.com/dominexmacedon-docs/greenServeFE-language/main/greenServeFE-logo.png" alt="greenServeFE logo"><span><strong>greenServeFE</strong><small>Language, VM and Native Module Reference</small></span></a>
+<nav aria-label="Documentation"><a href="index.html">Home</a><a href="language.html">Language</a><a href="vm.html">Virtual Machine</a><a href="modules.html">Modules</a><a href="server.html">Server</a><a href="construct.html">Construct</a></nav>
+</div></header>
+<main class="wrap">
+<p class="crumb"><a href="index.html">Documentation home</a> / Native C Module Development</p>
+<div class="eyebrow">Developer guide · Native API · ABI 1</div>
+<h1>Build Native C Modules for greenServeFE</h1>
+<p class="lead">The greenServeFE Native API lets developers extend the language runtime with their own C code. Write a C source file, expose functions as GSVE values, compile it into a Linux shared library (<code>.so</code>), and import that module from a <code>.gsve</code> program. You do not need to modify or rebuild the greenServeFE language runtime to create an independent native module.</p>
+<div class="panel">
+<strong>SDK release: greenServeFE-module-SDK-v1.0.0</strong>
+<p class="muted">Linux x86_64 SDK archive containing the public native API header and the greenServeFE runtime used to compile and integration-test native modules.</p>
+<p><a href="https://github.com/dominexmacedon-docs/greenServeFE-/releases/tag/greenServeFE-module-SDK-v1.0.0">View SDK release</a> · <a href="https://github.com/dominexmacedon-docs/greenServeFE-/releases/download/greenServeFE-module-SDK-v1.0.0/greenServeFE-native-api-linux-x86_64.tar.gz">Download Linux x86_64 SDK (.tar.gz)</a> · <a href="https://github.com/dominexmacedon-docs/examples/blob/main/.github/workflows/test-g.yml">Reference build workflow</a></p>
+<span class="pill">C11</span><span class="pill">Linux x86_64</span><span class="pill">.so shared modules</span><span class="pill">Native ABI 1</span>
+</div>
+<h2 id="contents">On this page</h2>
+<ol class="toc">
+<li><a href="#workflow">How native modules work</a></li><li><a href="#sdk">Download and prepare the SDK</a></li><li><a href="#abi">ABI and module contract</a></li><li><a href="#first-module">Write your first C module</a></li><li><a href="#api">Native API reference</a></li><li><a href="#values">Values, collections and ownership</a></li><li><a href="#callbacks">Calling GSVE functions from C</a></li><li><a href="#compile">Compile the shared library</a></li><li><a href="#load">Load and use the module</a></li><li><a href="#debug">Verify and troubleshoot</a></li><li><a href="#release">Package and distribute a module</a></li><li><a href="#security">Security and compatibility</a></li>
+</ol>
+<h2 id="workflow">1. How native modules work</h2>
+<p>A native module is a C shared library that follows the greenServeFE Native Module ABI. The runtime loads the library when a GSVE program imports its module name. The library must export one well-known initializer, <code>greenServeFE_module_init</code>. That initializer receives a pointer to the runtime's <code>GSNativeAPI</code> function table and returns a GSVE object containing the functions and values that the language should expose.</p>
+<div class="grid">
+<div class="panel"><span class="step">01 · Prepare</span><h3>Download SDK</h3><p class="muted small">Get <code>module_api.h</code> and the matching greenServeFE runtime from the SDK archive.</p></div>
+<div class="panel"><span class="step">02 · Develop</span><h3>Write C source</h3><p class="muted small">Implement C functions using <code>GSValue</code> and the <code>GSNativeAPI</code> table.</p></div>
+<div class="panel"><span class="step">03 · Compile</span><h3>Build a .so</h3><p class="muted small">Compile with GCC, <code>-fPIC</code> and <code>-shared</code>.</p></div>
+<div class="panel"><span class="step">04 · Integrate</span><h3>Import in GSVE</h3><p class="muted small">Put the shared library on the module path and call its exported functions.</p></div>
+</div>
+<p>The resulting relationship is:</p>
+<pre>your_module.c  +  module_api.h
+          │
+          ▼
+      GCC compiler
+          │
+          ▼
+    your_module.so
+          │
+          ▼
+GREENSERVE_MODULE_PATH
+          │
+          ▼
+import your_module;
+          │
+          ▼
+your_module.exported_function()</pre>
+<h2 id="sdk">2. Download and prepare the SDK</h2>
+<p>The supported reference workflow downloads the versioned SDK archive directly from the greenServeFE release. It installs ordinary Linux build tools, extracts the archive, locates the public header named <code>module_api.h</code> and the executable <code>greenServeFE</code>, and copies both into a predictable working location.</p>
+<h3>Install build dependencies</h3>
+<pre><code>sudo apt-get update
+sudo apt-get install -y build-essential binutils curl tar zip</code></pre>
+<h3>Download and extract greenServeFE-module-SDK-v1.0.0</h3>
+<pre><code>set -eu
+
+SDK_URL="https://github.com/dominexmacedon-docs/greenServeFE-/releases/download/greenServeFE-module-SDK-v1.0.0/greenServeFE-native-api-linux-x86_64.tar.gz"
+SDK_ARCHIVE="$PWD/greenServeFE-native-api-linux-x86_64.tar.gz"
+SDK_DIR="$PWD/greenServeFE-native-api"
+
+curl --fail --location --retry 3 --retry-delay 2 "$SDK_URL" -o "$SDK_ARCHIVE"
+mkdir -p "$SDK_DIR"
+tar -xzf "$SDK_ARCHIVE" -C "$SDK_DIR"
+
+HEADER="$(find "$SDK_DIR" -type f -name module_api.h -print -quit)"
+RUNTIME="$(find "$SDK_DIR" -type f -name greenServeFE -perm -u+x -print -quit)"
+
+if [ -z "$HEADER" ]; then
+  echo "module_api.h was not found in the SDK." >&2
+  find "$SDK_DIR" -maxdepth 4 -type f -print >&2
+  exit 1
+fi
+
+if [ -z "$RUNTIME" ]; then
+  echo "The greenServeFE runtime was not found in the SDK." >&2
+  find "$SDK_DIR" -maxdepth 4 -type f -print >&2
+  exit 1
+fi
+
+mkdir -p sdk
+install -m 0644 "$HEADER" sdk/module_api.h
+install -m 0755 "$RUNTIME" sdk/greenServeFE
+sdk/greenServeFE --version</code></pre>
+<div class="notice">The archive is versioned. Build against the header and runtime supplied by the same SDK release so the module is compiled against the intended ABI contract.</div>
+<h2 id="abi">3. ABI and module contract</h2>
+<p>The public C interface is declared in <code>module_api.h</code>. The current ABI version is <code>GSFE_MODULE_ABI_VERSION</code>, whose value is <code>1u</code>. The initializer symbol is <code>GSFE_MODULE_INIT_SYMBOL</code>, defined as <code>"greenServeFE_module_init"</code>.</p>
+<pre><code>#define GSFE_MODULE_ABI_VERSION 1u
+#define GSFE_MODULE_INIT_SYMBOL "greenServeFE_module_init"
+
+typedef GSValue (*GSModuleInit)(const GSNativeAPI *api);
+
+GSValue greenServeFE_module_init(const GSNativeAPI *api);</code></pre>
+<p>Your shared library must satisfy these requirements:</p>
+<ul>
+<li>Export a function with the exact name <code>greenServeFE_module_init</code>.</li>
+<li>Use the initializer signature <code>GSValue greenServeFE_module_init(const GSNativeAPI *api)</code>.</li>
+<li>Check that <code>api</code> is not null and that <code>api-&gt;abi_version</code> equals <code>GSFE_MODULE_ABI_VERSION</code>.</li>
+<li>Return a GSVE object whose properties are the functions or values you want to expose.</li>
+<li>Create callable exports with <code>api-&gt;native(your_c_function)</code> and attach them to the returned object.</li>
+<li>Compile the library as a position-independent shared object.</li>
+</ul>
+<p>The native callback type is <code>GSValue (*GSNativeFn)(GSValue *args, size_t count)</code>. Each native function receives its arguments as an array of <code>GSValue</code> values and the number of arguments supplied, then returns a <code>GSValue</code>.</p>
+<h2 id="first-module">4. Write your first C module</h2>
+<p>Create a file named <code>hello_native.c</code>. This example exports a version function, a greeting function and an addition function. It follows the same initializer and value-management pattern used by the published <code>test-g</code> example.</p>
+<pre><code>#include "module_api.h"
+
+#include &lt;stdio.h&gt;
+
+static const GSNativeAPI *api;
+
+static GSValue hello_version(GSValue *args, size_t count) {
+    (void)args;
+    (void)count;
+    return api-&gt;string("1.0.0");
+}
+
+static GSValue hello_greet(GSValue *args, size_t count) {
+    const char *name = count &gt; 0 ? api-&gt;cstring(args[0]) : NULL;
+    if (!name || !*name) name = "greenServeFE developer";
+
+    char message[512];
+    int written = snprintf(message, sizeof(message), "Hello, %s!", name);
+    if (written &lt; 0 || (size_t)written &gt;= sizeof(message)) {
+        return api-&gt;null();
+    }
+    return api-&gt;string(message);
+}
+
+static GSValue hello_add(GSValue *args, size_t count) {
+    if (count &lt; 2) return api-&gt;null();
+
+    double total = 0.0;
+    for (size_t i = 0; i &lt; count; ++i) {
+        if (args[i].type != V_NUMBER) return api-&gt;null();
+        total += api-&gt;number_value(args[i]);
+    }
+    return api-&gt;number(total);
+}
+
+GSValue greenServeFE_module_init(const GSNativeAPI *native_api) {
+    if (!native_api ||
+        native_api-&gt;abi_version != GSFE_MODULE_ABI_VERSION ||
+        !native_api-&gt;object ||
+        !native_api-&gt;native ||
+        !native_api-&gt;object_set ||
+        !native_api-&gt;release) {
+        return native_api &amp;&amp; native_api-&gt;null
+            ? native_api-&gt;null()
+            : (GSValue){0};
+    }
+
+    api = native_api;
+    GSValue exports = api-&gt;object();
+
+    GSValue fn = api-&gt;native(hello_version);
+    api-&gt;object_set(&amp;exports, "version", fn);
+    api-&gt;release(fn);
+
+    fn = api-&gt;native(hello_greet);
+    api-&gt;object_set(&amp;exports, "greet", fn);
+    api-&gt;release(fn);
+
+    fn = api-&gt;native(hello_add);
+    api-&gt;object_set(&amp;exports, "add", fn);
+    api-&gt;release(fn);
+
+    return exports;
+}</code></pre>
+<p>Important details:</p>
+<ul>
+<li><code>static const GSNativeAPI *api</code> stores the runtime API table pointer for the callbacks in this simple module pattern.</li>
+<li><code>api-&gt;cstring</code> converts a GSVE string value to a C string pointer for reading. Check for a null pointer before using it.</li>
+<li><code>api-&gt;number_value</code> reads a numeric value after checking its type.</li>
+<li><code>api-&gt;string</code>, <code>api-&gt;number</code> and <code>api-&gt;null</code> construct GSVE values.</li>
+<li>After inserting a newly created native function into the exports object, the example releases its temporary reference with <code>api-&gt;release</code>.</li>
+<li>Validate argument count and types in every exported function. Return <code>api-&gt;null()</code> for invalid input in this example; a module may define a more specific error-reporting convention if its host integration provides one.</li>
+</ul>
+<h2 id="api">5. Native API reference</h2>
+<p><code>GSNativeAPI</code> is a function table supplied by the runtime. Use these function pointers instead of linking your module directly to private runtime implementation functions.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>API member</th><th>Purpose</th></tr></thead>
+<tbody>
+<tr><td><code>abi_version</code></td><td>ABI version supplied by the runtime. Compare it with <code>GSFE_MODULE_ABI_VERSION</code>.</td></tr>
+<tr><td><code>null()</code></td><td>Create a null GSVE value.</td></tr>
+<tr><td><code>number(double)</code></td><td>Create a numeric value.</td></tr>
+<tr><td><code>boolean(int)</code></td><td>Create a boolean value.</td></tr>
+<tr><td><code>string(const char *)</code></td><td>Create a GSVE string from a C string.</td></tr>
+<tr><td><code>object()</code></td><td>Create an object value for module exports or structured data.</td></tr>
+<tr><td><code>array()</code></td><td>Create an array value.</td></tr>
+<tr><td><code>native(GSNativeFn)</code></td><td>Wrap a C callback as a callable GSVE native function.</td></tr>
+<tr><td><code>copy(GSValue)</code></td><td>Create a copied GSVE value using the runtime's value-copy operation.</td></tr>
+<tr><td><code>retain(GSValue)</code></td><td>Retain a value when your code needs to keep an owned reference.</td></tr>
+<tr><td><code>release(GSValue)</code></td><td>Release a reference owned by your native code when it is no longer needed.</td></tr>
+<tr><td><code>array_push(GSValue *, GSValue)</code></td><td>Append a value to an array.</td></tr>
+<tr><td><code>array_count(GSValue)</code></td><td>Return the number of elements in an array.</td></tr>
+<tr><td><code>array_get(GSValue, size_t)</code></td><td>Read an array element by index.</td></tr>
+<tr><td><code>array_set(GSValue *, size_t, GSValue)</code></td><td>Set an existing array element; returns an integer status.</td></tr>
+<tr><td><code>object_count(GSValue)</code></td><td>Return the number of properties in an object.</td></tr>
+<tr><td><code>object_key(GSValue, size_t)</code></td><td>Read the key at an object property index.</td></tr>
+<tr><td><code>object_set(GSValue *, const char *, GSValue)</code></td><td>Set an object property.</td></tr>
+<tr><td><code>object_get(GSValue, const char *)</code></td><td>Read an object property by key.</td></tr>
+<tr><td><code>cstring(GSValue)</code></td><td>Access the C-string representation of a GSVE string.</td></tr>
+<tr><td><code>truthy(GSValue)</code></td><td>Evaluate a GSVE value using the runtime's truthiness rules.</td></tr>
+<tr><td><code>number_value(GSValue)</code></td><td>Read the numeric payload of a GSVE value.</td></tr>
+<tr><td><code>print(FILE *, GSValue)</code></td><td>Print a GSVE value to the supplied C stream.</td></tr>
+<tr><td><code>context</code></td><td>Opaque runtime context passed back to the callback bridge.</td></tr>
+<tr><td><code>call(void *, GSValue, GSValue *, size_t, GSValue *)</code></td><td>Callback bridge entry point for invoking a GSVE callable value from native code.</td></tr>
+</tbody></table></div>
+<h2 id="values">6. Values, collections and ownership</h2>
+<p>Native functions exchange values using <code>GSValue</code>. The public value definition includes a <code>type</code> field and a typed payload. The type constants available in the SDK include:</p>
+<div class="table-wrap"><table><thead><tr><th>Type</th><th>Meaning</th></tr></thead><tbody>
+<tr><td><code>V_NULL</code></td><td>Null value.</td></tr><tr><td><code>V_NUMBER</code></td><td>Double-precision number.</td></tr><tr><td><code>V_BOOL</code></td><td>Boolean value.</td></tr><tr><td><code>V_STRING</code></td><td>String value.</td></tr><tr><td><code>V_ARRAY</code></td><td>Array collection.</td></tr><tr><td><code>V_OBJECT</code></td><td>Object collection.</td></tr><tr><td><code>V_FUNCTION</code></td><td>GSVE-defined function.</td></tr><tr><td><code>V_NATIVE</code></td><td>Native C function.</td></tr><tr><td><code>V_ITER</code></td><td>Iterator value.</td></tr>
+</tbody></table></div>
+<h3>Read arguments safely</h3>
+<pre><code>static GSValue inspect_value(GSValue *args, size_t count) {
+    if (count == 0) return api-&gt;null();
+
+    if (args[0].type == V_NUMBER) {
+        double n = api-&gt;number_value(args[0]);
+        return api-&gt;number(n * 2.0);
+    }
+
+    if (args[0].type == V_STRING) {
+        const char *s = api-&gt;cstring(args[0]);
+        if (s) return api-&gt;string(s);
+    }
+
+    return api-&gt;null();
+}</code></pre>
+<h3>Create and populate an array</h3>
+<pre><code>GSValue values = api-&gt;array();
+
+GSValue first = api-&gt;number(10);
+api-&gt;array_push(&amp;values, first);
+api-&gt;release(first);
+
+GSValue second = api-&gt;number(20);
+api-&gt;array_push(&amp;values, second);
+api-&gt;release(second);
+
+size_t length = api-&gt;array_count(values);
+GSValue item = api-&gt;array_get(values, 0);
+
+/* Release values your code owns when finished. */
+api-&gt;release(item);
+api-&gt;release(values);</code></pre>
+<h3>Create and read an object</h3>
+<pre><code>GSValue record = api-&gt;object();
+GSValue name = api-&gt;string("Ada");
+GSValue score = api-&gt;number(100);
+
+api-&gt;object_set(&amp;record, "name", name);
+api-&gt;object_set(&amp;record, "score", score);
+
+api-&gt;release(name);
+api-&gt;release(score);
+
+GSValue stored_name = api-&gt;object_get(record, "name");
+const char *name_text = api-&gt;cstring(stored_name);
+
+/* Use name_text while the corresponding value remains valid. */
+api-&gt;release(stored_name);
+api-&gt;release(record);</code></pre>
+<div class="notice warning"><strong>Ownership is part of the ABI.</strong> Follow the ownership behavior defined by the SDK header and runtime. The established module pattern releases temporary values after inserting them into a container. Do not keep borrowed pointers from <code>cstring</code> beyond the lifetime of the value that backs them. Retain values you need to keep, and release references your module owns. Avoid releasing a borrowed argument merely because you have finished reading it.</div>
+<h2 id="callbacks">7. Calling GSVE functions from C</h2>
+<p>The API table includes <code>context</code> and <code>call</code> for the native-to-GSVE callback bridge. This allows a native extension to invoke a GSVE callable value supplied to it, rather than limiting communication to values flowing from GSVE into C.</p>
+<pre><code>void *context;
+int (*call)(
+    void *context,
+    GSValue callable,
+    GSValue *args,
+    size_t count,
+    GSValue *result
+);</code></pre>
+<p>The callback bridge receives the runtime context, the callable GSVE value, an argument array and its length, and an output location for the returned value. Check that <code>api-&gt;call</code> is available before using it, pass the supplied <code>api-&gt;context</code>, and check the returned status before consuming the output value. Follow the value ownership rules for the returned result.</p>
+<p>Use the callback bridge when your native module needs to call a GSVE function passed into a native API, such as a user-provided callback. Keep the original GSVE callable value valid for the duration required by the call.</p>
+<h2 id="compile">8. Compile the shared library</h2>
+<p>Compile the C file with GCC using the SDK header. The important flags are <code>-std=c11</code> for the C language standard, <code>-fPIC</code> for position-independent code and <code>-shared</code> to produce a shared library.</p>
+<pre><code>mkdir -p build
+
+gcc -std=c11 -O2 -Wall -Wextra -Wpedantic -fPIC -shared \
+  -Isdk \
+  -o build/hello_native.so \
+  hello_native.c</code></pre>
+<p>Check that the expected initializer is exported:</p>
+<pre><code>nm -D --defined-only build/hello_native.so | grep greenServeFE_module_init
+file build/hello_native.so</code></pre>
+<p>The output file name determines the import name. For example, <code>hello_native.so</code> is imported as <code>hello_native</code> in GSVE. Use a simple module filename that matches the identifier used by your import statement.</p>
+<h2 id="load">9. Load and use the module</h2>
+<p>Create a GSVE test file named <code>hello_native.gsve</code>:</p>
+<pre><code>import hello_native;
+
+print(hello_native.version());
+print(hello_native.greet("Ada"));
+print(hello_native.add(10, 20, 30));</code></pre>
+<p>Set the module search path to the directory containing the shared library, then execute the program with the SDK runtime:</p>
+<pre><code>export GREENSERVE_MODULE_PATH="$PWD/build"
+export LD_LIBRARY_PATH="$PWD/build:${LD_LIBRARY_PATH:-}"
+sdk/greenServeFE hello_native.gsve</code></pre>
+<p><code>GREENSERVE_MODULE_PATH</code> tells greenServeFE where to find native modules. <code>LD_LIBRARY_PATH</code> helps the operating system's dynamic loader find shared-library dependencies when your module has any. The module search path and the operating-system library search path serve different purposes.</p>
+<h2 id="debug">10. Verify and troubleshoot</h2>
+<div class="table-wrap"><table><thead><tr><th>Symptom</th><th>What to check</th></tr></thead><tbody>
+<tr><td><code>module_api.h</code> not found</td><td>Confirm that the SDK archive was extracted and that the compiler include path points to the directory containing the header, for example <code>-Isdk</code>.</td></tr>
+<tr><td>Initializer symbol not found</td><td>Run <code>nm -D --defined-only your_module.so</code> and confirm that <code>greenServeFE_module_init</code> is exported with the exact spelling.</td></tr>
+<tr><td>Module cannot be located</td><td>Confirm the <code>.so</code> filename matches the import name and that <code>GREENSERVE_MODULE_PATH</code> points to its containing directory.</td></tr>
+<tr><td>Shared-library dependency cannot be loaded</td><td>Inspect dependencies with <code>ldd your_module.so</code> and provide the required libraries through the system's normal library search configuration.</td></tr>
+<tr><td>ABI mismatch</td><td>Build against the <code>module_api.h</code> from the intended SDK and check <code>api-&gt;abi_version</code> against <code>GSFE_MODULE_ABI_VERSION</code>.</td></tr>
+<tr><td>Unexpected null or incorrect result</td><td>Check argument count, each argument's <code>GSValue.type</code>, conversion calls, return values and ownership handling.</td></tr>
+<tr><td>Runtime works but a dependency is missing on another machine</td><td>Document and package the dependency or use an available system library. A native module is not automatically a self-contained executable.</td></tr>
+</tbody></table></div>
+<p>A minimal integration test should verify the exported symbol, load the module with the target runtime, call every exported function with valid inputs, and test invalid argument counts and types. The published <a href="https://github.com/dominexmacedon-docs/examples/tree/main/test-g">test-g example source</a> demonstrates several exports, while its <a href="https://github.com/dominexmacedon-docs/examples/blob/main/.github/workflows/test-g.yml">GitHub Actions workflow</a> automates SDK download, compilation, symbol verification, runtime integration testing and ZIP packaging.</p>
+<h2 id="release">11. Package and distribute a module</h2>
+<p>A distributable native module should include enough material for users and maintainers to understand, verify and rebuild it. A practical Linux x86_64 package layout is:</p>
+<pre><code>hello-native-linux-x86_64/
+├── hello_native.c
+├── module_api.h
+├── hello_native.so
+├── hello_native.gsve
+└── README.md</code></pre>
+<p>Include the module's source, the public header used for the build, the compiled shared library, a small GSVE integration test and instructions describing the runtime and ABI requirements. State the target operating system and CPU architecture clearly. If the module depends on other shared libraries, list those dependencies and their required versions.</p>
+<h3>Reproducible build and release checklist</h3>
+<ul>
+<li>Download the versioned SDK release and use its public header.</li>
+<li>Compile with warnings enabled and fail the build when compilation fails.</li>
+<li>Verify that <code>greenServeFE_module_init</code> is present in the dynamic symbol table.</li>
+<li>Run a GSVE integration program using the SDK runtime and the module search path.</li>
+<li>Test normal inputs, invalid inputs and relevant boundary conditions.</li>
+<li>Package the source, header, binary, test program and README.</li>
+<li>Test the archive itself before publishing it.</li>
+<li>Publish a versioned release and document its ABI and platform compatibility.</li>
+</ul>
+<h2 id="security">12. Security and compatibility</h2>
+<div class="notice warning"><strong>Native modules execute native code.</strong> They are trusted extensions, not sandboxed GSVE scripts. A loaded module can exercise the operating-system permissions of the process. Only load native modules from sources you trust, and review C code and external dependencies before deployment.</div>
+<ul>
+<li><strong>Platform compatibility:</strong> a Linux x86_64 <code>.so</code> is not a Windows DLL or macOS dynamic library. Build and test separately for each supported platform and architecture.</li>
+<li><strong>ABI compatibility:</strong> compile against the SDK header matching the runtime ABI you target. Do not assume that a binary built for one ABI version will work with another.</li>
+<li><strong>Memory safety:</strong> validate pointers, lengths, argument counts and value types. Avoid buffer overflows and use bounded C operations.</li>
+<li><strong>Dependencies:</strong> declare external library requirements and test on a clean environment that resembles the target deployment system.</li>
+<li><strong>Concurrency:</strong> design shared module state carefully if callbacks may be invoked from different execution contexts. Do not assume thread-safety guarantees that are not documented by the runtime.</li>
+<li><strong>Failure handling:</strong> check optional function pointers before use, check callback status values, and return valid GSVE values from native callbacks.</li>
+</ul>
+<h2 id="reference">Reference implementation and SDK</h2>
+<div class="panel">
+<p><strong>SDK:</strong> <a href="https://github.com/dominexmacedon-docs/greenServeFE-/releases/tag/greenServeFE-module-SDK-v1.0.0">greenServeFE-module-SDK-v1.0.0</a></p>
+<p><strong>Working C example:</strong> <a href="https://github.com/dominexmacedon-docs/examples/blob/main/test-g/test-g.c">test-g/test-g.c</a></p>
+<p><strong>Automated build and test:</strong> <a href="https://github.com/dominexmacedon-docs/examples/blob/main/.github/workflows/test-g.yml">test-g.yml</a></p>
+<p><strong>Runtime implementation reference:</strong> <a href="https://github.com/dominexmacedon-docs/greenServeFE-build/blob/main/module.h">Native module ABI header in greenServeFE-build</a></p>
+<p class="muted small">This guide documents the published Native API ABI 1 workflow and the SDK's exposed function table. Refer to the SDK header distributed with the release as the authoritative declaration when compiling a module.</p>
+</div>
+</main>
+<footer><div class="wrap"><strong>greenServeFE</strong><p>Developed by Dominex Macedon. <a href="index.html">Documentation home</a> · <a href="https://github.com/dominexmacedon-docs/greenServeFE-build">Runtime source and implementation reference</a></p><p class="muted">Native module documentation for developers building C extensions for the greenServeFE runtime.</p></div></footer>
+</body>
+</html>
