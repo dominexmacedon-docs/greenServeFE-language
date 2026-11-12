@@ -1,26 +1,264 @@
 <!doctype html>
-<html lang="en"><head>
+<html lang="en">
+<head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0b1120"><meta name="description" content="A native numerical toolkit covering financial calculations, statistics, vectors, matrices, numerical methods, conversions and reproducible random helpers.">
-<meta name="keywords" content="greenServeFE, GSVE, programming language, bytecode VM, info, percent, percent_change, discount, tax, tip, compound, loan_payment, clamp, lerp, map_range, stats, sum, quadratic, convert, mean, variance, dot, vector_add, vector_sub, vector_scale, norm, matrix_add, matrix_sub, matrix_determinant, matrix_inverse, matrix_vector, is_close, is_null, benchmark_stats, transpose, matmul, zeros, identity, solve, integrate, differentiate, linspace, random_seed, random, random_array">
+<meta name="theme-color" content="#0b1120">
+<meta name="description" content="Complete gs_compute 2.1.0 API reference for greenServeFE: financial formulas, statistics, vector and matrix algebra, numerical methods, unit conversion, tolerances, benchmarking and seeded random sampling.">
+<meta name="keywords" content="greenServeFE, GSVE, gs_compute, numerical computing, matrix, vector, statistics, financial functions, scientific computing, API reference">
 <meta name="author" content="Dominex Macedon"><meta name="robots" content="index,follow,max-image-preview:large">
-<link rel="canonical" href="https://dominexmacedon-docs.github.io/greenServeFE-language/gs_compute.html"><link rel="icon" type="image/png" href="https://raw.githubusercontent.com/dominexmacedon-docs/greenServeFE-language/main/greenServeFE-logo.png">
-<meta property="og:type" content="article"><meta property="og:site_name" content="greenServeFE Language Guide"><meta property="og:title" content="Scientific, Financial and Matrix Computation | greenServeFE"><meta property="og:description" content="A native numerical toolkit covering financial calculations, statistics, vectors, matrices, numerical methods, conversions and reproducible random helpers."><meta property="og:url" content="https://dominexmacedon-docs.github.io/greenServeFE-language/gs_compute.html"><meta property="og:image" content="https://raw.githubusercontent.com/dominexmacedon-docs/greenServeFE-language/main/greenServeFE-logo.png">
-<meta name="twitter:card" content="summary"><meta name="twitter:title" content="Scientific, Financial and Matrix Computation | greenServeFE"><meta name="twitter:description" content="A native numerical toolkit covering financial calculations, statistics, vectors, matrices, numerical methods, conversions and reproducible random helpers.">
-<title>Scientific, Financial and Matrix Computation | greenServeFE Documentation</title>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Scientific, Financial and Matrix Computation","description":"A native numerical toolkit covering financial calculations, statistics, vectors, matrices, numerical methods, conversions and reproducible random helpers.","author":{"@type":"Person","name":"Dominex Macedon"},"publisher":{"@type":"Organization","name":"greenServeFE"},"url":"https://dominexmacedon-docs.github.io/greenServeFE-language/gs_compute.html","about":{"@type":"SoftwareApplication","name":"greenServeFE","applicationCategory":"DeveloperApplication","programmingLanguage":"GSVE"}}</script>
+<link rel="canonical" href="https://dominexmacedon-docs.github.io/greenServeFE-language/gs_compute.html">
+<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/dominexmacedon-docs/greenServeFE-language/main/greenServeFE-logo.png">
+<meta property="og:type" content="article"><meta property="og:site_name" content="greenServeFE Language Guide"><meta property="og:title" content="gs_compute Complete API Reference | greenServeFE"><meta property="og:description" content="Complete function signatures, argument rules, algorithms and practical GSVE examples for gs_compute 2.1.0."><meta property="og:url" content="https://dominexmacedon-docs.github.io/greenServeFE-language/gs_compute.html"><meta property="og:image" content="https://raw.githubusercontent.com/dominexmacedon-docs/greenServeFE-language/main/greenServeFE-logo.png">
+<meta name="twitter:card" content="summary"><meta name="twitter:title" content="gs_compute Complete API Reference | greenServeFE"><meta name="twitter:description" content="Complete gs_compute 2.1.0 API reference and GSVE usage examples.">
+<title>gs_compute Complete API Reference | greenServeFE Documentation</title>
 <style>
 :root{color-scheme:dark;--bg:#0b1120;--panel:#111c2e;--panel2:#16243a;--text:#e8eef8;--muted:#a8b6ca;--line:#293a52;--accent:#69e0bd;--link:#8bb8ff;--code:#080e19}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 12% 0%,#19314a 0,transparent 42%),var(--bg);color:var(--text);font:16px/1.7 system-ui,-apple-system,"Segoe UI",sans-serif}
-a{color:var(--link);text-decoration:none}a:hover{text-decoration:underline}.wrap{width:min(1080px,calc(100% - 36px));margin:auto}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:18px}body{margin:0;background:radial-gradient(ellipse at 12% 0%,#19314a 0,transparent 42%),var(--bg);color:var(--text);font:16px/1.7 system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:var(--link);text-decoration:none}a:hover{text-decoration:underline}.wrap{width:min(1120px,calc(100% - 36px));margin:auto}
 header{border-bottom:1px solid var(--line);padding:20px 0;background:#0b1120dd}.brand{display:flex;align-items:center;gap:12px}.brand img{width:42px;height:42px;object-fit:contain}.brand strong{font-size:1.1rem}.brand small{display:block;color:var(--muted)}nav{display:flex;flex-wrap:wrap;gap:15px;margin-top:14px;font-size:.92rem}
-main{padding:42px 0 70px}.eyebrow{color:var(--accent);text-transform:uppercase;font-size:.75rem;font-weight:800;letter-spacing:.13em}h1{font-size:clamp(2rem,5vw,3.5rem);line-height:1.1;letter-spacing:-.035em;margin:.45em 0}h2{font-size:1.55rem;margin:1.7em 0 .5em}h3{font-size:1.1rem;margin:1.25em 0 .4em}.lead{font-size:1.12rem;color:var(--muted);max-width:850px}
-.panel{background:linear-gradient(145deg,var(--panel),#0f1929);border:1px solid var(--line);border-radius:15px;padding:20px;margin:18px 0}.muted{color:var(--muted)}code,pre{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}pre{overflow:auto;background:var(--code);border:1px solid var(--line);border-radius:11px;padding:17px;color:#dce8f8;line-height:1.6}code{color:#b8f3df}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;margin:15px 0}th,td{text-align:left;vertical-align:top;padding:11px;border-bottom:1px solid var(--line)}th{color:var(--accent);font-size:.9rem}td:first-child{white-space:nowrap}li{margin:.35em 0}.notice{border-left:3px solid var(--accent);padding:12px 16px;background:#102333;color:var(--muted);border-radius:0 9px 9px 0}.crumb{color:var(--muted);font-size:.9rem}footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--muted)}
-@media(max-width:600px){.wrap{width:calc(100% - 26px)}main{padding-top:28px}td:first-child{white-space:normal}}
-</style></head><body><header><div class="wrap"><a class="brand" href="index.html"><img src="https://raw.githubusercontent.com/dominexmacedon-docs/greenServeFE-language/main/greenServeFE-logo.png" alt="greenServeFE logo"><span><strong>greenServeFE</strong><small>Language, VM and Native Module Reference</small></span></a><nav aria-label="Documentation"><a href="index.html">Home</a><a href="language.html">Language</a><a href="vm.html">Virtual Machine</a><a href="modules.html">Modules</a><a href="server.html">Server</a><a href="construct.html">Construct</a></nav></div></header>
-<main class="wrap"><p class="crumb"><a href="index.html">Documentation home</a> / Native Module API</p><div class="eyebrow">Native Module API</div><h1>Scientific, Financial and Matrix Computation</h1><p class="lead">A native numerical toolkit covering financial calculations, statistics, vectors, matrices, numerical methods, conversions and reproducible random helpers.</p><h2>Purpose</h2><p>A native numerical toolkit covering financial calculations, statistics, vectors, matrices, numerical methods, conversions and reproducible random helpers.</p><h2>Exported API</h2><div class="table-wrap"><table><thead><tr><th>Export</th><th>Role</th></tr></thead><tbody><tr><td><code>info</code></td><td>info native function or exported value</td></tr><tr><td><code>percent</code></td><td>percent native function or exported value</td></tr><tr><td><code>percent_change</code></td><td>percent change native function or exported value</td></tr><tr><td><code>discount</code></td><td>discount native function or exported value</td></tr><tr><td><code>tax</code></td><td>tax native function or exported value</td></tr><tr><td><code>tip</code></td><td>tip native function or exported value</td></tr><tr><td><code>compound</code></td><td>compound native function or exported value</td></tr><tr><td><code>loan_payment</code></td><td>loan payment native function or exported value</td></tr><tr><td><code>clamp</code></td><td>clamp native function or exported value</td></tr><tr><td><code>lerp</code></td><td>lerp native function or exported value</td></tr><tr><td><code>map_range</code></td><td>map range native function or exported value</td></tr><tr><td><code>stats</code></td><td>stats native function or exported value</td></tr><tr><td><code>sum</code></td><td>sum native function or exported value</td></tr><tr><td><code>quadratic</code></td><td>quadratic native function or exported value</td></tr><tr><td><code>convert</code></td><td>convert native function or exported value</td></tr><tr><td><code>mean</code></td><td>mean native function or exported value</td></tr><tr><td><code>variance</code></td><td>variance native function or exported value</td></tr><tr><td><code>dot</code></td><td>dot native function or exported value</td></tr><tr><td><code>vector_add</code></td><td>vector add native function or exported value</td></tr><tr><td><code>vector_sub</code></td><td>vector sub native function or exported value</td></tr><tr><td><code>vector_scale</code></td><td>vector scale native function or exported value</td></tr><tr><td><code>norm</code></td><td>norm native function or exported value</td></tr><tr><td><code>matrix_add</code></td><td>matrix add native function or exported value</td></tr><tr><td><code>matrix_sub</code></td><td>matrix sub native function or exported value</td></tr><tr><td><code>matrix_determinant</code></td><td>matrix determinant native function or exported value</td></tr><tr><td><code>matrix_inverse</code></td><td>matrix inverse native function or exported value</td></tr><tr><td><code>matrix_vector</code></td><td>matrix vector native function or exported value</td></tr><tr><td><code>is_close</code></td><td>is close native function or exported value</td></tr><tr><td><code>is_null</code></td><td>is null native function or exported value</td></tr><tr><td><code>benchmark_stats</code></td><td>benchmark stats native function or exported value</td></tr><tr><td><code>transpose</code></td><td>transpose native function or exported value</td></tr><tr><td><code>matmul</code></td><td>matmul native function or exported value</td></tr><tr><td><code>zeros</code></td><td>zeros native function or exported value</td></tr><tr><td><code>identity</code></td><td>identity native function or exported value</td></tr><tr><td><code>solve</code></td><td>solve native function or exported value</td></tr><tr><td><code>integrate</code></td><td>integrate native function or exported value</td></tr><tr><td><code>differentiate</code></td><td>differentiate native function or exported value</td></tr><tr><td><code>linspace</code></td><td>linspace native function or exported value</td></tr><tr><td><code>random_seed</code></td><td>random seed native function or exported value</td></tr><tr><td><code>random</code></td><td>random native function or exported value</td></tr><tr><td><code>random_array</code></td><td>random array native function or exported value</td></tr></tbody></table></div><h2>Usage example</h2><pre>import gs_compute;
-print(gs_compute.percent(250, 12));
-print(gs_compute.compound(1000, 5, 3));
-print(gs_compute.matrix_determinant([[1, 2], [3, 4]]));
-print(gs_compute.linspace(0, 1, 5));</pre><div class="notice">Exported function names are listed from the module initializer. Consult the source-level argument validation for exact accepted arity and object fields; use numeric tolerances for approximate algorithms.</div><h2>Related documentation</h2><ul><li><a href="modules.html">Native module catalog</a></li><li><a href="native-api.html">Native ABI and module loading</a></li><li><a href="language.html">GSVE language reference</a></li></ul></main>
-<footer><div class="wrap"><strong>greenServeFE</strong><p>Developed by Dominex Macedon. <a href="index.html">Documentation home</a> · <a href="https://github.com/dominexmacedon-docs/greenServeFE-build">Runtime source and implementation reference</a></p><p class="muted">API descriptions follow the implementation and reference material available in the linked build repository. Availability can depend on the installed native module build.</p></div></footer></body></html>
+main{padding:42px 0 70px}.eyebrow{color:var(--accent);text-transform:uppercase;font-size:.75rem;font-weight:800;letter-spacing:.13em}h1{font-size:clamp(2rem,5vw,3.5rem);line-height:1.1;letter-spacing:-.035em;margin:.45em 0}h2{font-size:1.55rem;margin:1.8em 0 .5em;border-bottom:1px solid var(--line);padding-bottom:.35em}h3{font-size:1.12rem;margin:1.35em 0 .35em}.lead{font-size:1.12rem;color:var(--muted);max-width:900px}
+.panel{background:linear-gradient(145deg,var(--panel),#0f1929);border:1px solid var(--line);border-radius:15px;padding:20px;margin:18px 0}.muted{color:var(--muted)}code,pre{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}pre{overflow:auto;background:var(--code);border:1px solid var(--line);border-radius:11px;padding:17px;color:#dce8f8;line-height:1.6}code{color:#b8f3df}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;margin:15px 0}th,td{text-align:left;vertical-align:top;padding:11px;border-bottom:1px solid var(--line)}th{color:var(--accent);font-size:.9rem}td:first-child{white-space:nowrap}.notice{border-left:3px solid var(--accent);padding:12px 16px;background:#102333;color:var(--muted);border-radius:0 9px 9px 0;margin:18px 0}.warning{border-left-color:#e6b85c;background:#2b2518}.crumb{color:var(--muted);font-size:.9rem}.toc{columns:2;column-gap:34px}.toc li{break-inside:avoid;margin:.35em 0}.signature{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;color:#b8f3df;overflow-wrap:anywhere}.api{padding:12px 0;border-bottom:1px solid var(--line)}.api p{margin:.35em 0}.tag{display:inline-block;border:1px solid var(--line);border-radius:99px;padding:1px 8px;color:var(--muted);font-size:.78rem}li{margin:.35em 0}footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--muted)}
+@media(max-width:650px){.wrap{width:calc(100% - 26px)}main{padding-top:28px}.toc{columns:1}td:first-child{white-space:normal}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="index.html"><img src="https://raw.githubusercontent.com/dominexmacedon-docs/greenServeFE-language/main/greenServeFE-logo.png" alt="greenServeFE logo"><span><strong>greenServeFE</strong><small>Language, VM and Native Module Reference</small></span></a><nav aria-label="Documentation"><a href="index.html">Home</a><a href="language.html">Language</a><a href="syntax.html">Syntax</a><a href="vm.html">Virtual Machine</a><a href="modules.html">Modules</a><a href="server.html">Server</a><a href="construct.html">Construct</a></nav></div></header>
+<main class="wrap">
+<p class="crumb"><a href="index.html">Documentation home</a> / <a href="modules.html">Native modules</a> / gs_compute</p>
+<div class="eyebrow">Native module reference · version 2.1.0</div>
+<h1>gs_compute: Complete API and Usage</h1>
+<p class="lead">A native C numerical toolkit for financial calculations, descriptive statistics, vectors, matrix algebra, linear systems, numerical integration and differentiation, unit conversion, numeric comparisons, benchmarking, and reproducible random sampling. This reference follows the module's exported functions and validation logic.</p>
+<div class="panel"><strong>At a glance</strong><p><span class="tag">41 exported functions</span> <span class="tag">Native C CPU</span> <span class="tag">IEEE-754 double</span> <span class="tag">Module ABI v1</span></p><p class="muted">Import the module once with <code>import gs_compute;</code>, then call its functions through the module object. The module does not add language keywords or change the VM.</p></div>
+<h2 id="contents">Contents</h2>
+<ol class="toc">
+<li><a href="#install">Build, install and import</a></li><li><a href="#language">GSVE language usage</a></li><li><a href="#financial">Financial and percentage APIs</a></li><li><a href="#scalar">Scalar and numeric helpers</a></li><li><a href="#statistics">Statistics APIs</a></li><li><a href="#vectors">Vector APIs</a></li><li><a href="#matrices">Matrix APIs</a></li><li><a href="#numerical">Numerical methods</a></li><li><a href="#conversion">Unit conversion</a></li><li><a href="#validation">Validation and benchmarking</a></li><li><a href="#random">Seeded random APIs</a></li><li><a href="#errors">Types, limits and null results</a></li><li><a href="#complete-example">Complete application example</a></li>
+</ol>
+<h2 id="install">1. Build, install and import</h2>
+<p><code>gs_compute</code> is implemented in C as a native shared-library module. Build it using the <code>gs_compute</code> build workflow in the greenServeFE build repository, then place <code>gs_compute.so</code> in a directory searched by the native module loader.</p>
+<pre><code># Example installation location
+/usr/local/lib/modules/gs_compute.so
+
+# Make the module directory visible to the process
+export GREENSERVE_MODULE_PATH=/usr/local/lib/modules
+export LD_LIBRARY_PATH=/usr/local/lib/modules:$LD_LIBRARY_PATH</code></pre>
+<p>Run a GSVE file after the module is installed:</p>
+<pre><code>import gs_compute;
+
+print(gs_compute.info());
+print(gs_compute.percent(250, 12));</code></pre>
+<div class="notice">The source file existing in a checkout does not mean its shared object is already built or installed. The VM must be able to locate a compatible <code>gs_compute.so</code> at runtime.</div>
+<h2 id="language">2. GSVE language usage</h2>
+<p>Examples use the actual greenServeFE language forms: <code>define</code> for variable declarations, <code>func</code> for functions, semicolons for statements, arrays with square brackets, and object values with braces. Module functions are called with dot-member access.</p>
+<pre><code>import gs_compute;
+
+define values = [12, 18, 24, 30];
+define summary = gs_compute.stats(values);
+
+print(summary.mean);
+print(summary.median);
+print(summary.stddev);
+
+func price_after_discount(price, rate) {
+    return gs_compute.discount(price, rate);
+}
+
+print(price_after_discount(120, 15));</code></pre>
+<p>All numeric arguments must be GSVE numbers. Numeric strings are not automatically parsed by this module. Convert text deliberately with the language's numeric conversion facilities before calling a numerical API.</p>
+
+<h2 id="financial">3. Financial and percentage APIs</h2>
+<div class="api"><h3><code>percent(value, percentage)</code></h3><p>Returns <code>value * percentage / 100</code>. The percentage may be negative or greater than 100; both inputs must be finite numbers.</p><pre><code>print(gs_compute.percent(250, 12)); // 30</code></pre></div>
+<div class="api"><h3><code>percent_change(before, after)</code></h3><p>Returns the signed percentage change: <code>(after - before) / abs(before) * 100</code>. Returns <code>null</code> when <code>before</code> is zero.</p><pre><code>print(gs_compute.percent_change(80, 100));  // 25
+print(gs_compute.percent_change(100, 80));  // -20</code></pre></div>
+<div class="api"><h3><code>discount(price, percentage)</code></h3><p>Returns the price after applying a discount. Requires <code>price >= 0</code> and <code>0 <= percentage <= 100</code>.</p><pre><code>define sale_price = gs_compute.discount(250, 20);
+print(sale_price); // 200</code></pre></div>
+<div class="api"><h3><code>tax(price, percentage)</code></h3><p>Returns price including the percentage tax: <code>price * (1 + percentage / 100)</code>. Requires a non-negative price and percentage.</p><pre><code>print(gs_compute.tax(200, 5)); // 210</code></pre></div>
+<div class="api"><h3><code>tip(bill, percentage, people?)</code></h3><p>Calculates a tip and split. <code>people</code> defaults to 1 and, when supplied, must be a positive integer. Returns an object with <code>tip</code>, <code>total</code>, and <code>per_person</code>.</p><pre><code>define split = gs_compute.tip(120, 15, 4);
+print(split.tip);         // 18
+print(split.total);       // 138
+print(split.per_person);  // 34.5</code></pre></div>
+<div class="api"><h3><code>compound(principal, annual_rate_percent, years)</code></h3><p>Calculates compound growth with annual compounding. The four-argument overload <code>compound(principal, annual_rate_percent, periods_per_year, years)</code> selects the compounding frequency. Principal must be non-negative; rate must be greater than -100%; periods must be a positive integer; years must be between 0 and 100000.</p><pre><code>define annual = gs_compute.compound(1000, 5, 3);
+define monthly = gs_compute.compound(1000, 5, 12, 3);
+print(annual);
+print(monthly);</code></pre></div>
+<div class="api"><h3><code>loan_payment(principal, annual_rate_percent, months)</code></h3><p>Returns the fixed monthly payment for a fully amortizing loan. Months must be a positive integer (maximum 120000); principal and annual rate must be non-negative. A zero interest rate returns <code>principal / months</code>.</p><pre><code>define payment = gs_compute.loan_payment(12000, 6, 24);
+print(payment);</code></pre></div>
+
+<h2 id="scalar">4. Scalar and numeric helpers</h2>
+<div class="api"><h3><code>clamp(value, lower, upper)</code></h3><p>Constrains a number to the inclusive bounds. If lower is greater than upper, the implementation swaps the bounds.</p><pre><code>print(gs_compute.clamp(125, 0, 100)); // 100</code></pre></div>
+<div class="api"><h3><code>lerp(start, end, t)</code></h3><p>Linear interpolation or extrapolation: <code>start + (end - start) * t</code>. Values of <code>t</code> outside 0–1 extrapolate.</p><pre><code>print(gs_compute.lerp(10, 20, 0.25)); // 12.5</code></pre></div>
+<div class="api"><h3><code>map_range(value, input_min, input_max, output_min, output_max)</code></h3><p>Maps a value linearly from one range to another. The input range endpoints must differ; the value is not clamped to the input range.</p><pre><code>print(gs_compute.map_range(5, 0, 10, 0, 100)); // 50</code></pre></div>
+<div class="api"><h3><code>sum(numbers)</code></h3><p>Returns the sum of a non-empty or empty numeric array (an empty array sums to zero). Every element must be a finite number; the array limit for this function is 1,000,000 values.</p><pre><code>print(gs_compute.sum([10, 20, 30])); // 60</code></pre></div>
+<div class="api"><h3><code>quadratic(a, b, c)</code></h3><p>Solves <code>a*x*x + b*x + c = 0</code> for real roots. Returns a two-element array in minus-root then plus-root order. Returns <code>null</code> if <code>a</code> is zero or the discriminant is negative.</p><pre><code>define roots = gs_compute.quadratic(1, -5, 6);
+print(roots[0]); // 2
+print(roots[1]); // 3</code></pre></div>
+
+<h2 id="statistics">5. Statistics APIs</h2>
+<div class="api"><h3><code>stats(numbers)</code></h3><p>Returns a descriptive-statistics object: <code>count</code>, <code>sum</code>, <code>mean</code>, <code>min</code>, <code>max</code>, <code>median</code>, <code>range</code>, <code>variance</code>, and <code>stddev</code>. Variance is population variance (divisor <code>N</code>), and standard deviation is its square root. Median sorts a copy of the input values.</p><pre><code>define s = gs_compute.stats([2, 4, 4, 4, 5, 5, 7, 9]);
+print(s.count);     // 8
+print(s.mean);      // 5
+print(s.median);    // 4.5
+print(s.variance);  // 4
+print(s.stddev);</code></pre></div>
+<div class="api"><h3><code>mean(numbers)</code></h3><p>Returns the arithmetic mean using an incremental mean update. Requires at least one finite numeric value.</p><pre><code>print(gs_compute.mean([2, 4, 6, 8])); // 5</code></pre></div>
+<div class="api"><h3><code>variance(numbers)</code></h3><p>Returns population variance using Welford's online update. Requires at least one finite numeric value.</p><pre><code>print(gs_compute.variance([2, 4, 6, 8]));</code></pre></div>
+
+<h2 id="vectors">6. Vector APIs</h2>
+<p>Vectors are one-dimensional GSVE arrays of finite numbers. Operations that combine two vectors require equal lengths.</p>
+<div class="api"><h3><code>dot(vector_a, vector_b)</code></h3><p>Returns the dot product, the sum of pairwise products. Both vectors must have the same non-zero length.</p><pre><code>print(gs_compute.dot([1, 2, 3], [4, 5, 6])); // 32</code></pre></div>
+<div class="api"><h3><code>vector_add(vector_a, vector_b)</code></h3><p>Returns element-wise addition of two equally sized vectors.</p><pre><code>print(gs_compute.vector_add([1, 2], [10, 20])); // [11, 22]</code></pre></div>
+<div class="api"><h3><code>vector_sub(vector_a, vector_b)</code></h3><p>Returns element-wise subtraction <code>a - b</code>.</p><pre><code>print(gs_compute.vector_sub([10, 20], [1, 2])); // [9, 18]</code></pre></div>
+<div class="api"><h3><code>vector_scale(vector, scalar)</code></h3><p>Multiplies every vector element by a finite scalar.</p><pre><code>print(gs_compute.vector_scale([1, 2, 3], 2)); // [2, 4, 6]</code></pre></div>
+<div class="api"><h3><code>norm(vector)</code></h3><p>Returns the Euclidean (L2) norm. Uses a scaled sum-of-squares algorithm to reduce overflow and underflow risk. The vector must be non-empty.</p><pre><code>print(gs_compute.norm([3, 4])); // 5</code></pre></div>
+
+<h2 id="matrices">7. Matrix APIs</h2>
+<p>Matrices are rectangular arrays of equally sized row arrays. Every cell must be a finite number. Matrix operations reject ragged rows and incompatible dimensions.</p>
+<div class="api"><h3><code>matrix_add(matrix_a, matrix_b)</code> and <code>matrix_sub(matrix_a, matrix_b)</code></h3><p>Element-wise addition or subtraction. Both matrices must have identical row and column counts.</p><pre><code>define a = [[1, 2], [3, 4]];
+define b = [[5, 6], [7, 8]];
+print(gs_compute.matrix_add(a, b));
+print(gs_compute.matrix_sub(b, a));</code></pre></div>
+<div class="api"><h3><code>transpose(matrix)</code></h3><p>Returns a new matrix with rows and columns exchanged. Rectangular matrices are supported.</p><pre><code>print(gs_compute.transpose([[1, 2, 3], [4, 5, 6]]));
+// [[1, 4], [2, 5], [3, 6]]</code></pre></div>
+<div class="api"><h3><code>matmul(matrix_a, matrix_b)</code></h3><p>Performs matrix multiplication. If A has shape <code>r × k</code>, B must have shape <code>k × c</code>, and the result has shape <code>r × c</code>. The C implementation uses cache-friendly blocked multiplication.</p><pre><code>define product = gs_compute.matmul(
+    [[1, 2], [3, 4]],
+    [[5, 6], [7, 8]]
+);
+print(product); // [[19, 22], [43, 50]]</code></pre></div>
+<div class="api"><h3><code>matrix_vector(matrix, vector)</code></h3><p>Multiplies an <code>r × c</code> matrix by a vector of length <code>c</code>; returns a vector of length <code>r</code>.</p><pre><code>print(gs_compute.matrix_vector([[1, 2], [3, 4]], [5, 6]));
+// [17, 39]</code></pre></div>
+<div class="api"><h3><code>matrix_determinant(matrix)</code></h3><p>Computes the determinant of a square matrix using Gaussian elimination with partial pivoting. A singular matrix returns numeric zero; malformed or non-square input returns <code>null</code>.</p><pre><code>print(gs_compute.matrix_determinant([[1, 2], [3, 4]])); // -2</code></pre></div>
+<div class="api"><h3><code>matrix_inverse(matrix)</code></h3><p>Computes the inverse of a square non-singular matrix using Gauss–Jordan elimination with scaled partial pivoting. Singular or numerically rejected matrices return <code>null</code>.</p><pre><code>define inverse = gs_compute.matrix_inverse([[4, 7], [2, 6]]);
+print(inverse);</code></pre></div>
+<div class="api"><h3><code>zeros(rows, columns)</code></h3><p>Creates a matrix of the requested positive integer dimensions, filled with zeros.</p><pre><code>print(gs_compute.zeros(2, 3)); // [[0, 0, 0], [0, 0, 0]]</code></pre></div>
+<div class="api"><h3><code>identity(size)</code></h3><p>Creates a square identity matrix of the requested positive integer size. The current implementation accepts sizes up to 3162.</p><pre><code>print(gs_compute.identity(3));
+// [[1, 0, 0], [0, 1, 0], [0, 0, 1]]</code></pre></div>
+<div class="api"><h3><code>solve(matrix_a, vector_b)</code></h3><p>Solves the square linear system <code>A*x = b</code> using Gaussian elimination with scaled partial pivoting. The vector length must equal the matrix dimension. Singular or numerically unstable systems return <code>null</code>.</p><pre><code>define solution = gs_compute.solve(
+    [[2, 1], [1, 3]],
+    [8, 13]
+);
+print(solution); // [2.2, 3.6]</code></pre></div>
+
+<h2 id="numerical">8. Numerical methods</h2>
+<div class="api"><h3><code>integrate(x_values, y_values)</code></h3><p>Approximates the definite integral for sampled data using the composite trapezoidal rule. The two arrays must have equal length of at least two. X values must be non-decreasing; repeated x values contribute zero width.</p><pre><code>define area = gs_compute.integrate(
+    [0, 1, 2, 3],
+    [0, 1, 2, 3]
+);
+print(area); // 4.5</code></pre></div>
+<div class="api"><h3><code>differentiate(x_values, y_values)</code></h3><p>Returns a derivative estimate at every sample. It uses forward difference at the first point, backward difference at the last point, and a two-point central difference for interior points. X coordinates must be strictly increasing wherever a stencil is evaluated; duplicate or decreasing coordinates return <code>null</code>.</p><pre><code>define slope = gs_compute.differentiate(
+    [0, 1, 2, 3],
+    [0, 1, 4, 9]
+);
+print(slope);</code></pre></div>
+<div class="api"><h3><code>linspace(start, end, count)</code></h3><p>Creates <code>count</code> evenly spaced numbers including both endpoints when count is greater than one. When count is one, the result contains only <code>start</code>. Count must be a positive integer.</p><pre><code>print(gs_compute.linspace(0, 1, 5)); // [0, 0.25, 0.5, 0.75, 1]</code></pre></div>
+
+<h2 id="conversion">9. Unit conversion</h2>
+<div class="api"><h3><code>convert(value, from_unit, to_unit)</code></h3><p>Converts a number between supported units in the same dimension. Unit strings are case-sensitive. Identical unit strings return the input value.</p>
+<div class="table-wrap"><table><thead><tr><th>Dimension</th><th>Supported units</th></tr></thead><tbody>
+<tr><td>Length</td><td><code>m</code>, <code>km</code>, <code>cm</code>, <code>mm</code>, <code>mi</code>, <code>ft</code>, <code>in</code>, <code>yd</code></td></tr>
+<tr><td>Mass</td><td><code>kg</code>, <code>g</code>, <code>mg</code>, <code>lb</code>, <code>oz</code></td></tr>
+<tr><td>Time</td><td><code>s</code>, <code>ms</code>, <code>min</code>, <code>h</code>, <code>day</code></td></tr>
+<tr><td>Decimal data size</td><td><code>B</code>, <code>KB</code>, <code>MB</code>, <code>GB</code> (base 1000)</td></tr>
+<tr><td>Binary data size</td><td><code>KiB</code>, <code>MiB</code>, <code>GiB</code> (base 1024)</td></tr>
+<tr><td>Temperature</td><td><code>C</code>, <code>F</code>, <code>K</code></td></tr>
+</tbody></table></div>
+<pre><code>print(gs_compute.convert(5, "km", "m"));   // 5000
+print(gs_compute.convert(32, "F", "C"));   // 0
+print(gs_compute.convert(1, "GiB", "MB")); // 1073.741824</code></pre>
+<p>Temperature conversions use Celsius as the intermediate scale. Kelvin values below absolute zero are rejected. Unsupported units and cross-dimension conversions return <code>null</code>.</p></div>
+
+<h2 id="validation">10. Validation and benchmarking</h2>
+<div class="api"><h3><code>is_close(a, b, absolute_tolerance?, relative_tolerance?)</code></h3><p>Returns a boolean indicating whether <code>abs(a-b) &lt;= abs_tol + rel_tol * max(abs(a), abs(b))</code>. Both tolerances default to <code>1e-9</code> and must be non-negative.</p><pre><code>print(gs_compute.is_close(0.1 + 0.2, 0.3));
+print(gs_compute.is_close(1000, 1000.1, 0.001, 0.0002));</code></pre></div>
+<div class="api"><h3><code>is_null(value)</code></h3><p>Returns <code>true</code> only when the first supplied argument is the VM's null value. If no argument is supplied, returns <code>false</code>.</p><pre><code>define result = gs_compute.matrix_inverse([[1, 2], [2, 4]]);
+print(gs_compute.is_null(result));</code></pre></div>
+<div class="api"><h3><code>benchmark_stats(count)</code></h3><p>Runs a fixed internal workload: generates values cycling from 0 through 999, computes Welford mean and variance, sorts the generated values, and measures CPU time. Returns an object containing <code>count</code>, <code>elapsed_ms</code>, <code>mean</code>, <code>variance</code>, <code>min</code>, <code>max</code>, <code>median</code>, and <code>workload</code>. Count must be an integer from 1 through 10,000,000.</p><pre><code>define result = gs_compute.benchmark_stats(100000);
+print(result.count);
+print(result.elapsed_ms);
+print(result.workload);</code></pre><p class="muted">This benchmarks the module's fixed statistics workload, not arbitrary user functions or the entire VM. Timings vary by CPU, system load and compiler build.</p></div>
+
+<h2 id="random">11. Seeded random APIs</h2>
+<div class="notice warning">The random generator is deterministic and intended for simulation, sampling and reproducible experiments. It is not cryptographically secure. Do not use it for passwords, tokens, keys, authentication secrets or security-sensitive identifiers.</div>
+<div class="api"><h3><code>random_seed(seed)</code></h3><p>Sets the module's deterministic pseudo-random generator state and returns <code>true</code> on success. The seed must be a finite number with absolute value no greater than 9007199254740991. A zero seed is mapped to the generator's non-zero default state.</p><pre><code>print(gs_compute.random_seed(12345));</code></pre></div>
+<div class="api"><h3><code>random(minimum?, maximum?)</code></h3><p>Returns a pseudo-random floating-point value in the half-open interval from the lower bound up to (but not including) the upper bound. Defaults are 0 and 1. If bounds are reversed, they are swapped.</p><pre><code>gs_compute.random_seed(7);
+print(gs_compute.random());       // [0, 1)
+print(gs_compute.random(10, 20));  // [10, 20)</code></pre></div>
+<div class="api"><h3><code>random_array(count, minimum?, maximum?)</code></h3><p>Returns an array of pseudo-random floating-point values. Count must be an integer from 0 through 10,000,000. Bounds default to 0 and 1 and are swapped when supplied in reverse order.</p><pre><code>gs_compute.random_seed(42);
+define samples = gs_compute.random_array(5, -1, 1);
+print(samples);</code></pre></div>
+
+<h2 id="metadata">12. Module metadata</h2>
+<div class="api"><h3><code>info()</code></h3><p>Returns metadata about the loaded module:</p><ul><li><code>name</code>: <code>"gs_compute"</code></li><li><code>version</code>: <code>"2.1.0"</code></li><li><code>backend</code>: <code>"native C CPU"</code></li><li><code>numeric_type</code>: <code>"IEEE-754 double"</code></li><li><code>status</code>: a capability summary string</li></ul><pre><code>define details = gs_compute.info();
+print(details.name);
+print(details.version);
+print(details.backend);</code></pre></div>
+
+<h2 id="errors">13. Types, limits and null results</h2>
+<ul>
+<li><strong>Numeric values:</strong> numerical parameters must be finite GSVE numbers. Numeric strings are not accepted as numbers.</li>
+<li><strong>Arrays:</strong> vector and data-array functions require arrays containing only finite numbers. Matrix functions require non-empty rectangular nested arrays of finite numbers.</li>
+<li><strong>Invalid input:</strong> most validation failures, unsupported units, incompatible dimensions, singular inverses/linear systems, non-finite calculations and allocation failures return the VM value <code>null</code>. <code>matrix_determinant</code> is a special case: a valid singular square matrix returns numeric zero.</li>
+<li><strong>Statistics:</strong> <code>stats</code> and <code>sum</code> cap the input at 1,000,000 values. Scientific array and matrix helpers use a 10,000,000-element guard, subject to shape-specific and memory checks.</li>
+<li><strong>Matrix creation:</strong> <code>zeros</code> requires positive integer dimensions and limits total cells to 10,000,000. <code>identity</code> currently accepts sizes up to 3162.</li>
+<li><strong>Precision:</strong> values use C <code>double</code> / IEEE-754 floating-point. Exact decimal equality is not guaranteed; use <code>is_close</code> for approximate comparisons.</li>
+<li><strong>Randomness:</strong> the PRNG state is shared by calls to this module instance. Reseeding resets the sequence. It is not a cryptographic random source.</li>
+</ul>
+<div class="notice">When an API returns <code>null</code>, inspect argument types, array shape, dimensions, bounds and numeric finiteness. Use <code>gs_compute.is_null(result)</code> to test the returned value explicitly.</div>
+
+<h2 id="complete-example">14. Complete GSVE example: sales and scientific calculations</h2>
+<pre><code>import gs_compute;
+
+# Sales calculations
+define unit_price = 89.50;
+define quantity = 12;
+define subtotal = unit_price * quantity;
+define discount_amount = gs_compute.percent(subtotal, 10);
+define discounted = gs_compute.discount(subtotal, 10);
+define total = gs_compute.tax(discounted, 5);
+
+print("Subtotal:");
+print(subtotal);
+print("Discount amount:");
+print(discount_amount);
+print("Total after discount and tax:");
+print(total);
+
+# Statistics for daily sales
+define daily_sales = [120, 135, 98, 160, 145, 172, 155];
+define report = gs_compute.stats(daily_sales);
+print("Average daily sales:");
+print(report.mean);
+print("Median daily sales:");
+print(report.median);
+print("Population standard deviation:");
+print(report.stddev);
+
+# Vector and matrix calculations
+define demand = [10, 15, 20];
+define unit_cost = [3, 4, 5];
+print("Weighted total:");
+print(gs_compute.dot(demand, unit_cost));
+
+define matrix_a = [[2, 1], [1, 3]];
+define matrix_b = [[8, 1], [13, 2]];
+print(gs_compute.matmul(matrix_a, matrix_b));
+print(gs_compute.solve(matrix_a, [8, 13]));
+print(gs_compute.matrix_inverse(matrix_a));
+
+# Sampled numerical data
+define x = [0, 1, 2, 3, 4];
+define y = [0, 1, 4, 9, 16];
+print("Approximate area:");
+print(gs_compute.integrate(x, y));
+print("Approximate derivative:");
+print(gs_compute.differentiate(x, y));
+
+# Reproducible experiment
+gs_compute.random_seed(2026);
+define samples = gs_compute.random_array(8, 0, 100);
+print(samples);
+print(gs_compute.stats(samples));</code></pre>
+
+<h2 id="related">15. Related documentation</h2>
+<ul><li><a href="syntax.html">Complete language syntax</a></li><li><a href="language.html">GSVE language reference</a></li><li><a href="vm.html">Virtual machine reference</a></li><li><a href="modules.html">Native module catalog</a></li><li><a href="native-api.html">Native module ABI and loading</a></li></ul>
+</main>
+<footer><div class="wrap"><strong>greenServeFE</strong><p>Developed by Dominex Macedon. <a href="index.html">Documentation home</a></p><p class="muted">This page documents the exported gs_compute 2.1.0 API and behavior implemented by the native module. Availability depends on building and installing the shared object compatible with the VM's native module ABI.</p></div></footer>
+</body></html>
