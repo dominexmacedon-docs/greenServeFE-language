@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b1120"><meta name="description" content="Complete reference to GSVE syntax, values, operators, control flow, functions, imports, iteration, nested data and class-like objects.">
+<meta name="keywords" content="greenServeFE, GSVE, programming language, bytecode VM">
+<meta name="author" content="Dominex Macedon"><meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://dominexmacedon-docs.github.io/greenServeFE-language/language.html"><link rel="icon" type="image/png" href="https://raw.githubusercontent.com/dominexmacedon-docs/greenServeFE-language/main/greenServeFE-logo.png">
+<meta property="og:type" content="article"><meta property="og:site_name" content="greenServeFE Language Guide"><meta property="og:title" content="GSVE Language Reference | greenServeFE"><meta property="og:description" content="Complete reference to GSVE syntax, values, operators, control flow, functions, imports, iteration, nested data and class-like objects."><meta property="og:url" content="https://dominexmacedon-docs.github.io/greenServeFE-language/language.html"><meta property="og:image" content="https://raw.githubusercontent.com/dominexmacedon-docs/greenServeFE-language/main/greenServeFE-logo.png">
+<meta name="twitter:card" content="summary"><meta name="twitter:title" content="GSVE Language Reference | greenServeFE"><meta name="twitter:description" content="Complete reference to GSVE syntax, values, operators, control flow, functions, imports, iteration, nested data and class-like objects.">
+<title>GSVE Language Reference | greenServeFE Documentation</title>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"GSVE Language Reference","description":"Complete reference to GSVE syntax, values, operators, control flow, functions, imports, iteration, nested data and class-like objects.","author":{"@type":"Person","name":"Dominex Macedon"},"publisher":{"@type":"Organization","name":"greenServeFE"},"url":"https://dominexmacedon-docs.github.io/greenServeFE-language/language.html","about":{"@type":"SoftwareApplication","name":"greenServeFE","applicationCategory":"DeveloperApplication","programmingLanguage":"GSVE"}}</script>
+<style>
+:root{color-scheme:dark;--bg:#0b1120;--panel:#111c2e;--panel2:#16243a;--text:#e8eef8;--muted:#a8b6ca;--line:#293a52;--accent:#69e0bd;--link:#8bb8ff;--code:#080e19}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 12% 0%,#19314a 0,transparent 42%),var(--bg);color:var(--text);font:16px/1.7 system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:var(--link);text-decoration:none}a:hover{text-decoration:underline}.wrap{width:min(1080px,calc(100% - 36px));margin:auto}
+header{border-bottom:1px solid var(--line);padding:20px 0;background:#0b1120dd}.brand{display:flex;align-items:center;gap:12px}.brand img{width:42px;height:42px;object-fit:contain}.brand strong{font-size:1.1rem}.brand small{display:block;color:var(--muted)}nav{display:flex;flex-wrap:wrap;gap:15px;margin-top:14px;font-size:.92rem}
+main{padding:42px 0 70px}.eyebrow{color:var(--accent);text-transform:uppercase;font-size:.75rem;font-weight:800;letter-spacing:.13em}h1{font-size:clamp(2rem,5vw,3.5rem);line-height:1.1;letter-spacing:-.035em;margin:.45em 0}h2{font-size:1.55rem;margin:1.7em 0 .5em}h3{font-size:1.1rem;margin:1.25em 0 .4em}.lead{font-size:1.12rem;color:var(--muted);max-width:850px}
+.panel{background:linear-gradient(145deg,var(--panel),#0f1929);border:1px solid var(--line);border-radius:15px;padding:20px;margin:18px 0}.muted{color:var(--muted)}code,pre{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}pre{overflow:auto;background:var(--code);border:1px solid var(--line);border-radius:11px;padding:17px;color:#dce8f8;line-height:1.6}code{color:#b8f3df}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;margin:15px 0}th,td{text-align:left;vertical-align:top;padding:11px;border-bottom:1px solid var(--line)}th{color:var(--accent);font-size:.9rem}td:first-child{white-space:nowrap}li{margin:.35em 0}.notice{border-left:3px solid var(--accent);padding:12px 16px;background:#102333;color:var(--muted);border-radius:0 9px 9px 0}.crumb{color:var(--muted);font-size:.9rem}footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--muted)}
+@media(max-width:600px){.wrap{width:calc(100% - 26px)}main{padding-top:28px}td:first-child{white-space:normal}}
+</style></head><body><header><div class="wrap"><a class="brand" href="index.html"><img src="https://raw.githubusercontent.com/dominexmacedon-docs/greenServeFE-language/main/greenServeFE-logo.png" alt="greenServeFE logo"><span><strong>greenServeFE</strong><small>Language, VM and Native Module Reference</small></span></a><nav aria-label="Documentation"><a href="index.html">Home</a><a href="language.html">Language</a><a href="vm.html">Virtual Machine</a><a href="modules.html">Modules</a><a href="server.html">Server</a><a href="construct.html">Construct</a></nav></div></header>
+<main class="wrap"><p class="crumb"><a href="index.html">Documentation home</a> / Language</p><div class="eyebrow">Language</div><h1>GSVE Language Reference</h1><p class="lead">Complete reference to GSVE syntax, values, operators, control flow, functions, imports, iteration, nested data and class-like objects.</p><h2>Language design</h2><p>GSVE is the source language executed by greenServeFE. Programs use the <code>.gsve</code> extension. The VM language keeps a compact syntax with explicit definitions, blocks, functions and module imports.</p><h2>Keywords</h2><pre>define if else for in while func return break continue import from true false null</pre><h2>Values</h2><p>Supported runtime values include null, numbers, booleans, strings, arrays, objects, functions, native functions and iterators.</p><pre>define title = "greenServeFE";
+define ready = true;
+define scores = [90, 95, 100];
+define profile = {name: "Ada", active: true};</pre><h2>Operators</h2><p>Arithmetic: <code>+ - * / %</code>. Comparisons: <code>== != &lt; &lt;= &gt; &gt;=</code>. Logical: <code>&amp;&amp; || !</code>. Logical AND and OR short-circuit and return booleans.</p><h2>Control flow</h2><pre>if (ready) {
+    print("ready");
+} else {
+    print("waiting");
+}
+
+define i = 0;
+while (i &lt; 3) {
+    print(i);
+    i = i + 1;
+}
+
+for (item in scores) {
+    print(item);
+}</pre><h2>Functions, recursion and closures</h2><pre>func factorial(n) {
+    if (n &lt;= 1) { return 1; }
+    return n * factorial(n - 1);
+}
+print(factorial(5));</pre><p>Function values capture their lexical environment. The VM supports recursion and nested functions.</p><h2>Iteration semantics</h2><ul><li>Arrays yield their values.</li><li>Strings yield one-character strings.</li><li>Objects yield their keys in insertion order.</li></ul><h2>Nested data and mutation</h2><pre>define account = {profile: {name: "Ada", scores: [10, 20, 30]}};
+account.profile.name = "Grace";
+account.profile.scores[1] = 99;</pre><h2>Class-like objects</h2><p><code>class(fields, methods, parent?)</code> creates a class descriptor; <code>new(ClassName)</code> creates an instance; <code>instanceof(instance, ClassName)</code> checks the class and parent chain. Methods are ordinary functions and receive <code>self</code> explicitly. This is not automatic receiver binding or constructor dispatch.</p><pre>define Person = class({name: "unknown"}, {
+    greet: func(self) { return "Hello " + self.name; }
+});
+define ada = new(Person);
+ada.name = "Ada";
+print(ada.greet(ada));</pre><h2>Imports</h2><pre>import gs_math;
+from gsnum import sum, mean;
+print(gs_math.sqrt(81));</pre><h2>Related references</h2><ul><li><a href="builtins.html">Core built-in functions</a></li><li><a href="bytecode.html">Bytecode instruction set</a></li><li><a href="native-api.html">Native module ABI</a></li></ul></main>
+<footer><div class="wrap"><strong>greenServeFE</strong><p>Developed by Dominex Macedon. <a href="index.html">Documentation home</a> · <a href="https://github.com/dominexmacedon-docs/greenServeFE-build">Runtime source and implementation reference</a></p><p class="muted">API descriptions follow the implementation and reference material available in the linked build repository. Availability can depend on the installed native module build.</p></div></footer></body></html>
