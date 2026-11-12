@@ -35,7 +35,7 @@
 <p class="lead">A practical, implementation-aligned reference to the GSVE language accepted by the greenServeFE lexer, parser, compiler and bytecode virtual machine. It covers source syntax, runtime values, control flow, functions, classes, imports, built-ins and the native module boundary.</p>
 <div class="notice"><strong>Version and scope.</strong> This reference describes the source currently present in <a href="https://github.com/dominexmacedon-docs/greenServeFE-build">greenServeFE-build</a> (runtime identifies itself as 1.0.6). Native modules are independently compiled shared libraries. An API appearing in a module page is available only when its matching module is built and installed.</div>
 <nav class="toc panel" aria-label="On this page">
-<a href="#quick-start">Quick start</a><a href="#lexical">Lexical rules</a><a href="#values">Values and literals</a><a href="#expressions">Expressions and operators</a><a href="#variables">Variables and assignment</a><a href="#collections">Arrays and objects</a><a href="#control">Control flow</a><a href="#functions">Functions and closures</a><a href="#classes">Classes</a><a href="#builtins">Built-in functions</a><a href="#imports">Imports and modules</a><a href="#vm">Compiler and VM</a><a href="#modules">Module catalog</a><a href="#diagnostics">Diagnostics and CLI</a><a href="#limits">Current language boundaries</a>
+<a href="#quick-start">Quick start</a><a href="#lexical">Lexical rules</a><a href="#values">Values and literals</a><a href="#expressions">Expressions and operators</a><a href="#variables">Variables and assignment</a><a href="#collections">Arrays and objects</a><a href="#control">Control flow</a><a href="#functions">Functions and closures</a><a href="#classes">Classes</a><a href="#builtins">Built-in functions</a><a href="#imports">Imports and modules</a><a href="#vm">Compiler and VM</a><a href="#modules">Module catalog</a><a href="#grammar">Grammar reference</a><a href="#bytecode">Bytecode instructions</a><a href="#runtime-model">Runtime model</a><a href="#native-abi">Native module ABI</a><a href="#module-inventory">Build module inventory</a><a href="#diagnostics">Diagnostics and CLI</a><a href="#limits">Current language boundaries</a>
 </nav>
 
 <h2 id="quick-start">1. Quick start</h2>
@@ -463,7 +463,7 @@ print(gs_math.sqrt(81));</pre>
 </tbody></table></div>
 <div class="notice"><strong>Module safety:</strong> native modules execute inside the same process as the VM and are not sandboxed. Filesystem and network modules operate with the process's operating-system permissions. Never load untrusted <code>.so</code> files.</div>
 
-<h2 id="diagnostics">20. Diagnostics and command-line modes</h2>
+<h2 id="diagnostics">19. Diagnostics and command-line modes</h2>
 <table><thead><tr><th>Command</th><th>Behavior</th></tr></thead><tbody>
 <tr><td><code>greenServeFE file.gsve</code></td><td>Compile and execute a GSVE program.</td></tr>
 <tr><td><code>greenServeFE --version</code></td><td>Print runtime version.</td></tr>
@@ -473,7 +473,7 @@ print(gs_math.sqrt(81));</pre>
 </tbody></table>
 <p>Source diagnostics identify lexer, parser, compiler or runtime stages and include line/column positions where available. The CLI prints the relevant source line and a caret under the reported location.</p>
 
-<h2 id="limits">21. Current implementation boundaries</h2>
+<h2 id="limits">20. Current implementation boundaries</h2>
 <ul>
 <li>The accepted source extension is <code>.gsve</code>.</li>
 <li>The language is dynamically typed; numbers are represented as doubles.</li>
