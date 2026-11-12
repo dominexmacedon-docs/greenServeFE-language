@@ -1,17 +1,793 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0b1120"><meta name="description" content="Reference for the optional native server module: route registration, request and response objects, static serving, TLS options, HTTP client helpers and file/template utilities."><meta name="keywords" content="greenServeFE, GSVE, HTTP server, routing, construct, HTML generation, native module API"><meta name="author" content="Dominex Macedon"><meta name="robots" content="index,follow"><link rel="canonical" href="https://dominexmacedon-docs.github.io/greenServeFE-language/server.html"><link rel="icon" type="image/png" href="https://raw.githubusercontent.com/dominexmacedon-docs/greenServeFE-language/main/greenServeFE-logo.png"><meta property="og:type" content="article"><meta property="og:title" content="greenServeFE HTTP Server and Networking API | greenServeFE"><meta property="og:description" content="Reference for the optional native server module: route registration, request and response objects, static serving, TLS options, HTTP client helpers and file/template utilities."><meta property="og:url" content="https://dominexmacedon-docs.github.io/greenServeFE-language/server.html"><meta property="og:image" content="https://raw.githubusercontent.com/dominexmacedon-docs/greenServeFE-language/main/greenServeFE-logo.png"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="greenServeFE HTTP Server and Networking API"><meta name="twitter:description" content="Reference for the optional native server module: route registration, request and response objects, static serving, TLS options, HTTP client helpers and file/template utilities."><title>greenServeFE HTTP Server and Networking API | greenServeFE Documentation</title><script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"greenServeFE HTTP Server and Networking API","description":"Reference for the optional native server module: route registration, request and response objects, static serving, TLS options, HTTP client helpers and file/template utilities.","author":{"@type":"Person","name":"Dominex Macedon"},"url":"https://dominexmacedon-docs.github.io/greenServeFE-language/server.html"}</script><style>:root{color-scheme:dark;--bg:#0b1120;--panel:#111c2e;--text:#e8eef8;--muted:#a8b6ca;--line:#293a52;--accent:#69e0bd;--link:#8bb8ff;--code:#080e19}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 12% 0%,#19314a 0,transparent 42%),var(--bg);color:var(--text);font:16px/1.7 system-ui,sans-serif}a{color:var(--link);text-decoration:none}.wrap{width:min(1080px,calc(100% - 36px));margin:auto}header,footer{border-bottom:1px solid var(--line);padding:20px 0}footer{border-top:1px solid var(--line);border-bottom:0;color:var(--muted)}.brand{display:flex;align-items:center;gap:12px}.brand img{width:42px;height:42px}nav{display:flex;flex-wrap:wrap;gap:15px;margin-top:14px}main{padding:42px 0 70px}.eyebrow{color:var(--accent);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:.75rem}h1{font-size:clamp(2rem,5vw,3.4rem);line-height:1.1}.lead,.muted{color:var(--muted)}pre{overflow:auto;background:var(--code);border:1px solid var(--line);border-radius:10px;padding:16px}code{color:#b8f3df;font-family:ui-monospace,Consolas,monospace}.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:17px;margin:18px 0}.notice{border-left:3px solid var(--accent);padding:12px 16px;background:#102333;color:var(--muted)}table{width:100%;border-collapse:collapse}td,th{text-align:left;padding:10px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--accent)}</style></head><body><header><div class="wrap"><a class="brand" href="index.html"><img src="https://raw.githubusercontent.com/dominexmacedon-docs/greenServeFE-language/main/greenServeFE-logo.png" alt="greenServeFE"><strong>greenServeFE</strong></a><nav><a href="index.html">Home</a><a href="language.html">Language</a><a href="vm.html">VM</a><a href="modules.html">Modules</a><a href="server.html">Server</a><a href="construct.html">Construct</a></nav></div></header><main class="wrap"><p class="muted"><a href="index.html">Documentation home</a> / Reference</p><div class="eyebrow">Reference documentation</div><h1>greenServeFE HTTP Server and Networking API</h1><p class="lead">Reference for the optional native server module: route registration, request and response objects, static serving, TLS options, HTTP client helpers and file/template utilities.</p><h2>Module and runtime boundary</h2><p>Import the optional native module with <code>import server;</code> when the matching <code>server.so</code> is installed. The build README distinguishes the core VM server name surface from the separately built host-runtime networking integration. The complete HTTP APIs below refer to the native server implementation, not a promise that every greenServeFE executable bundles networking automatically.</p><h2>Route registration</h2><table><tr><th>Export</th><th>Purpose</th></tr><tr><td><code>get</code></td><td>Register a handler for the corresponding HTTP method</td></tr><tr><td><code>page</code></td><td>Register a fixed HTML string as a GET route</td></tr><tr><td><code>post</code></td><td>Register a handler for the corresponding HTTP method</td></tr><tr><td><code>put</code></td><td>Register a handler for the corresponding HTTP method</td></tr><tr><td><code>patch</code></td><td>Register a handler for the corresponding HTTP method</td></tr><tr><td><code>delete</code></td><td>Register a handler for the corresponding HTTP method</td></tr><tr><td><code>options</code></td><td>Register a handler for the corresponding HTTP method</td></tr><tr><td><code>any</code></td><td>Register a handler for the corresponding HTTP method</td></tr><tr><td><code>use</code></td><td>Register prefix middleware</td></tr><tr><td><code>clear_routes</code></td><td>Clear registered routes</td></tr><tr><td><code>serve</code></td><td>Start the HTTP listener</td></tr></table><pre>import server;
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b1120">
+<meta name="description" content="Complete greenServeFE native HTTP server guide: full server.c API reference, GSVE routing, middleware, request and response handling, HTML generation, templates, shop, sales, inventory, admin dashboards, JSON APIs, TLS, static files and deployment examples.">
+<meta name="keywords" content="greenServeFE server, GSVE HTTP server, server.c API, greenServeFE web development, GSVE shop example, inventory management, sales dashboard, HTML templates, middleware, TLS, JSON API, construct module">
+<meta name="author" content="Dominex Macedon">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://dominexmacedon-docs.github.io/greenServeFE-language/server.html">
+<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/dominexmacedon-docs/greenServeFE-language/main/greenServeFE-logo.png">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Complete greenServeFE Server Development Guide">
+<meta property="og:description" content="Learn the complete native server API with full GSVE applications: storefront, product catalog, sales, inventory, admin pages, HTML templates, middleware, APIs and TLS.">
+<meta property="og:url" content="https://dominexmacedon-docs.github.io/greenServeFE-language/server.html">
+<meta property="og:image" content="https://raw.githubusercontent.com/dominexmacedon-docs/greenServeFE-language/main/greenServeFE-logo.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Complete greenServeFE Server Development Guide">
+<meta name="twitter:description" content="A practical, source-aligned guide to the greenServeFE native HTTP server and complete GSVE web applications.">
+<title>Complete greenServeFE Server Development Guide | GSVE Documentation</title>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TechArticle","headline":"Complete greenServeFE Server Development Guide","description":"Complete API reference and practical GSVE server applications covering routes, middleware, HTML, templates, shop, sales, inventory, JSON APIs and deployment.","author":{"@type":"Person","name":"Dominex Macedon"},"url":"https://dominexmacedon-docs.github.io/greenServeFE-language/server.html","programmingLanguage":["greenServeFE","GSVE","C"],"about":{"@type":"SoftwareApplication","name":"greenServeFE","applicationCategory":"DeveloperApplication"}}
+</script>
+<style>
+:root{color-scheme:dark;--bg:#0b1120;--panel:#111c2e;--panel2:#15243a;--text:#e8eef8;--muted:#a8b6ca;--line:#293a52;--accent:#69e0bd;--link:#8bb8ff;--code:#080e19;--warn:#f5c879}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:18px}body{margin:0;background:radial-gradient(ellipse at 12% 0%,#19314a 0,transparent 42%),var(--bg);color:var(--text);font:16px/1.72 system-ui,-apple-system,Segoe UI,sans-serif}a{color:var(--link);text-decoration:none}a:hover{text-decoration:underline}.wrap{width:min(1160px,calc(100% - 36px));margin:auto}header,footer{border-bottom:1px solid var(--line);padding:18px 0}footer{border-top:1px solid var(--line);border-bottom:0;color:var(--muted);margin-top:60px}.brand{display:flex;align-items:center;gap:12px;color:var(--text)}.brand img{width:42px;height:42px}nav{display:flex;flex-wrap:wrap;gap:15px;margin-top:14px}main{padding:38px 0 70px}.eyebrow{color:var(--accent);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:.75rem}h1{font-size:clamp(2.1rem,5vw,3.8rem);line-height:1.08;margin:.35em 0}h2{font-size:1.8rem;margin-top:2.2em;border-bottom:1px solid var(--line);padding-bottom:.35em}h3{font-size:1.25rem;margin-top:1.7em}h4{font-size:1.05rem}.lead,.muted{color:var(--muted)}.lead{font-size:1.13rem;max-width:900px}pre{overflow:auto;background:var(--code);border:1px solid var(--line);border-radius:10px;padding:17px;line-height:1.55;tab-size:4}code{color:#b8f3df;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.93em}pre code{font-size:.9rem;color:#d6e6f7}.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;margin:18px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}.tile{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px}.notice{border-left:3px solid var(--accent);padding:12px 16px;background:#102333;color:var(--muted);margin:18px 0}.warning{border-left-color:var(--warn);background:#302719}.toc{columns:2;column-gap:30px}.toc li{break-inside:avoid;margin:.25em 0}.pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:3px 10px;color:var(--accent);font-size:.8rem;margin:3px}.scroll{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:650px}td,th{text-align:left;padding:10px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--accent)}.small{font-size:.9rem;color:var(--muted)}.back{margin-top:28px}kbd{background:#202e42;border:1px solid var(--line);border-radius:4px;padding:1px 5px}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<a class="brand" href="index.html"><img src="https://raw.githubusercontent.com/dominexmacedon-docs/greenServeFE-language/main/greenServeFE-logo.png" alt="greenServeFE"><strong>greenServeFE documentation</strong></a>
+<nav><a href="index.html">Home</a><a href="language.html">Language</a><a href="vm.html">VM</a><a href="builtins.html">Built-ins</a><a href="modules.html">Modules</a><a href="server.html">Server guide</a><a href="construct.html">HTML construct</a></nav>
+</div></header>
+<main class="wrap">
+<p class="muted"><a href="index.html">Documentation home</a> / Web development</p>
+<div class="eyebrow">Complete practical reference · Native C server module</div>
+<h1>Build complete web applications with greenServeFE</h1>
+<p class="lead">This guide takes the <code>server</code> module beyond a hello-world listener. It documents the API exported by the native <code>server.c</code> implementation and provides substantial GSVE examples for HTML websites, reusable templates, product catalogs, shopping carts, sales records, inventory workflows, admin dashboards, JSON endpoints, middleware, file delivery and HTTPS.</p>
+<div class="panel"><strong>What this guide covers</strong><div class="grid"><div><span class="pill">HTTP routing</span><span class="pill">Middleware</span><span class="pill">Request parsing</span><span class="pill">Response API</span></div><div><span class="pill">HTML pages</span><span class="pill">Templates</span><span class="pill">Construct</span><span class="pill">Static files</span></div><div><span class="pill">Shop</span><span class="pill">Sales</span><span class="pill">Inventory</span><span class="pill">Admin</span></div><div><span class="pill">JSON API</span><span class="pill">HTTP client</span><span class="pill">TLS</span><span class="pill">Security</span></div></div></div>
+<div class="notice"><strong>Source alignment:</strong> API names and behavior below are derived from the greenServeFE native <code>server.c</code> implementation and the build repository's documented <code>construct</code> integration. Examples use the actual GSVE declaration keyword <code>define</code> and function syntax. The optional native module must be built and installed separately; a core VM build does not automatically include this networking runtime.</div>
+<h2 id="contents">Contents</h2>
+<ol class="toc">
+<li><a href="#architecture">Architecture and setup</a></li><li><a href="#quickstart">First server</a></li><li><a href="#routes">Routes and parameters</a></li><li><a href="#request">Request object</a></li><li><a href="#response">Complete response API</a></li><li><a href="#middleware">Middleware</a></li><li><a href="#templates">HTML templates</a></li><li><a href="#construct">Construct HTML generation</a></li><li><a href="#storefront">Complete storefront</a></li><li><a href="#inventory">Inventory management</a></li><li><a href="#sales">Sales and order workflows</a></li><li><a href="#dashboard">Admin dashboard</a></li><li><a href="#api">JSON API patterns</a></li><li><a href="#files">Static files and downloads</a></li><li><a href="#client">Outbound HTTP client</a></li><li><a href="#tls">HTTPS and deployment</a></li><li><a href="#security">Security and operational limits</a></li><li><a href="#api-reference">Full export inventory</a></li>
+</ol>
+<h2 id="architecture">Architecture and setup</h2>
+<p>The server is an optional native module, not a language keyword. The program imports it with <code>import server;</code>. The C module exposes route registration, a socket listener, response helpers, template/file functions and libcurl-based outbound HTTP functions.</p>
+<div class="panel"><strong>Request lifecycle</strong><p class="small">Client → TCP listener → request parser → route match → matching middleware → route handler → response serialization → client</p><p class="small">The current listener accepts a connection and forks a child process to handle it. That matters for application design: ordinary in-memory mutations made while handling a request are not a durable shared database. Use a database or another persistent store for carts, stock, orders and user records.</p></div>
+<h3>Build and install</h3>
+<ol><li>Open the greenServeFE build repository and run its manual workflow for building the <code>construct</code> and <code>server</code> native modules.</li><li>Install the resulting <code>server.so</code> (and <code>construct.so</code> if you use it) in a directory searched by the native module loader.</li><li>Configure <code>GREENSERVE_MODULE_PATH</code> and, where required by the shared libraries, <code>LD_LIBRARY_PATH</code>.</li><li>Run the GSVE program with the greenServeFE executable.</li></ol>
+<pre><code>export GREENSERVE_MODULE_PATH=/usr/local/lib/modules
+export LD_LIBRARY_PATH=/usr/local/lib/modules:$LD_LIBRARY_PATH
+greenServeFE app.gsve</code></pre>
+<p class="small">The exact package contents and linked system libraries depend on the module build workflow and release. Confirm that the installed shared object is compatible with the VM native-module ABI.</p>
+<h2 id="quickstart">First server: a complete small site</h2>
+<p>Create <code>app.gsve</code>. The server root is the current directory; this minimal example disables automatic static serving and explicitly registers its routes.</p>
+<pre><code>import server;
+
 func home(req, res) {
-    res.html("&lt;h1&gt;Hello from greenServeFE&lt;/h1&gt;");
-}
-server.get("/", home);
-server.serve(".", 8080, {static: false, host: "0.0.0.0"});</pre><h2>Request object</h2><p>Handlers receive <code>method</code>, <code>path</code>, <code>queryString</code>, <code>query</code>, <code>body</code>, <code>headers</code> and <code>params</code> when a parameterized route matches. Colon segments create named parameters. Wildcard routes expose the matched value as <code>req.params.wildcard</code>. Query strings are available through <code>req.query</code>.</p><h2>Response helpers</h2><p>Reference response helpers include <code>status</code>, <code>set</code>, <code>type</code>, <code>send</code>, <code>json</code>, <code>html</code>, <code>redirect</code>, <code>sendFile</code> and <code>render</code>. The current build README additionally documents <code>text</code>, <code>jsonp</code>, <code>noContent</code>, <code>download</code> and cookie/header helpers. Check <code>server.info()</code> on the installed module to confirm optional capabilities.</p><pre>func api(req, res) {
     res.status(200);
-    res.set("X-App", "greenServeFE");
-    res.json({method: req.method, path: req.path, query: req.query});
+    res.set("X-Powered-By", "greenServeFE");
+    res.html("&lt;!doctype html&gt;&lt;html lang='en'&gt;&lt;head&gt;&lt;meta charset='utf-8'&gt;&lt;title&gt;My site&lt;/title&gt;&lt;/head&gt;&lt;body&gt;&lt;h1&gt;Hello from GSVE&lt;/h1&gt;&lt;p&gt;A native HTTP route.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;");
 }
-server.get("/api/info", api);</pre><h2>Serve options</h2><p>Documented options include <code>index</code>, <code>static</code>, <code>cors</code>, <code>notFound</code>, <code>host</code>, <code>backlog</code>, <code>max_requests</code>, <code>protocol</code>, <code>cert</code> and <code>key</code>. Reference defaults: host <code>0.0.0.0</code>, port <code>8080</code>, index <code>index.html</code>.</p><pre>server.serve(".", 8443, {
+
+func health(req, res) {
+    res.json({ok: true, service: "storefront"});
+}
+
+server.get("/", home);
+server.get("/health", health);
+server.serve(".", 8080, {host: "0.0.0.0", static: false});</code></pre>
+<p>Open <code>http://127.0.0.1:8080/</code> on the machine running the server. If you bind to <code>0.0.0.0</code>, the listener accepts connections on available IPv4 interfaces; use firewall rules to control who can reach it.</p>
+<h2 id="routes">Routes, methods, parameters and matching</h2>
+<p>Register handlers before calling <code>serve</code>. A route handler receives exactly two arguments: <code>func handler(req, res)</code>. Named path segments use a colon; a wildcard segment is supported by the route matcher. Exact routes are preferred over less-specific matches. Middleware registered with <code>use</code> is prefix-matched.</p>
+<div class="scroll"><table><tr><th>Registration</th><th>HTTP method</th><th>Use</th></tr>
+<tr><td><code>server.get(path, handler)</code></td><td>GET</td><td>Read pages and resources</td></tr><tr><td><code>server.post(path, handler)</code></td><td>POST</td><td>Create or submit data</td></tr><tr><td><code>server.put(path, handler)</code></td><td>PUT</td><td>Replace a resource</td></tr><tr><td><code>server.patch(path, handler)</code></td><td>PATCH</td><td>Partially update a resource</td></tr><tr><td><code>server.delete(path, handler)</code></td><td>DELETE</td><td>Delete a resource</td></tr><tr><td><code>server.options(path, handler)</code></td><td>OPTIONS</td><td>Handle OPTIONS requests</td></tr><tr><td><code>server.any(path, handler)</code></td><td>Any</td><td>Match any method</td></tr><tr><td><code>server.page(path, html)</code></td><td>GET</td><td>Register a fixed HTML string</td></tr><tr><td><code>server.use(prefix, handler)</code></td><td>Middleware</td><td>Run middleware for a path prefix</td></tr><tr><td><code>server.clear_routes()</code></td><td>—</td><td>Clear all registered routes</td></tr></table></div>
+<h3>Named route parameters and query strings</h3>
+<pre><code>import server;
+
+func product_detail(req, res) {
+    define product_id = req.params.id;
+    define page_number = req.query.page;
+    res.json({
+        id: product_id,
+        page: page_number,
+        route: req.path
+    });
+}
+
+func search(req, res) {
+    res.json({
+        term: req.query.q,
+        sort: req.query.sort,
+        raw_query: req.queryString
+    });
+}
+
+server.get("/products/:id", product_detail);
+server.get("/search", search);
+server.serve(".", 8080, {static: false});</code></pre>
+<p>For <code>/products/sku-42?page=2</code>, the path parameter is available as <code>req.params.id</code>; query parameters are available as properties of <code>req.query</code>. Query decoding handles percent-encoded values and plus signs.</p>
+<h3>Wildcard route</h3>
+<pre><code>func catch_all(req, res) {
+    res.json({requested: req.params.wildcard});
+}
+server.get("/docs/*", catch_all);</code></pre>
+<h2 id="request">Request object: fields and parsing</h2>
+<div class="scroll"><table><tr><th>Field</th><th>Type / meaning</th></tr>
+<tr><td><code>req.method</code></td><td>HTTP method text, such as GET or POST</td></tr><tr><td><code>req.path</code></td><td>URL path without the query string</td></tr><tr><td><code>req.queryString</code></td><td>Raw query-string text</td></tr><tr><td><code>req.query</code></td><td>Object containing decoded query parameters</td></tr><tr><td><code>req.body</code></td><td>Request body as text</td></tr><tr><td><code>req.form</code></td><td>URL-encoded form fields parsed into an object</td></tr><tr><td><code>req.headers</code></td><td>Request header object</td></tr><tr><td><code>req.params</code></td><td>Named route parameters, when present</td></tr><tr><td><code>req.cookies</code></td><td>Cookie name/value object parsed from the Cookie header</td></tr><tr><td><code>req.isJson</code></td><td>Boolean indicating an application/json content type</td></tr><tr><td><code>req.contentType</code></td><td>Content-Type header, when present</td></tr><tr><td><code>req.isAjax</code></td><td>Boolean based on X-Requested-With: XMLHttpRequest</td></tr></table></div>
+<h3>Read a form submission</h3>
+<pre><code>import server;
+
+func contact_submit(req, res) {
+    define name = req.form.name;
+    define email = req.form.email;
+    define message = req.form.message;
+
+    if (name == null || email == null || message == null) {
+        res.status(400);
+        res.json({ok: false, error: "Missing required form fields"});
+        return;
+    }
+
+    res.json({ok: true, received: {name: name, email: email}});
+}
+
+server.post("/contact", contact_submit);
+server.serve(".", 8080, {static: false});</code></pre>
+<h3>Read a JSON request body</h3>
+<p>The native request parser exposes the body as text and marks JSON content types with <code>req.isJson</code>. This server module does not itself provide a JSON parser for turning arbitrary request-body text into a nested GSVE object. For production JSON APIs, use a JSON parsing module available in your build, or accept explicitly defined form fields. Do not assume <code>req.body</code> is already an object.</p>
+<h2 id="response">Complete response API</h2>
+<div class="scroll"><table><tr><th>Method</th><th>Signature</th><th>Behavior</th></tr>
+<tr><td><code>res.status</code></td><td><code>status(code)</code></td><td>Set numeric HTTP status code.</td></tr>
+<tr><td><code>res.set</code></td><td><code>set(name, value)</code></td><td>Set a response header; CR/LF is rejected.</td></tr>
+<tr><td><code>res.header</code></td><td><code>header(name, value)</code></td><td>Alias for <code>set</code>.</td></tr>
+<tr><td><code>res.cookie</code></td><td><code>cookie(name, value, maxAge?, secure?)</code></td><td>Set a cookie with Path=/ and SameSite=Lax; optional max-age and secure/httpOnly flags.</td></tr>
+<tr><td><code>res.clearCookie</code></td><td><code>clearCookie(name)</code></td><td>Set an empty cookie with Max-Age=0.</td></tr>
+<tr><td><code>res.type</code></td><td><code>type(contentType)</code></td><td>Set the response content type.</td></tr>
+<tr><td><code>res.send</code></td><td><code>send(value)</code></td><td>Send text as text; non-string values are serialized as JSON.</td></tr>
+<tr><td><code>res.text</code></td><td><code>text(value)</code></td><td>Send text/plain.</td></tr>
+<tr><td><code>res.noContent</code></td><td><code>noContent()</code></td><td>Send status 204 with an empty body.</td></tr>
+<tr><td><code>res.json</code></td><td><code>json(value)</code></td><td>Serialize GSVE values as JSON and send application/json.</td></tr>
+<tr><td><code>res.jsonp</code></td><td><code>jsonp(value, callback)</code></td><td>Send JSONP; callback must be a dotted JavaScript identifier.</td></tr>
+<tr><td><code>res.html</code></td><td><code>html(markup)</code></td><td>Send HTML as text/html. Markup is inserted as supplied.</td></tr>
+<tr><td><code>res.redirect</code></td><td><code>redirect(url)</code></td><td>Set Location and default to status 302; rejects CR/LF and unsupported schemes.</td></tr>
+<tr><td><code>res.sendFile</code></td><td><code>sendFile(relativePath)</code></td><td>Send a file under the configured server root after path-safety checks.</td></tr>
+<tr><td><code>res.download</code></td><td><code>download(path, filename?)</code></td><td>Send a file as an attachment with a validated filename.</td></tr>
+<tr><td><code>res.render</code></td><td><code>render(relativePath, data?)</code></td><td>Read a template under the server root and substitute placeholders.</td></tr></table></div>
+<h3>Response examples</h3>
+<pre><code>func created(req, res) {
+    res.status(201);
+    res.set("Location", "/api/items/42");
+    res.json({ok: true, id: 42});
+}
+
+func not_found(req, res) {
+    res.status(404);
+    res.type("text/plain; charset=utf-8");
+    res.send("Resource not found");
+}
+
+func redirect_to_shop(req, res) {
+    res.redirect("/shop");
+}
+
+func export_file(req, res) {
+    res.download("exports/catalog.csv", "catalog.csv");
+}</code></pre>
+<p>Response helpers end the response when they send a body. Set the status and headers before sending. <code>res.send</code> is polymorphic: strings are emitted as text; other supported VM values are serialized as JSON.</p>
+<h2 id="middleware">Middleware and request guards</h2>
+<p>Middleware is registered with <code>server.use(prefix, handler)</code>. Its signature is <code>func middleware(req, res, next)</code>. Call <code>next()</code> to continue. Sending a response or returning without calling <code>next()</code> stops the chain. Middleware executes in registration order for matching prefixes.</p>
+<pre><code>import server;
+
+func request_headers(req, res, next) {
+    res.set("X-Content-Type-Options", "nosniff");
+    res.set("X-Frame-Options", "DENY");
+    res.set("Referrer-Policy", "strict-origin-when-cross-origin");
+    next();
+}
+
+func admin_gate(req, res, next) {
+    define token = req.headers["X-Admin-Token"];
+    if (token == "replace-this-demo-token") {
+        next();
+    } else {
+        res.status(401);
+        res.json({ok: false, error: "Authentication required"});
+    }
+}
+
+server.use("/", request_headers);
+server.use("/admin", admin_gate);
+
+func admin_home(req, res) {
+    res.html("&lt;h1&gt;Admin area&lt;/h1&gt;");
+}
+server.get("/admin", admin_home);
+server.serve(".", 8080, {static: false});</code></pre>
+<div class="notice warning"><strong>Authentication example warning:</strong> the hard-coded token above is only a teaching illustration. Do not deploy a shared token embedded in source. Use a persistent user/session system, strong secrets from environment configuration, secure cookies, and authorization checks on every protected operation. The server's cookie helper is not a complete session framework.</div>
+<h2 id="templates">HTML templates with server.render</h2>
+<p>The server template engine replaces <code>{{name}}</code> placeholders using values from an object. Dotted paths such as <code>{{customer.name}}</code> are supported. A missing or null value produces an empty substitution. It does not implement loops, conditions, includes, layouts or automatic HTML escaping.</p>
+<h3>Template file: <code>views/product.html</code></h3>
+<pre><code>&lt;!doctype html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;meta name="viewport" content="width=device-width,initial-scale=1"&gt;
+  &lt;title&gt;{{product.name}} | Northstar Shop&lt;/title&gt;
+  &lt;link rel="stylesheet" href="/assets/site.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;header&gt;&lt;a href="/"&gt;Northstar Shop&lt;/a&gt;&lt;/header&gt;
+  &lt;main&gt;
+    &lt;p&gt;SKU: {{product.sku}}&lt;/p&gt;
+    &lt;h1&gt;{{product.name}}&lt;/h1&gt;
+    &lt;p&gt;{{product.description}}&lt;/p&gt;
+    &lt;strong&gt;{{product.price_label}}&lt;/strong&gt;
+    &lt;form method="post" action="/cart/add"&gt;
+      &lt;input type="hidden" name="sku" value="{{product.sku}}"&gt;
+      &lt;label&gt;Quantity &lt;input type="number" name="quantity" value="1" min="1"&gt;&lt;/label&gt;
+      &lt;button type="submit"&gt;Add to cart&lt;/button&gt;
+    &lt;/form&gt;
+  &lt;/main&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<h3>Route that renders the template</h3>
+<pre><code>import server;
+
+func product_page(req, res) {
+    define product = {
+        name: "Field Notebook",
+        sku: "NOTE-01",
+        description: "A durable everyday notebook.",
+        price_label: "$12.00"
+    };
+    res.render("views/product.html", {product: product});
+}
+
+server.get("/products/notebook", product_page);
+server.serve(".", 8080, {static: false});</code></pre>
+<div class="notice warning"><strong>Critical template safety:</strong> the current C template renderer inserts values directly into the output. It does not HTML-escape them. Never interpolate user-submitted names, descriptions, search strings, comments or database content into HTML without escaping for the correct output context. Prefer <code>construct.escape(value)</code> when using the construct module, or a reviewed context-aware escaping routine. Attribute values and JavaScript contexts need their own escaping rules. Do not treat a template placeholder as safe by default.</div>
+<h3>Inline templates with server.render</h3>
+<p>The module-level <code>server.render(template, data)</code> function renders a template string in memory; <code>res.render(file, data)</code> reads a template file beneath the server root and sends the rendered HTML response.</p>
+<pre><code>import server;
+
+func welcome(req, res) {
+    define template = "&lt;main&gt;&lt;h1&gt;Hello, {{profile.name}}&lt;/h1&gt;&lt;p&gt;Plan: {{profile.plan}}&lt;/p&gt;&lt;/main&gt;";
+    define page = server.render(template, {
+        profile: {name: "Ada", plan: "Starter"}
+    });
+    res.html(page);
+}
+
+server.get("/welcome", welcome);
+server.serve(".", 8080, {static: false});</code></pre>
+<h2 id="construct">Generate semantic HTML with construct</h2>
+<p>The optional <code>construct</code> module complements the server. Use it to create complete documents, semantic elements, metadata, links, styles and scripts from GSVE. Its element/text helpers escape text and validate supported attributes; the <code>page</code> body, CSS and JavaScript slots are trusted raw insertion points.</p>
+<pre><code>import construct;
+import server;
+
+define navigation =
+    "&lt;nav&gt;" +
+    construct.link("Home", "/") +
+    construct.link("Products", "/products") +
+    construct.link("About", "/about") +
+    "&lt;/nav&gt;";
+
+define main_content =
+    construct.element("h1", "A shop generated by GSVE") +
+    construct.element("p", "HTML is composed in the server program.") +
+    construct.element("a", "Browse the catalog", {href: "/products"});
+
+define document = construct.page({
+    lang: "en",
+    title: "Northstar Shop",
+    body: navigation + "&lt;main&gt;" + main_content + "&lt;/main&gt;",
+    css: "body{font:16px system-ui;margin:0;color:#172033}nav{padding:1rem;background:#10243a}nav a{color:white;margin-right:1rem}main{max-width:900px;margin:3rem auto;padding:1rem}",
+    js: "console.log('Northstar Shop ready');"
+});
+
+func home(req, res) {
+    res.html(document);
+}
+
+server.get("/", home);
+server.serve(".", 8080, {static: false});</code></pre>
+<h3>Construct API quick reference</h3>
+<div class="scroll"><table><tr><th>Function</th><th>Purpose</th></tr><tr><td><code>construct.page(options)</code></td><td>Build a full HTML document; options include title, body, css, js and lang.</td></tr><tr><td><code>construct.document(options)</code></td><td>Document-building alias / companion API.</td></tr><tr><td><code>construct.element(tag, text, attrs?)</code></td><td>Build an HTML element with escaped text and validated supported attributes.</td></tr><tr><td><code>construct.meta(name, content)</code></td><td>Create an allowlisted metadata element.</td></tr><tr><td><code>construct.link(label, href)</code></td><td>Create a navigation link with escaped label and URL validation.</td></tr><tr><td><code>construct.escape(value)</code></td><td>Escape a value for HTML text insertion.</td></tr><tr><td><code>construct.style(css)</code></td><td>Wrap trusted CSS source.</td></tr><tr><td><code>construct.script(js)</code></td><td>Wrap trusted JavaScript source.</td></tr><tr><td><code>construct.render(template, data)</code></td><td>Render a template with escaped substitutions.</td></tr></table></div>
+<h2 id="storefront">Complete example: product storefront</h2>
+<p>This example shows a multi-route shop with a home page, product listing, product details, a search route, an HTML checkout form, a cart submission endpoint and order confirmation. It is a runnable teaching skeleton with a small in-memory catalog. The catalog is read-only; the cart/order confirmation is illustrative and is not persistent. For real transactions, store cart and order records in <code>gs_db</code> or another durable database.</p>
+<pre><code>import construct;
+import server;
+
+define products = [
+    {sku: "BAG-100", name: "Canvas Field Bag", category: "Bags", price: 38, stock: 12, description: "A practical everyday carry bag."},
+    {sku: "NOTE-210", name: "Hardcover Notebook", category: "Stationery", price: 14, stock: 40, description: "A sturdy notebook for plans and ideas."},
+    {sku: "LAMP-310", name: "Desk Lamp", category: "Home", price: 52, stock: 7, description: "Adjustable light for a focused workspace."},
+    {sku: "MUG-410", name: "Ceramic Mug", category: "Home", price: 18, stock: 25, description: "A simple ceramic coffee mug."}
+];
+
+func money(value) {
+    return "$" + str(value);
+}
+
+func layout(title, content) {
+    define nav = "&lt;header&gt;&lt;a href='/'&gt;Northstar Market&lt;/a&gt;&lt;nav&gt;" +
+        construct.link("Shop", "/products") +
+        construct.link("About", "/about") +
+        construct.link("Cart", "/cart") +
+        "&lt;/nav&gt;&lt;/header&gt;";
+    return construct.page({
+        title: title + " | Northstar Market",
+        lang: "en",
+        body: nav + "&lt;main class='container'&gt;" + content + "&lt;/main&gt;",
+        css: "body{margin:0;font:16px system-ui;color:#182536;background:#f4f7fb}header{display:flex;justify-content:space-between;padding:1rem 5%;background:#14283e;color:white}header a{color:white;margin-right:1rem}main{max-width:1050px;margin:2rem auto;padding:1rem}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}.card{background:white;border:1px solid #dce4ed;border-radius:12px;padding:1rem}.price{font-size:1.3rem;font-weight:bold;color:#087f5b}button{padding:.7rem 1rem;background:#087f5b;color:white;border:0;border-radius:7px}input{padding:.6rem;border:1px solid #ccd5df;border-radius:6px}",
+        js: ""
+    });
+}
+
+func find_product(sku) {
+    for product in products {
+        if (product.sku == sku) {
+            return product;
+        }
+    }
+    return null;
+}
+
+func home(req, res) {
+    define body = "&lt;section&gt;&lt;h1&gt;Useful things, thoughtfully selected.&lt;/h1&gt;" +
+        "&lt;p&gt;Browse the catalog and discover the current collection.&lt;/p&gt;" +
+        "&lt;a href='/products'&gt;Explore products →&lt;/a&gt;&lt;/section&gt;";
+    res.html(layout("Welcome", body));
+}
+
+func product_list(req, res) {
+    define cards = "";
+    for product in products {
+        define safe_name = construct.escape(product.name);
+        define safe_sku = construct.escape(product.sku);
+        define safe_category = construct.escape(product.category);
+        cards = cards + "&lt;article class='card'&gt;&lt;p&gt;" + safe_category + "&lt;/p&gt;" +
+            "&lt;h2&gt;" + safe_name + "&lt;/h2&gt;" +
+            "&lt;p class='price'&gt;" + money(product.price) + "&lt;/p&gt;" +
+            "&lt;p&gt;Available: " + str(product.stock) + "&lt;/p&gt;" +
+            "&lt;a href='/products/" + safe_sku + "'&gt;View details&lt;/a&gt;&lt;/article&gt;";
+    }
+    res.html(layout("Products", "&lt;h1&gt;Product catalog&lt;/h1&gt;&lt;div class='cards'&gt;" + cards + "&lt;/div&gt;"));
+}
+
+func product_detail(req, res) {
+    define product = find_product(req.params.sku);
+    if (product == null) {
+        res.status(404);
+        res.html(layout("Not found", "&lt;h1&gt;Product not found&lt;/h1&gt;&lt;a href='/products'&gt;Back to shop&lt;/a&gt;"));
+        return;
+    }
+    define safe_name = construct.escape(product.name);
+    define safe_description = construct.escape(product.description);
+    define safe_sku = construct.escape(product.sku);
+    define body = "&lt;article&gt;&lt;p&gt;" + construct.escape(product.category) + "&lt;/p&gt;" +
+        "&lt;h1&gt;" + safe_name + "&lt;/h1&gt;&lt;p&gt;" + safe_description + "&lt;/p&gt;" +
+        "&lt;p class='price'&gt;" + money(product.price) + "&lt;/p&gt;" +
+        "&lt;p&gt;In stock: " + str(product.stock) + "&lt;/p&gt;" +
+        "&lt;form method='post' action='/cart/add'&gt;" +
+        "&lt;input type='hidden' name='sku' value='" + safe_sku + "'&gt;" +
+        "&lt;label&gt;Quantity &lt;input type='number' name='quantity' value='1' min='1' max='10'&gt;&lt;/label&gt; " +
+        "&lt;button type='submit'&gt;Add to cart&lt;/button&gt;&lt;/form&gt;&lt;/article&gt;";
+    res.html(layout(product.name, body));
+}
+
+func search_products(req, res) {
+    define term = req.query.q;
+    if (term == null) {
+        term = "";
+    }
+    define matches = "";
+    for product in products {
+        if (contains(str(product.name), str(term))) {
+            matches = matches + "&lt;li&gt;" + construct.link(product.name, "/products/" + product.sku) + "&lt;/li&gt;";
+        }
+    }
+    res.html(layout("Search", "&lt;h1&gt;Search results&lt;/h1&gt;&lt;ul&gt;" + matches + "&lt;/ul&gt;"));
+}
+
+func cart_add(req, res) {
+    define sku = req.form.sku;
+    define quantity = num(req.form.quantity);
+    define product = find_product(sku);
+    if (product == null || quantity < 1 || quantity > 10 || quantity > product.stock) {
+        res.status(400);
+        res.html(layout("Cart", "&lt;h1&gt;Unable to add item&lt;/h1&gt;&lt;p&gt;Check the SKU, quantity and stock.&lt;/p&gt;"));
+        return;
+    }
+    res.cookie("last_sku", product.sku, 86400, false);
+    res.html(layout("Cart", "&lt;h1&gt;Added to cart&lt;/h1&gt;&lt;p&gt;" +
+        construct.escape(product.name) + " × " + str(quantity) + "&lt;/p&gt;" +
+        "&lt;p&gt;This demo confirms the form flow but does not persist cart contents.&lt;/p&gt;" +
+        "&lt;a href='/products'&gt;Continue shopping&lt;/a&gt;"));
+}
+
+func checkout_form(req, res) {
+    define body = "&lt;h1&gt;Checkout&lt;/h1&gt;&lt;form method='post' action='/checkout'&gt;" +
+        "&lt;label&gt;Full name &lt;input name='customer' required&gt;&lt;/label&gt;&lt;br&gt;" +
+        "&lt;label&gt;Email &lt;input type='email' name='email' required&gt;&lt;/label&gt;&lt;br&gt;" +
+        "&lt;label&gt;Delivery address &lt;textarea name='address' required&gt;&lt;/textarea&gt;&lt;/label&gt;&lt;br&gt;" +
+        "&lt;button type='submit'&gt;Place demo order&lt;/button&gt;&lt;/form&gt;";
+    res.html(layout("Checkout", body));
+}
+
+func checkout_submit(req, res) {
+    if (req.form.customer == null || req.form.email == null || req.form.address == null) {
+        res.status(400);
+        res.html(layout("Checkout error", "&lt;h1&gt;Please complete all fields.&lt;/h1&gt;"));
+        return;
+    }
+    res.status(201);
+    res.html(layout("Order received", "&lt;h1&gt;Thank you, " +
+        construct.escape(req.form.customer) + "&lt;/h1&gt;&lt;p&gt;Your demo order was received.&lt;/p&gt;"));
+}
+
+func about(req, res) {
+    res.html(layout("About", "&lt;h1&gt;About Northstar Market&lt;/h1&gt;&lt;p&gt;A sample storefront built with GSVE routes and native HTML helpers.&lt;/p&gt;"));
+}
+
+server.get("/", home);
+server.get("/products", product_list);
+server.get("/products/:sku", product_detail);
+server.get("/search", search_products);
+server.post("/cart/add", cart_add);
+server.get("/checkout", checkout_form);
+server.post("/checkout", checkout_submit);
+server.get("/about", about);
+
+server.serve(".", 8080, {host: "0.0.0.0", static: false, index: "index.html"});</code></pre>
+<div class="notice warning"><strong>Important example limitation:</strong> the storefront catalog is static demonstration data. The current server forks a child for each accepted connection, so changing a GSVE array during one request does not create a reliable cross-request cart or inventory store. Persist every order, cart and stock change in SQLite or another database. Also add CSRF protection, authentication, payment-provider verification, idempotency and transaction handling before accepting real orders or money.</div>
+<h2 id="inventory">Inventory management: products, stock and restocking</h2>
+<p>Inventory requires durable storage. The following illustrates the route design and validation boundary; connect the persistence calls to the installed <code>gs_db</code> module and use parameterized SQL. Do not replace database persistence with mutable global arrays in a fork-per-request server.</p>
+<h3>Inventory page and adjustment form</h3>
+<pre><code>import construct;
+import server;
+
+func inventory_page(req, res) {
+    define rows =
+        "&lt;tr&gt;&lt;td&gt;BAG-100&lt;/td&gt;&lt;td&gt;Canvas Field Bag&lt;/td&gt;&lt;td&gt;12&lt;/td&gt;&lt;td&gt;38.00&lt;/td&gt;&lt;/tr&gt;" +
+        "&lt;tr&gt;&lt;td&gt;NOTE-210&lt;/td&gt;&lt;td&gt;Hardcover Notebook&lt;/td&gt;&lt;td&gt;40&lt;/td&gt;&lt;td&gt;14.00&lt;/td&gt;&lt;/tr&gt;" +
+        "&lt;tr&gt;&lt;td&gt;LAMP-310&lt;/td&gt;&lt;td&gt;Desk Lamp&lt;/td&gt;&lt;td&gt;7&lt;/td&gt;&lt;td&gt;52.00&lt;/td&gt;&lt;/tr&gt;";
+    define body = "&lt;h1&gt;Inventory&lt;/h1&gt;&lt;p&gt;Review current stock levels and record a restock.&lt;/p&gt;" +
+        "&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;SKU&lt;/th&gt;&lt;th&gt;Product&lt;/th&gt;&lt;th&gt;On hand&lt;/th&gt;&lt;th&gt;Unit price&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;" +
+        rows + "&lt;/tbody&gt;&lt;/table&gt;" +
+        "&lt;h2&gt;Record stock adjustment&lt;/h2&gt;&lt;form method='post' action='/admin/inventory/adjust'&gt;" +
+        "&lt;label&gt;SKU &lt;input name='sku' required&gt;&lt;/label&gt;" +
+        "&lt;label&gt;Quantity change &lt;input name='delta' type='number' required&gt;&lt;/label&gt;" +
+        "&lt;label&gt;Reason &lt;select name='reason'&gt;&lt;option&gt;restock&lt;/option&gt;&lt;option&gt;correction&lt;/option&gt;&lt;option&gt;damaged&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;" +
+        "&lt;button type='submit'&gt;Save adjustment&lt;/button&gt;&lt;/form&gt;";
+    res.html(construct.page({title: "Inventory", body: body}));
+}
+
+func inventory_adjust(req, res) {
+    define sku = req.form.sku;
+    define delta = num(req.form.delta);
+    if (sku == null || req.form.delta == null || delta == 0) {
+        res.status(400);
+        res.json({ok: false, error: "A SKU and non-zero quantity change are required"});
+        return;
+    }
+    # Replace this point with a parameterized database transaction:
+    # 1. Read the current quantity for this SKU.
+    # 2. Reject unknown SKUs and any result below zero.
+    # 3. Update products.stock and insert an inventory_movements row.
+    # 4. Commit both writes together.
+    res.status(202);
+    res.json({ok: true, sku: sku, quantity_change: delta, reason: req.form.reason, persisted: false});
+}
+
+server.get("/admin/inventory", inventory_page);
+server.post("/admin/inventory/adjust", inventory_adjust);
+server.serve(".", 8080, {static: false});</code></pre>
+<h3>Suggested relational schema</h3>
+<pre><code>CREATE TABLE products (
+    id INTEGER PRIMARY KEY,
+    sku TEXT NOT NULL UNIQUE,
+    name TEXT NOT NULL,
+    description TEXT NOT NULL DEFAULT '',
+    price_cents INTEGER NOT NULL CHECK (price_cents &gt;= 0),
+    stock INTEGER NOT NULL DEFAULT 0 CHECK (stock &gt;= 0),
+    active INTEGER NOT NULL DEFAULT 1
+);
+
+CREATE TABLE inventory_movements (
+    id INTEGER PRIMARY KEY,
+    product_id INTEGER NOT NULL,
+    quantity_delta INTEGER NOT NULL,
+    reason TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (product_id) REFERENCES products(id)
+);</code></pre>
+<p>Use integer minor currency units (for example cents) instead of floating-point values for money. Keep an append-only movement record so stock changes can be audited. Apply stock changes atomically and prevent a sale from making stock negative.</p>
+<h2 id="sales">Sales, orders and checkout</h2>
+<p>A sales system needs an order header, order lines, customer details, payment state and inventory movement records. The route handlers below show the HTTP contract and validation pattern; the persistence and payment provider integration must be implemented in the application layer.</p>
+<h3>Sales report page</h3>
+<pre><code>import construct;
+import server;
+
+func sales_report(req, res) {
+    define rows =
+        "&lt;tr&gt;&lt;td&gt;2026-11-01&lt;/td&gt;&lt;td&gt;ORD-1001&lt;/td&gt;&lt;td&gt;Ada Customer&lt;/td&gt;&lt;td&gt;2&lt;/td&gt;&lt;td&gt;$76.00&lt;/td&gt;&lt;td&gt;Paid&lt;/td&gt;&lt;/tr&gt;" +
+        "&lt;tr&gt;&lt;td&gt;2026-11-02&lt;/td&gt;&lt;td&gt;ORD-1002&lt;/td&gt;&lt;td&gt;Lin Customer&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;$52.00&lt;/td&gt;&lt;td&gt;Pending&lt;/td&gt;&lt;/tr&gt;" +
+        "&lt;tr&gt;&lt;td&gt;2026-11-03&lt;/td&gt;&lt;td&gt;ORD-1003&lt;/td&gt;&lt;td&gt;Mira Customer&lt;/td&gt;&lt;td&gt;3&lt;/td&gt;&lt;td&gt;$42.00&lt;/td&gt;&lt;td&gt;Paid&lt;/td&gt;&lt;/tr&gt;";
+    define body = "&lt;h1&gt;Sales report&lt;/h1&gt;" +
+        "&lt;section class='metrics'&gt;&lt;article&gt;&lt;strong&gt;$170.00&lt;/strong&gt;&lt;p&gt;Gross sales (sample)&lt;/p&gt;&lt;/article&gt;" +
+        "&lt;article&gt;&lt;strong&gt;6&lt;/strong&gt;&lt;p&gt;Items sold (sample)&lt;/p&gt;&lt;/article&gt;" +
+        "&lt;article&gt;&lt;strong&gt;3&lt;/strong&gt;&lt;p&gt;Orders (sample)&lt;/p&gt;&lt;/article&gt;&lt;/section&gt;" +
+        "&lt;h2&gt;Recent orders&lt;/h2&gt;&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Date&lt;/th&gt;&lt;th&gt;Order&lt;/th&gt;&lt;th&gt;Customer&lt;/th&gt;&lt;th&gt;Items&lt;/th&gt;&lt;th&gt;Total&lt;/th&gt;&lt;th&gt;Status&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;" +
+        rows + "&lt;/tbody&gt;&lt;/table&gt;";
+    res.html(construct.page({
+        title: "Sales report",
+        body: body,
+        css: ".metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem}.metrics article{background:#edf3f8;padding:1rem;border-radius:10px}.metrics strong{font-size:1.7rem}"
+    }));
+}
+
+func order_detail(req, res) {
+    define order_id = req.params.id;
+    # Load the order and its lines from persistent storage here.
+    res.json({ok: true, order_id: order_id, note: "Connect this handler to the orders database"});
+}
+
+func order_status_update(req, res) {
+    define order_id = req.params.id;
+    define status = req.form.status;
+    if (status != "pending" && status != "paid" && status != "fulfilled" && status != "cancelled") {
+        res.status(400);
+        res.json({ok: false, error: "Unsupported order status"});
+        return;
+    }
+    # Verify authorization and apply a valid state transition in a DB transaction.
+    res.json({ok: true, order_id: order_id, requested_status: status, persisted: false});
+}
+
+server.get("/admin/sales", sales_report);
+server.get("/admin/orders/:id", order_detail);
+server.post("/admin/orders/:id/status", order_status_update);
+server.serve(".", 8080, {static: false});</code></pre>
+<h3>Suggested order schema</h3>
+<pre><code>CREATE TABLE orders (
+    id INTEGER PRIMARY KEY,
+    order_number TEXT NOT NULL UNIQUE,
+    customer_name TEXT NOT NULL,
+    customer_email TEXT NOT NULL,
+    total_cents INTEGER NOT NULL CHECK (total_cents &gt;= 0),
+    status TEXT NOT NULL DEFAULT 'pending',
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE order_items (
+    id INTEGER PRIMARY KEY,
+    order_id INTEGER NOT NULL,
+    product_id INTEGER NOT NULL,
+    sku TEXT NOT NULL,
+    quantity INTEGER NOT NULL CHECK (quantity &gt; 0),
+    unit_price_cents INTEGER NOT NULL CHECK (unit_price_cents &gt;= 0),
+    FOREIGN KEY (order_id) REFERENCES orders(id),
+    FOREIGN KEY (product_id) REFERENCES products(id)
+);</code></pre>
+<h2 id="dashboard">Admin dashboard and navigation</h2>
+<pre><code>import construct;
+import server;
+
+func admin_layout(title, content) {
+    define menu = "&lt;aside&gt;&lt;h2&gt;Northstar Admin&lt;/h2&gt;" +
+        construct.link("Overview", "/admin") +
+        construct.link("Products", "/admin/products") +
+        construct.link("Inventory", "/admin/inventory") +
+        construct.link("Sales", "/admin/sales") +
+        construct.link("Orders", "/admin/orders") +
+        "&lt;/aside&gt;";
+    return construct.page({
+        title: title + " | Admin",
+        body: menu + "&lt;main&gt;" + content + "&lt;/main&gt;",
+        css: "body{margin:0;display:grid;grid-template-columns:220px 1fr;font:16px system-ui;background:#f3f6fa;color:#172033}aside{min-height:100vh;background:#14283e;padding:1.2rem;display:flex;flex-direction:column;gap:1rem}aside h2,aside a{color:white}main{padding:2rem}.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem}.stat{background:white;border:1px solid #dce4ed;border-radius:10px;padding:1rem}.stat strong{font-size:1.7rem}"
+    });
+}
+
+func admin_home(req, res) {
+    define body = "&lt;h1&gt;Dashboard&lt;/h1&gt;&lt;p&gt;Store performance at a glance.&lt;/p&gt;" +
+        "&lt;section class='stat-grid'&gt;" +
+        "&lt;article class='stat'&gt;&lt;strong&gt;128&lt;/strong&gt;&lt;p&gt;Orders this month&lt;/p&gt;&lt;/article&gt;" +
+        "&lt;article class='stat'&gt;&lt;strong&gt;$8,420&lt;/strong&gt;&lt;p&gt;Sample revenue&lt;/p&gt;&lt;/article&gt;" +
+        "&lt;article class='stat'&gt;&lt;strong&gt;24&lt;/strong&gt;&lt;p&gt;Low-stock products&lt;/p&gt;&lt;/article&gt;" +
+        "&lt;/section&gt;&lt;p&gt;These are illustrative figures. Replace them with database aggregates.&lt;/p&gt;";
+    res.html(admin_layout("Overview", body));
+}
+
+func admin_products(req, res) {
+    res.html(admin_layout("Products", "&lt;h1&gt;Product management&lt;/h1&gt;&lt;p&gt;Add, edit, archive and inspect products using persistent database-backed routes.&lt;/p&gt;&lt;a href='/admin/inventory'&gt;Manage stock&lt;/a&gt;"));
+}
+
+func admin_orders(req, res) {
+    res.html(admin_layout("Orders", "&lt;h1&gt;Orders&lt;/h1&gt;&lt;p&gt;Review order status, customer details and line items.&lt;/p&gt;&lt;a href='/admin/sales'&gt;View sales report&lt;/a&gt;"));
+}
+
+server.get("/admin", admin_home);
+server.get("/admin/products", admin_products);
+server.get("/admin/inventory", inventory_page);
+server.get("/admin/sales", sales_report);
+server.get("/admin/orders", admin_orders);
+server.serve(".", 8080, {static: false});</code></pre>
+<p class="small">The dashboard page above composes HTML using literal trusted markup and the construct module. The route data shown is sample content, not live analytics.</p>
+<h2 id="api">JSON APIs and CRUD route structure</h2>
+<pre><code>import server;
+
+func list_products(req, res) {
+    res.json({
+        ok: true,
+        items: [
+            {sku: "BAG-100", name: "Canvas Field Bag", price_cents: 3800},
+            {sku: "NOTE-210", name: "Hardcover Notebook", price_cents: 1400}
+        ],
+        count: 2
+    });
+}
+
+func get_product(req, res) {
+    define sku = req.params.sku;
+    res.json({ok: true, sku: sku});
+}
+
+func create_product(req, res) {
+    define sku = req.form.sku;
+    define name = req.form.name;
+    define price = num(req.form.price_cents);
+    if (sku == null || name == null || req.form.price_cents == null || price < 0) {
+        res.status(400);
+        res.json({ok: false, error: "Invalid product fields"});
+        return;
+    }
+    # Persist the product with a parameterized INSERT and unique-SKU handling.
+    res.status(201);
+    res.json({ok: true, sku: sku, name: name, price_cents: price, persisted: false});
+}
+
+func replace_product(req, res) {
+    define sku = req.params.sku;
+    # Validate every field and execute a parameterized UPDATE.
+    res.json({ok: true, sku: sku, operation: "replace", persisted: false});
+}
+
+func delete_product(req, res) {
+    define sku = req.params.sku;
+    # Check permissions, references and business rules before deletion/archive.
+    res.status(204);
+    res.noContent();
+}
+
+server.get("/api/products", list_products);
+server.get("/api/products/:sku", get_product);
+server.post("/api/products", create_product);
+server.put("/api/products/:sku", replace_product);
+server.delete("/api/products/:sku", delete_product);
+server.serve(".", 8080, {static: false});</code></pre>
+<p>In this server implementation, the request parser provides URL-encoded form parsing. Do not send a JSON body and expect <code>req.form</code> to decode it. The response serializer supports JSON values, including arrays and nested objects.</p>
+<h2 id="files">Static assets, files and downloads</h2>
+<p>When static serving is enabled, the server can serve files from its configured root. The <code>index</code> option selects the directory index filename. When static serving is disabled, only registered routes and explicit file helpers are available.</p>
+<pre><code>import server;
+
+func home(req, res) {
+    res.sendFile("public/home.html");
+}
+
+func stylesheet(req, res) {
+    res.sendFile("public/assets/site.css");
+}
+
+func manual_download(req, res) {
+    res.download("public/files/user-guide.pdf", "greenServeFE-guide.pdf");
+}
+
+server.get("/", home);
+server.get("/assets/site.css", stylesheet);
+server.get("/downloads/guide", manual_download);
+server.serve(".", 8080, {
+    host: "127.0.0.1",
+    static: true,
+    index: "index.html"
+});</code></pre>
+<p>File helpers are rooted beneath the server's configured document root and apply path-safety checks. Keep private configuration, database files, uploaded files and TLS private keys outside publicly served directories. Never build a filesystem path directly from untrusted request text.</p>
+<h2 id="client">Outbound HTTP requests from the server module</h2>
+<p>The same module exports libcurl-backed client functions. They return an object with <code>status</code>, <code>body</code>, <code>contentType</code>, <code>url</code>, <code>headers</code> and <code>error</code>. The client enables TLS peer and hostname verification, follows at most five redirects, uses a 10-second connect timeout and a 30-second total timeout.</p>
+<div class="scroll"><table><tr><th>Function</th><th>Signature</th></tr><tr><td><code>request</code></td><td><code>request(method, url, body?, headers?)</code></td></tr><tr><td><code>http_get</code></td><td><code>http_get(url)</code></td></tr><tr><td><code>https_get</code></td><td><code>https_get(url)</code></td></tr><tr><td><code>http_post</code></td><td><code>http_post(url, body)</code></td></tr><tr><td><code>http_put</code></td><td><code>http_put(url, body?, headers?)</code></td></tr><tr><td><code>http_patch</code></td><td><code>http_patch(url, body?, headers?)</code></td></tr><tr><td><code>http_delete</code></td><td><code>http_delete(url, body?, headers?)</code></td></tr><tr><td><code>http_options</code></td><td><code>http_options(url, body?, headers?)</code></td></tr></table></div>
+<pre><code>import server;
+
+func remote_status(req, res) {
+    define result = server.http_get("https://example.com/");
+    if (result.error != "") {
+        res.status(502);
+        res.json({ok: false, error: result.error});
+        return;
+    }
+    res.json({
+        ok: true,
+        upstream_status: result.status,
+        content_type: result.contentType,
+        response_preview: result.body
+    });
+}
+
+func submit_remote(req, res) {
+    define headers = {"Content-Type": "application/json", "Accept": "application/json"};
+    define result = server.request("POST", "https://api.example.com/events", "{\"event\":\"order.created\"}", headers);
+    res.json({status: result.status, error: result.error, body: result.body});
+}
+
+server.get("/integrations/status", remote_status);
+server.post("/integrations/events", submit_remote);
+server.serve(".", 8080, {static: false});</code></pre>
+<div class="notice warning">Do not expose an arbitrary URL-fetching route to public users. That can create server-side request forgery (SSRF). Restrict upstream hosts to an explicit allowlist, validate every destination, avoid forwarding credentials, and set application-level response-size and time budgets.</div>
+<h2 id="tls">HTTPS and listener options</h2>
+<p>The native listener supports TLS when built with its OpenSSL dependencies. Supply a certificate and matching private key. The listener uses a TCP socket, accepts connections, and handles each accepted connection in a forked child process.</p>
+<pre><code>import server;
+
+func secure_home(req, res) {
+    res.set("Strict-Transport-Security", "max-age=31536000");
+    res.html("&lt;h1&gt;Secure greenServeFE site&lt;/h1&gt;");
+}
+
+server.get("/", secure_home);
+server.serve(".", 8443, {
+    host: "0.0.0.0",
     protocol: "https",
-    cert: "server.crt",
-    key: "server.key",
+    cert: "certs/fullchain.pem",
+    key: "certs/private-key.pem",
+    static: false,
     index: "index.html",
-    static: true
-});</pre><h2>Additional exported helpers</h2><p>The C initializer exports the following names in addition to route registration:</p><p><code>info</code>, <code>tls</code>, <code>features</code>, <code>request</code>, <code>http_get</code>, <code>https_get</code>, <code>http_post</code>, <code>http_put</code>, <code>http_patch</code>, <code>http_delete</code>, <code>http_options</code>, <code>read_file</code>, <code>write_file</code>, <code>render</code>, <code>url_encode</code>, <code>json_escape</code>.</p><h2>Security and deployment</h2><ul><li>Never commit TLS private keys.</li><li>Validate request parameters and bodies before using them.</li><li>Constrain file paths and avoid exposing file helpers to untrusted input.</li><li>Test the installed shared object and runtime behavior before production deployment.</li></ul><div class="notice">The full native HTTP server is a separately built integration. The module build workflow and runtime tests determine which additions are available in a given package version.</div><p>Related: <a href="construct.html">HTML construction</a> · <a href="gs_http.html">Outbound HTTP client</a>.</p></main><footer><div class="wrap">greenServeFE · Developed by Dominex Macedon · <a href="index.html">Documentation home</a> · <a href="https://github.com/dominexmacedon-docs/greenServeFE-build">Runtime source</a></div></footer></body></html>
+    backlog: 256,
+    request_timeout: 15,
+    max_requests: 0
+});</code></pre>
+<div class="scroll"><table><tr><th>Option</th><th>Meaning</th><th>Source behavior</th></tr>
+<tr><td><code>host</code></td><td>IPv4 bind address</td><td>Default <code>0.0.0.0</code>; <code>*</code> also binds all IPv4 interfaces.</td></tr>
+<tr><td><code>protocol</code></td><td>Listener protocol</td><td><code>https</code> or <code>tls</code> enables TLS.</td></tr>
+<tr><td><code>cert</code></td><td>PEM certificate path</td><td>Required when TLS is enabled.</td></tr>
+<tr><td><code>key</code></td><td>PEM private-key path</td><td>Required and checked against the certificate.</td></tr>
+<tr><td><code>index</code></td><td>Directory index file</td><td>Default <code>index.html</code>.</td></tr>
+<tr><td><code>static</code></td><td>Static file serving switch</td><td>Set false when serving only explicit routes.</td></tr>
+<tr><td><code>backlog</code></td><td>Socket listen backlog</td><td>Default 1024; values below 1 are raised to 1.</td></tr>
+<tr><td><code>max_requests</code></td><td>Accepted connection limit</td><td>Default 0, meaning no configured cap in this loop.</td></tr>
+<tr><td><code>request_timeout</code></td><td>Socket read/write timeout in seconds</td><td>Default 15; clamped to 1–120 seconds.</td></tr></table></div>
+<p class="small">The source currently exposes these options. Do not assume support for options that are not listed here, such as configurable rate limits, graceful shutdown hooks, compression settings, HTTP keep-alive tuning or request-body streaming.</p>
+<h2 id="security">Security, correctness and production readiness</h2>
+<ul>
+<li><strong>Escape output:</strong> route parameters, form values, query values and database strings are untrusted. Escape HTML text and attributes before inserting them into markup. The low-level server template renderer is raw substitution; construct helpers are safer for text and link generation.</li>
+<li><strong>Validate input:</strong> check required fields, lengths, numeric ranges, allowed enum values and SKU formats. Reject malformed values before database work.</li>
+<li><strong>Use parameterized SQL:</strong> never concatenate user input into SQL. Use transactions for order creation and stock changes.</li>
+<li><strong>Protect state-changing routes:</strong> add authentication, role checks, CSRF defenses and audit records. Hiding an admin URL is not authorization.</li>
+<li><strong>Protect secrets:</strong> keep keys, tokens, database files and environment configuration out of public directories and version control.</li>
+<li><strong>Restrict file access:</strong> do not allow user-controlled paths to reach <code>sendFile</code>, <code>download</code> or filesystem helpers.</li>
+<li><strong>Use TLS:</strong> protect credentials and sessions in transit. Configure secure cookies only behind correctly configured HTTPS.</li>
+<li><strong>Control exposure:</strong> bind to loopback for local testing; use a firewall and a carefully configured reverse proxy for public deployments.</li>
+<li><strong>Monitor process behavior:</strong> each accepted connection is handled by a forked child. This is not an event-loop server, and request-local memory is not shared between child processes.</li>
+<li><strong>Load test before deployment:</strong> verify concurrency, process limits, file descriptor limits, memory use, error behavior and TLS configuration on the target host.</li>
+</ul>
+<div class="notice warning"><strong>Capabilities not claimed by this source:</strong> the inspected <code>server.c</code> listener does not establish a complete production framework with rate limiting, graceful shutdown APIs, response compression, WebSocket upgrades, streaming response bodies, request-body streaming or persistent keep-alive sessions. Do not document or depend on those as implemented features unless the C source and tests are extended to provide them.</div>
+<h2 id="api-reference">Full native server export inventory</h2>
+<p>The module initializer registers the following top-level functions. This is the source-level export inventory for the inspected <code>server.c</code>.</p>
+<div class="scroll"><table><tr><th>Export</th><th>Category</th><th>Notes</th></tr>
+<tr><td><code>info()</code></td><td>Introspection</td><td>Returns module name, version and feature list.</td></tr>
+<tr><td><code>request(method, url, body?, headers?)</code></td><td>HTTP client</td><td>Generic outbound request.</td></tr>
+<tr><td><code>http_get(url)</code></td><td>HTTP client</td><td>GET request.</td></tr><tr><td><code>https_get(url)</code></td><td>HTTP client</td><td>GET helper; accepts HTTP or HTTPS URLs through the common client.</td></tr><tr><td><code>http_post(url, body)</code></td><td>HTTP client</td><td>POST request.</td></tr><tr><td><code>http_put(url, body?, headers?)</code></td><td>HTTP client</td><td>PUT request.</td></tr><tr><td><code>http_patch(url, body?, headers?)</code></td><td>HTTP client</td><td>PATCH request.</td></tr><tr><td><code>http_delete(url, body?, headers?)</code></td><td>HTTP client</td><td>DELETE request.</td></tr><tr><td><code>http_options(url, body?, headers?)</code></td><td>HTTP client</td><td>OPTIONS request.</td></tr>
+<tr><td><code>read_file(path)</code></td><td>File utility</td><td>Reads a file as text; returns null on failure.</td></tr><tr><td><code>write_file(path, text)</code></td><td>File utility</td><td>Writes text and returns a boolean success result.</td></tr>
+<tr><td><code>render(template, data)</code></td><td>Template</td><td>Renders an inline template string with object substitutions.</td></tr><tr><td><code>url_encode(text)</code></td><td>Encoding</td><td>URL-encodes a string using libcurl.</td></tr><tr><td><code>json_escape(text)</code></td><td>Encoding</td><td>Escapes JSON string characters; this is not a complete JSON serializer.</td></tr>
+<tr><td><code>get(path, handler)</code></td><td>Routing</td><td>Register GET handler.</td></tr><tr><td><code>page(path, html)</code></td><td>Routing</td><td>Register fixed HTML as a GET route.</td></tr><tr><td><code>post(path, handler)</code></td><td>Routing</td><td>Register POST handler.</td></tr><tr><td><code>put(path, handler)</code></td><td>Routing</td><td>Register PUT handler.</td></tr><tr><td><code>patch(path, handler)</code></td><td>Routing</td><td>Register PATCH handler.</td></tr><tr><td><code>delete(path, handler)</code></td><td>Routing</td><td>Register DELETE handler.</td></tr><tr><td><code>options(path, handler)</code></td><td>Routing</td><td>Register OPTIONS handler.</td></tr><tr><td><code>any(path, handler)</code></td><td>Routing</td><td>Register any-method handler.</td></tr><tr><td><code>use(prefix, handler)</code></td><td>Middleware</td><td>Register prefix middleware; handler receives req, res and next.</td></tr><tr><td><code>clear_routes()</code></td><td>Routing</td><td>Clear all registered routes.</td></tr><tr><td><code>serve(root, port?, options?)</code></td><td>Listener</td><td>Start the native HTTP or HTTPS listener.</td></tr></table></div>
+<h3>Inspect capabilities at runtime</h3>
+<pre><code>import server;
+
+define details = server.info();
+print(details.name);
+print(details.version);
+print(details.features);
+
+server.get("/server-info", func(req, res) {
+    res.json(server.info());
+});
+
+server.serve(".", 8080, {static: false});</code></pre>
+<p>The reported feature list in the inspected C source is: <code>http-routing</code>, <code>route-parameters</code>, <code>middleware-chain</code>, <code>middleware-next</code>, <code>static-files</code>, <code>templates</code>, <code>json-responses</code>, <code>jsonp-responses</code>, <code>text-responses</code>, <code>file-downloads</code>, <code>form-parsing</code>, <code>cookie-parsing</code>, <code>response-cookies</code>, <code>cors</code>, <code>global-headers</code>, <code>security-headers</code>, <code>tls</code>, <code>http-client</code> and <code>request-timeouts</code>. A feature label is a capability declaration, not a substitute for testing its behavior in the exact binary you deploy.</p>
+<h2>Further documentation and source</h2>
+<ul><li><a href="construct.html">Construct module reference</a> — HTML elements, document generation, escaping and templates.</li><li><a href="gs_http.html">gs_http module reference</a> — separate HTTP utility module, where installed.</li><li><a href="language.html">GSVE language reference</a> — syntax and language constructs.</li><li><a href="vm.html">Virtual machine reference</a> — bytecode execution and VM architecture.</li><li><a href="modules.html">Native module catalog</a> — module installation and APIs.</li></ul>
+<p class="back"><a href="index.html">← Back to greenServeFE documentation home</a></p>
+</main>
+<footer><div class="wrap">greenServeFE · Developed by Dominex Macedon · <a href="index.html">Documentation home</a> · <a href="construct.html">Construct reference</a></div></footer>
+</body>
+</html>
