@@ -778,10 +778,11 @@ print(details.name);
 print(details.version);
 print(details.features);
 
-server.get("/server-info", func(req, res) {
+func server_info_page(req, res) {
     res.json(server.info());
-});
+}
 
+server.get("/server-info", server_info_page);
 server.serve(".", 8080, {static: false});</code></pre>
 <p>The reported feature list in the inspected C source is: <code>http-routing</code>, <code>route-parameters</code>, <code>middleware-chain</code>, <code>middleware-next</code>, <code>static-files</code>, <code>templates</code>, <code>json-responses</code>, <code>jsonp-responses</code>, <code>text-responses</code>, <code>file-downloads</code>, <code>form-parsing</code>, <code>cookie-parsing</code>, <code>response-cookies</code>, <code>cors</code>, <code>global-headers</code>, <code>security-headers</code>, <code>tls</code>, <code>http-client</code> and <code>request-timeouts</code>. A feature label is a capability declaration, not a substitute for testing its behavior in the exact binary you deploy.</p>
 <h2>Further documentation and source</h2>
