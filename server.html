@@ -10,6 +10,7 @@
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://dominexmacedon-docs.github.io/greenServeFE-language/server.html">
 <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/dominexmacedon-docs/greenServeFE-language/main/greenServeFE-logo.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Complete greenServeFE Server Development Guide">
 <meta property="og:description" content="Learn the complete native server API with full GSVE applications: storefront, product catalog, sales, inventory, admin pages, HTML templates, middleware, APIs and TLS.">
@@ -45,7 +46,7 @@
 </ol>
 <h2 id="architecture">Architecture and setup</h2>
 <p>The server is an optional native module, not a language keyword. The program imports it with <code>import server;</code>. The C module exposes route registration, a socket listener, response helpers, template/file functions and libcurl-based outbound HTTP functions.</p>
-<div class="panel"><strong>Request lifecycle</strong><p class="small">Client → TCP listener → request parser → route match → matching middleware → route handler → response serialization → client</p><p class="small">The current listener accepts a connection and forks a child process to handle it. That matters for application design: ordinary in-memory mutations made while handling a request are not a durable shared database. Use a database or another persistent store for carts, stock, orders and user records.</p></div>
+<div class="panel"><strong>Request lifecycle</strong><p class="small">Client <i class="fa-solid fa-arrow-right" aria-hidden="true"></i> TCP listener <i class="fa-solid fa-arrow-right" aria-hidden="true"></i> request parser <i class="fa-solid fa-arrow-right" aria-hidden="true"></i> route match <i class="fa-solid fa-arrow-right" aria-hidden="true"></i> matching middleware <i class="fa-solid fa-arrow-right" aria-hidden="true"></i> route handler <i class="fa-solid fa-arrow-right" aria-hidden="true"></i> response serialization <i class="fa-solid fa-arrow-right" aria-hidden="true"></i> client</p><p class="small">The current listener accepts a connection and forks a child process to handle it. That matters for application design: ordinary in-memory mutations made while handling a request are not a durable shared database. Use a database or another persistent store for carts, stock, orders and user records.</p></div>
 <h3>Build and install</h3>
 <ol><li>Open the greenServeFE build repository and run its manual workflow for building the <code>construct</code> and <code>server</code> native modules.</li><li>Install the resulting <code>server.so</code> (and <code>construct.so</code> if you use it) in a directory searched by the native module loader.</li><li>Configure <code>GREENSERVE_MODULE_PATH</code> and, where required by the shared libraries, <code>LD_LIBRARY_PATH</code>.</li><li>Run the GSVE program with the greenServeFE executable.</li></ol>
 <pre><code>export GREENSERVE_MODULE_PATH=/usr/local/lib/modules
@@ -329,7 +330,7 @@ func find_product(sku) {
 func home(req, res) {
     define body = "&lt;section&gt;&lt;h1&gt;Useful things, thoughtfully selected.&lt;/h1&gt;" +
         "&lt;p&gt;Browse the catalog and discover the current collection.&lt;/p&gt;" +
-        "&lt;a href='/products'&gt;Explore products →&lt;/a&gt;&lt;/section&gt;";
+        "&lt;a href='/products'&gt;Explore products <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>&lt;/a&gt;&lt;/section&gt;";
     res.html(layout("Welcome", body));
 }
 
@@ -787,7 +788,7 @@ server.serve(".", 8080, {static: false});</code></pre>
 <p>The reported feature list in the inspected C source is: <code>http-routing</code>, <code>route-parameters</code>, <code>middleware-chain</code>, <code>middleware-next</code>, <code>static-files</code>, <code>templates</code>, <code>json-responses</code>, <code>jsonp-responses</code>, <code>text-responses</code>, <code>file-downloads</code>, <code>form-parsing</code>, <code>cookie-parsing</code>, <code>response-cookies</code>, <code>cors</code>, <code>global-headers</code>, <code>security-headers</code>, <code>tls</code>, <code>http-client</code> and <code>request-timeouts</code>. A feature label is a capability declaration, not a substitute for testing its behavior in the exact binary you deploy.</p>
 <h2>Further documentation and source</h2>
 <ul><li><a href="construct.html">Construct module reference</a> — HTML elements, document generation, escaping and templates.</li><li><a href="gs_http.html">gs_http module reference</a> — separate HTTP utility module, where installed.</li><li><a href="language.html">GSVE language reference</a> — syntax and language constructs.</li><li><a href="vm.html">Virtual machine reference</a> — bytecode execution and VM architecture.</li><li><a href="modules.html">Native module catalog</a> — module installation and APIs.</li></ul>
-<p class="back"><a href="index.html">← Back to greenServeFE documentation home</a></p>
+<p class="back"><a href="index.html"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back to greenServeFE documentation home</a></p>
 </main>
 <footer><div class="wrap">greenServeFE · Developed by Dominex Macedon · <a href="index.html">Documentation home</a> · <a href="construct.html">Construct reference</a></div></footer>
 </body>
