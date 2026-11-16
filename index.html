@@ -62,13 +62,12 @@
     .pdf{display:flex;flex-direction:column;min-height:190px}.pdf a{margin-top:auto;font-weight:700}
     pre{position:relative;overflow:auto;background:var(--code);border:1px solid var(--line);border-radius:12px;padding:19px;margin:12px 0 18px;color:#dce8f8;font: .91rem/1.65 ui-monospace,SFMono-Regular,Consolas,monospace;tab-size:2}
     code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
-    .copy{position:absolute;top:9px;right:9px;border:1px solid #40516b;background:#17243a;color:var(--text);border-radius:7px;padding:5px 9px;cursor:pointer;font-size:.78rem}
     .note{border-left:3px solid var(--accent);padding:12px 16px;background:#102333;border-radius:0 9px 9px 0;color:var(--muted)}
     .steps{counter-reset:step;display:grid;gap:12px}.step{counter-increment:step;display:flex;gap:14px;align-items:flex-start}.step:before{content:counter(step);display:grid;place-items:center;flex:0 0 30px;height:30px;border-radius:50%;background:var(--accent);color:#07141a;font-weight:800}
     footer{border-top:1px solid var(--line);padding:30px 0 45px;color:var(--muted);margin-top:30px}
     @media(max-width:600px){.hero{padding:52px 0 35px}.brand img{width:44px;height:44px}nav{gap:12px}.wrap{width:min(100% - 26px,1100px)}}
   /* greenServeFE GSVE syntax palette — aligned with the Aurora VS Code theme */
-.gsve-code{color:#EAF2FF}.gsve-comment{color:#83BFA8;font-style:italic}.gsve-keyword{color:#FF6BCB;font-weight:700}.gsve-string{color:#B7F774}.gsve-number{color:#64D8FF;font-weight:700}.gsve-function{color:#FFD166;font-weight:700}.gsve-member{color:#52E0D0;font-weight:700}.gsve-builtin{color:#C7A6FF;font-weight:700}.gsve-module{color:#5CE1E6;font-weight:700}.gsve-key{color:#8FC7FF}.gsve-constant{color:#FFB86C;font-weight:700}.gsve-operator{color:#FF9F68;font-weight:700}.gsve-punctuation{color:#A9B8D0}</style>
+.gsve-code{color:#EAF2FF}.gsve-variable{color:#E8EEFF}.gsve-parameter{color:#F6A6FF;font-style:italic}.gsve-escape{color:#FFE27A;font-weight:700}.gsve-palette{display:grid;gap:10px}.gsve-palette>div{display:grid;grid-template-columns:18px 1fr auto;gap:9px;align-items:center;font-size:.9rem}.gsve-palette code{color:var(--muted)}.swatch{width:16px;height:16px;border-radius:4px;border:1px solid #ffffff55}.gsve-comment{color:#83BFA8;font-style:italic}.gsve-keyword{color:#FF6BCB;font-weight:700}.gsve-string{color:#B7F774}.gsve-number{color:#64D8FF;font-weight:700}.gsve-function{color:#FFD166;font-weight:700}.gsve-member{color:#52E0D0;font-weight:700}.gsve-builtin{color:#C7A6FF;font-weight:700}.gsve-module{color:#5CE1E6;font-weight:700}.gsve-key{color:#8FC7FF}.gsve-constant{color:#FFB86C;font-weight:700}.gsve-operator{color:#FF9F68;font-weight:700}.gsve-punctuation{color:#A9B8D0}</style>
 </head>
 <body>
 <header>
@@ -94,6 +93,80 @@
     </div>
   </section>
 
+
+  <section id="syntax-colors" class="wrap">
+    <div class="section-head">
+      <h2>GSVE syntax and Aurora color specification</h2>
+      <p class="muted">The official greenServeFE syntax extension uses the <strong>greenServeFE Aurora</strong> dark theme. The color samples below are rendered with their actual hexadecimal values, not just color names. Use these token categories when implementing GSVE highlighting in an editor, IDE, website, or documentation tool.</p>
+    </div>
+    <div class="card">
+      <h3>Live GSVE color demonstration</h3>
+      <p class="muted">Each token is displayed using the same foreground color defined by the Aurora theme.</p>
+      <pre class="gsve-code"><code><span class="gsve-comment"># Aurora syntax demonstration</span>
+<span class="gsve-keyword">import</span> <span class="gsve-module">gs_math</span>;
+<span class="gsve-keyword">define</span> <span class="gsve-variable">temperature</span> = <span class="gsve-number">36.5</span>;
+<span class="gsve-keyword">define</span> <span class="gsve-variable">message</span> = <span class="gsve-string">"Hello, greenServeFE!"</span>;
+<span class="gsve-keyword">func</span> <span class="gsve-function">describe</span>(<span class="gsve-parameter">value</span>) {
+    <span class="gsve-builtin">print</span>(<span class="gsve-string">"Reading:"</span>, <span class="gsve-parameter">value</span>);
+    <span class="gsve-builtin">print</span>(<span class="gsve-member">gs_math.round</span>(<span class="gsve-parameter">value</span>));
+}
+<span class="gsve-keyword">if</span> (<span class="gsve-constant">true</span> && temperature &gt; <span class="gsve-number">0</span>) {
+    describe(temperature <span class="gsve-operator">+</span> <span class="gsve-number">1</span>);
+}
+<span class="gsve-variable">config</span> = { <span class="gsve-key">mode</span>: <span class="gsve-string">"demo"</span>, <span class="gsve-key">enabled</span>: <span class="gsve-constant">false</span> };</code></pre>
+      <p class="muted">The sample is illustrative syntax highlighting; use only language constructs and APIs supported by the installed greenServeFE runtime.</p>
+    </div>
+    <div class="grid" style="margin-top:16px">
+      <article class="card"><h3>Token colors</h3><div class="gsve-palette">
+        <div><span class="swatch" style="background:#EAF2FF"></span><b>Default text / identifiers</b><code>#EAF2FF</code></div>
+        <div><span class="swatch" style="background:#83BFA8"></span><b>Comments</b><code>#83BFA8</code></div>
+        <div><span class="swatch" style="background:#FF6BCB"></span><b>Control and declaration keywords</b><code>#FF6BCB</code></div>
+        <div><span class="swatch" style="background:#B7F774"></span><b>Strings</b><code>#B7F774</code></div>
+        <div><span class="swatch" style="background:#FFE27A"></span><b>String escape sequences</b><code>#FFE27A</code></div>
+        <div><span class="swatch" style="background:#64D8FF"></span><b>Numeric literals</b><code>#64D8FF</code></div>
+        <div><span class="swatch" style="background:#FFD166"></span><b>Function declarations and calls</b><code>#FFD166</code></div>
+        <div><span class="swatch" style="background:#52E0D0"></span><b>Member function calls</b><code>#52E0D0</code></div>
+        <div><span class="swatch" style="background:#C7A6FF"></span><b>Built-in functions</b><code>#C7A6FF</code></div>
+        <div><span class="swatch" style="background:#5CE1E6"></span><b>Native modules / import namespaces</b><code>#5CE1E6</code></div>
+        <div><span class="swatch" style="background:#8FC7FF"></span><b>Object keys / properties</b><code>#8FC7FF</code></div>
+        <div><span class="swatch" style="background:#FFB86C"></span><b>Language constants (true, false, null)</b><code>#FFB86C</code></div>
+        <div><span class="swatch" style="background:#FF9F68"></span><b>Operators</b><code>#FF9F68</code></div>
+        <div><span class="swatch" style="background:#A9B8D0"></span><b>Punctuation</b><code>#A9B8D0</code></div>
+        <div><span class="swatch" style="background:#F6A6FF"></span><b>Function parameters</b><code>#F6A6FF</code></div>
+      </div></article>
+      <article class="card"><h3>Syntax categories</h3>
+        <ul class="muted">
+          <li><b>Comments:</b> begin with <code>#</code> and continue to the end of the line.</li>
+          <li><b>Strings:</b> single- or double-quoted; escaped characters receive a separate scope.</li>
+          <li><b>Keywords:</b> <code>define</code>, <code>if</code>, <code>else</code>, <code>for</code>, <code>in</code>, <code>while</code>, <code>func</code>, <code>return</code>, <code>break</code>, <code>continue</code>, <code>from</code>, <code>import</code>.</li>
+          <li><b>Constants:</b> <code>true</code>, <code>false</code>, <code>null</code>.</li>
+          <li><b>Built-ins:</b> <code>print</code>, <code>interact</code>, <code>len</code>, <code>str</code>, <code>num</code>, <code>type</code>, <code>range</code>, <code>push</code>, <code>pop</code>, <code>keys</code>, <code>values</code>, <code>contains</code>, <code>clone</code>, <code>merge</code>, <code>has</code>, <code>class</code>, <code>new</code>, <code>instanceof</code>.</li>
+          <li><b>Modules:</b> <code>server</code>, <code>construct</code>, <code>gsnum</code>, <code>gs_table</code>, <code>gs_compute</code>, <code>gs_string</code>, <code>gs_json</code>, <code>gs_csv</code>, <code>gs_path</code>, <code>gs_time</code>, <code>gs_random</code>, <code>gs_uuid</code>, <code>gs_validate</code>, <code>gs_env</code>, <code>gs_hash</code>, <code>gs_base64</code>, <code>gs_math</code>, <code>gs_url</code>, <code>gs_file</code>, <code>gs_http</code>, <code>gs_crypto</code>, <code>gs_db</code>, <code>gs_log</code>, <code>gs_form</code>, <code>gs_object</code>, <code>gs_plot</code>, <code>gs_regex</code>, <code>gs_statistics</code>, <code>gs_test</code>, <code>gs_brain</code>, <code>gs_physics</code>, <code>gs_chemistry</code>, <code>gs_signal</code>, <code>gs_xml</code>, <code>gs_yaml</code>, <code>gs_compat</code>.</li>
+          <li><b>Other scopes:</b> function names, member calls, object keys, numbers, operators, punctuation and identifiers.</li>
+        </ul>
+      </article>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <h3>Implementing the palette in another editor</h3>
+      <p class="muted">A compatible highlighter should tokenize GSVE source first, then map each token category to the exact Aurora foreground value. Do not color tokens using substring matching alone: comments and quoted strings must be recognized before identifiers, keywords, and operators so their contents are not recolored accidentally.</p>
+      <pre><code>/* Example CSS token mapping */
+.gsve-comment   { color: #83BFA8; font-style: italic; }
+.gsve-keyword   { color: #FF6BCB; font-weight: 700; }
+.gsve-string    { color: #B7F774; }
+.gsve-escape    { color: #FFE27A; font-weight: 700; }
+.gsve-number    { color: #64D8FF; font-weight: 700; }
+.gsve-function  { color: #FFD166; font-weight: 700; }
+.gsve-member    { color: #52E0D0; font-weight: 700; }
+.gsve-builtin   { color: #C7A6FF; font-weight: 700; }
+.gsve-module    { color: #5CE1E6; font-weight: 700; }
+.gsve-property  { color: #8FC7FF; }
+.gsve-constant  { color: #FFB86C; font-weight: 700; }
+.gsve-operator  { color: #FF9F68; font-weight: 700; }
+.gsve-punctuation { color: #A9B8D0; }</code></pre>
+      <p class="muted">The authoritative grammar scopes and theme are maintained in the <a href="https://github.com/dominexmacedon-docs/greenServeFE-syntax-extension">greenServeFE syntax extension</a>. Refer to its TextMate grammar and Aurora color-theme JSON when building an editor integration.</p>
+    </div>
+  </section>
+
   <section id="guides" class="wrap">
     <div class="section-head"><h2>Download the language guides</h2><p class="muted">PDF editions from the greenServeFE language guide release.</p></div>
     <div class="grid">
@@ -109,7 +182,7 @@
     <div class="steps">
       <div class="step"><div><h3>Install MacoraOne</h3><p class="muted">Run this complete command in a Linux terminal. It downloads the v1.0.2 release, extracts the executable, and installs it as one.</p></div></div>
     </div>
-    <pre><button class="copy" type="button">Copy</button><code>set -eu
+    <pre><code>set -eu
 
 URL="https://github.com/MacoraOne/MacoraOne/releases/download/one-v1.0.2/macoraone-linux-x86_64.zip"
 TMP_DIR="$(mktemp -d)"
@@ -136,7 +209,7 @@ one --help</code></pre>
     <div class="note">Requirements: curl, unzip, and permission to install the executable into /usr/local/bin. If your Linux distribution does not already include curl or unzip, install those system packages first.</div>
 
     <div class="section-head" style="margin-top:32px"><h2>Install greenServeFE</h2><p class="muted">Use MacoraOne to install or remove the language package.</p></div>
-    <pre><button class="copy" type="button">Copy</button><code># Install the greenServeFE language package
+    <pre><code># Install the greenServeFE language package
 one install greenServeFE
 
 # Check the command
@@ -149,13 +222,13 @@ one uninstall greenServeFE</code></pre>
   <section id="modules" class="wrap">
     <div class="section-head"><h2>Manage modules with MacoraOne</h2><p class="muted">Install and uninstall packages individually. Use the exact package name and version published in the MacoraOne catalogue.</p></div>
     <div class="grid">
-      <article class="card"><h3>Install one module</h3><p>Install a module by its package name, optionally with a published version.</p><pre><button class="copy" type="button">Copy</button><code>one install server
+      <article class="card"><h3>Install one module</h3><p>Install a module by its package name, optionally with a published version.</p><pre><code>one install server
 one install server@1.0.0</code></pre></article>
-      <article class="card"><h3>Install another module</h3><p>Run a separate command for each additional module.</p><pre><button class="copy" type="button">Copy</button><code>one install gs_regex
+      <article class="card"><h3>Install another module</h3><p>Run a separate command for each additional module.</p><pre><code>one install gs_regex
 one install gs_json</code></pre></article>
-      <article class="card"><h3>Uninstall a module</h3><p>Remove an individual module by package name.</p><pre><button class="copy" type="button">Copy</button><code>one uninstall server
+      <article class="card"><h3>Uninstall a module</h3><p>Remove an individual module by package name.</p><pre><code>one uninstall server
 one uninstall gs_regex</code></pre></article>
-      <article class="card"><h3>Install or uninstall all</h3><p>Use the catalogue-wide commands when you intend to manage all available packages.</p><pre><button class="copy" type="button">Copy</button><code>one install all
+      <article class="card"><h3>Install or uninstall all</h3><p>Use the catalogue-wide commands when you intend to manage all available packages.</p><pre><code>one install all
 one uninstall all</code></pre></article>
     </div>
     <p class="note">MacoraOne is the unified project for package and tool management. For predictable results, install one package per command; repeat the command for each module you need. The availability of a package depends on the published catalogue.</p>
@@ -165,13 +238,13 @@ one uninstall all</code></pre></article>
   <section id="start" class="wrap">
     <div class="section-head"><h2>Your first greenServeFE program</h2><p class="muted">Create a file named hello.gsve, then run it with the greenServeFE command.</p></div>
     <h3>1. Create hello.gsve</h3>
-    <pre><button class="copy" type="button">Copy</button><code>print("Hello, greenServeFE!");
+    <pre><code>print("Hello, greenServeFE!");
 print("Welcome to programming.");</code></pre>
     <h3>2. Run the program</h3>
-    <pre><button class="copy" type="button">Copy</button><code>greenServeFE hello.gsve</code></pre>
+    <pre><code>greenServeFE hello.gsve</code></pre>
     <h3>Example using a module</h3>
     <p class="muted">After installing the corresponding module, import it in your program and call its functions.</p>
-    <pre><button class="copy" type="button">Copy</button><code>import gs_regex;
+    <pre><code>import gs_regex;
 
 define email_shape = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
 
@@ -207,20 +280,5 @@ print(gs_regex.replace_first("green green", "green", "blue"));</code></pre>
     <p>Language documentation, installation guidance, and learning resources.</p>
   </div>
 </footer>
-<script>
-  document.querySelectorAll(".copy").forEach(function(button){
-    button.addEventListener("click", async function(){
-      const code = button.parentElement.querySelector("code").innerText;
-      try {
-        await navigator.clipboard.writeText(code);
-        const old = button.innerText;
-        button.innerText = "Copied";
-        setTimeout(function(){button.innerText = old;}, 1400);
-      } catch (error) {
-        button.innerText = "Select code";
-      }
-    });
-  });
-</script>
 <script>(function(){const keywords=new Set(["define","if","else","for","in","while","func","return","break","continue","import","from"]),constants=new Set(["true","false","null"]),builtins=new Set(["print","interact","len","str","num","type","range","push","pop","keys","values","contains","clone","merge","has","class","new","instanceof"]),modules=new Set(["server","construct","gsnum","gs_table","gs_compute","gs_math","gs_string","gs_json","gs_csv","gs_path","gs_time","gs_random","gs_uuid","gs_validate","gs_env","gs_hash","gs_base64","gs_url","gs_file","gs_crypto","gs_db","gs_http","gs_log","gs_form","gs_object","gs_plot","gs_regex","gs_statistics","gs_test","gs_brain","gs_physics","gs_chemistry","gs_signal"]);const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));const token=/#.*$|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|\b[A-Za-z_][A-Za-z0-9_]*\b|(?:\d+\.?(?:\d*)|\.\d+)(?:[eE][+-]?\d+)?|&&|\|\||==|!=|<=|>=|[+*/%!=<>-]|[{}\[\]();,.]/gm;function paint(source){let out="",last=0,m;token.lastIndex=0;while((m=token.exec(source))){out+=esc(source.slice(last,m.index));const t=m[0],prev=source.slice(0,m.index).trimEnd(),next=source.slice(token.lastIndex).trimStart();let cls="";if(t[0]==="#")cls="gsve-comment";else if(t[0]==='"'||t[0]==="'")cls="gsve-string";else if(/^\d|^\.\d/.test(t))cls="gsve-number";else if(keywords.has(t))cls="gsve-keyword";else if(constants.has(t))cls="gsve-constant";else if(builtins.has(t))cls="gsve-builtin";else if(modules.has(t))cls="gsve-module";else if(/^[A-Za-z_]/.test(t)){if(prev.endsWith(".")&&next.startsWith("("))cls="gsve-member";else if(next.startsWith("("))cls="gsve-function";else if(next.startsWith(":"))cls="gsve-key";}else if(/^(?:&&|\|\||==|!=|<=|>=|[+*/%!=<>-])$/.test(t))cls="gsve-operator";else cls="gsve-punctuation";out+=cls?'<span class="'+cls+'">'+esc(t)+'</span>':esc(t);last=token.lastIndex;}return out+esc(source.slice(last));}document.querySelectorAll("pre").forEach(pre=>{const src=pre.textContent||"";if(/^\s*(?:#|import\b|from\b|define\b|func\b|if\s*\(|while\s*\(|for\s*\(|print\s*\(|return\b|break\s*;|continue\s*;)/m.test(src)){pre.classList.add("gsve-code");pre.innerHTML=paint(src);}});})();</script></body>
 </html>
