@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#0b1120">
-<meta name="description" content="Complete gs_compute 2.1.0 API reference for greenServeFE: financial formulas, statistics, vector and matrix algebra, numerical methods, unit conversion, tolerances, benchmarking and seeded random sampling.">
+<meta name="description" content="Complete gs_compute 1.0.2 API reference for greenServeFE: financial formulas, statistics, vector and matrix algebra, numerical methods, unit conversion, tolerances, benchmarking and seeded random sampling.">
 <meta name="keywords" content="greenServeFE, GSVE, gs_compute, numerical computing, matrix, vector, statistics, financial functions, scientific computing, API reference">
 <meta name="author" content="Dominex Macedon"><meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://dominexmacedon-docs.github.io/greenServeFE-language/gs_compute.html">
 <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/dominexmacedon-docs/greenServeFE-language/main/greenServeFE-logo.png">
-<meta property="og:type" content="article"><meta property="og:site_name" content="greenServeFE Language Guide"><meta property="og:title" content="gs_compute Complete API Reference | greenServeFE"><meta property="og:description" content="Complete function signatures, argument rules, algorithms and practical GSVE examples for gs_compute 2.1.0."><meta property="og:url" content="https://dominexmacedon-docs.github.io/greenServeFE-language/gs_compute.html"><meta property="og:image" content="https://raw.githubusercontent.com/dominexmacedon-docs/greenServeFE-language/main/greenServeFE-logo.png">
-<meta name="twitter:card" content="summary"><meta name="twitter:title" content="gs_compute Complete API Reference | greenServeFE"><meta name="twitter:description" content="Complete gs_compute 2.1.0 API reference and GSVE usage examples.">
+<meta property="og:type" content="article"><meta property="og:site_name" content="greenServeFE Language Guide"><meta property="og:title" content="gs_compute Complete API Reference | greenServeFE"><meta property="og:description" content="Complete function signatures, argument rules, algorithms and practical GSVE examples for gs_compute 1.0.2."><meta property="og:url" content="https://dominexmacedon-docs.github.io/greenServeFE-language/gs_compute.html"><meta property="og:image" content="https://raw.githubusercontent.com/dominexmacedon-docs/greenServeFE-language/main/greenServeFE-logo.png">
+<meta name="twitter:card" content="summary"><meta name="twitter:title" content="gs_compute Complete API Reference | greenServeFE"><meta name="twitter:description" content="Complete gs_compute 1.0.2 API reference and GSVE usage examples.">
 <title>gs_compute Complete API Reference | greenServeFE Documentation</title>
 <style>
 :root{color-scheme:dark;--bg:#0b1120;--panel:#111c2e;--panel2:#16243a;--text:#e8eef8;--muted:#a8b6ca;--line:#293a52;--accent:#69e0bd;--link:#8bb8ff;--code:#080e19}
@@ -26,7 +26,7 @@ main{padding:42px 0 70px}.eyebrow{color:var(--accent);text-transform:uppercase;f
 <header><div class="wrap"><a class="brand" href="index.html"><img src="https://raw.githubusercontent.com/dominexmacedon-docs/greenServeFE-language/main/greenServeFE-logo.png" alt="greenServeFE logo"><span><strong>greenServeFE</strong><small>Language, VM and Native Module Reference</small></span></a><nav aria-label="Documentation"><a href="index.html">Home</a><a href="language.html">Language</a><a href="syntax.html">Syntax</a><a href="vm.html">Virtual Machine</a><a href="modules.html">Modules</a><a href="server.html">Server</a><a href="construct.html">Construct</a></nav></div></header>
 <main class="wrap">
 <p class="crumb"><a href="index.html">Documentation home</a> / <a href="modules.html">Native modules</a> / gs_compute</p>
-<div class="eyebrow">Native module reference · version 2.1.0</div>
+<div class="eyebrow">Native module reference · version 1.0.2</div>
 <h1>gs_compute: Complete API and Usage</h1>
 <p class="lead">A native C numerical toolkit for financial calculations, descriptive statistics, vectors, matrix algebra, linear systems, numerical integration and differentiation, unit conversion, numeric comparisons, benchmarking, and reproducible random sampling. This reference follows the module's exported functions and validation logic.</p>
 <div class="panel"><strong>At a glance</strong><p><span class="tag">82 exported functions</span> <span class="tag">Native C CPU</span> <span class="tag">IEEE-754 double</span> <span class="tag">Module ABI v1</span></p><p class="muted">Import the module once with <code>import gs_compute;</code>, then call its functions through the module object. The module does not add language keywords or change the VM.</p></div>
@@ -153,7 +153,7 @@ print(slope);</code></pre></div>
 
 
 <h2 id="arrays">9. NumPy-inspired array APIs</h2>
-<p>The 2.1.0 native implementation adds a compact array-computing layer. It works with ordinary GSVE arrays and rectangular nested arrays; it does not introduce a new array type, syntax, opcode, or VM feature. The VM still compiles GSVE source to bytecode and invokes these functions through the existing native-module ABI.</p>
+<p>The 1.0.2 native implementation adds a compact array-computing layer. It works with ordinary GSVE arrays and rectangular nested arrays; it does not introduce a new array type, syntax, opcode, or VM feature. The VM still compiles GSVE source to bytecode and invokes these functions through the existing native-module ABI.</p>
 <div class="notice"><strong>Array model:</strong> vectors are one-dimensional arrays. Matrices are rectangular arrays of row arrays. Unary functions below accept a numeric array. Binary functions accept two numbers, a number and an array, or two equal-length arrays. This is scalar-to-array/equal-length broadcasting only—not arbitrary N-dimensional broadcasting or full NumPy compatibility.</div>
 
 <h3>Array construction and shape</h3>
@@ -245,7 +245,7 @@ define samples = gs_compute.random_array(5, -1, 1);
 print(samples);</code></pre></div>
 
 <h2 id="metadata">13. Module metadata</h2>
-<div class="api"><h3><code>info()</code></h3><p>Returns metadata about the loaded module:</p><ul><li><code>name</code>: <code>"gs_compute"</code></li><li><code>version</code>: <code>"2.1.0"</code></li><li><code>backend</code>: <code>"native C CPU"</code></li><li><code>numeric_type</code>: <code>"IEEE-754 double"</code></li><li><code>status</code>: a capability summary string</li></ul><pre><code>define details = gs_compute.info();
+<div class="api"><h3><code>info()</code></h3><p>Returns metadata about the loaded module:</p><ul><li><code>name</code>: <code>"gs_compute"</code></li><li><code>version</code>: <code>"1.0.2"</code></li><li><code>backend</code>: <code>"native C CPU"</code></li><li><code>numeric_type</code>: <code>"IEEE-754 double"</code></li><li><code>status</code>: a capability summary string</li></ul><pre><code>define details = gs_compute.info();
 print(details.name);
 print(details.version);
 print(details.backend);</code></pre></div>
@@ -318,7 +318,7 @@ print(gs_compute.stats(samples));</code></pre>
 
 
 <h2 id="api-catalog">17. Complete exported API catalogue</h2>
-<p>The following catalogue is cross-checked against <code>greenServeFE_module_init</code> in the native <code>gs_compute.c</code>. These are the complete 82 exported members in version <code>2.1.0</code>; names are case-sensitive and are called as <code>gs_compute.name(...)</code>.</p>
+<p>The following catalogue is cross-checked against <code>greenServeFE_module_init</code> in the native <code>gs_compute.c</code>. These are the complete 82 exported members in version <code>1.0.2</code>; names are case-sensitive and are called as <code>gs_compute.name(...)</code>.</p>
 <div class="table-wrap"><table><thead><tr><th>Group</th><th>Exported API</th><th>Purpose / result</th></tr></thead><tbody>
 <tr><td>Metadata</td><td><code>info()</code></td><td>Module name, version, backend, numeric representation and capability status.</td></tr>
 <tr><td>Finance</td><td><code>percent</code>, <code>percent_change</code>, <code>discount</code>, <code>tax</code>, <code>tip</code>, <code>compound</code>, <code>loan_payment</code></td><td>Percentage calculations, sale prices, tax, tips, compound growth and loan payments.</td></tr>
@@ -457,5 +457,5 @@ print(gs_compute.info());</code></pre>
 <h2 id="related">22. Related documentation</h2>
 <ul><li><a href="syntax.html">Complete language syntax</a></li><li><a href="language.html">GSVE language reference</a></li><li><a href="vm.html">Virtual machine reference</a></li><li><a href="modules.html">Native module catalog</a></li><li><a href="native-api.html">Native module ABI and loading</a></li></ul>
 </main>
-<footer><div class="wrap"><strong>greenServeFE</strong><p>Developed by Dominex Macedon. <a href="index.html">Documentation home</a></p><p class="muted">This page documents the exported gs_compute 2.1.0 API and behavior implemented by the native module. Availability depends on building and installing the shared object compatible with the VM's native module ABI.</p></div></footer>
+<footer><div class="wrap"><strong>greenServeFE</strong><p>Developed by Dominex Macedon. <a href="index.html">Documentation home</a></p><p class="muted">This page documents the exported gs_compute 1.0.2 API and behavior implemented by the native module. Availability depends on building and installing the shared object compatible with the VM's native module ABI.</p></div></footer>
 <script>(function(){const keywords=new Set(["define","if","else","for","in","while","func","return","break","continue","import","from"]),constants=new Set(["true","false","null"]),builtins=new Set(["print","interact","len","str","num","type","range","push","pop","keys","values","contains","clone","merge","has","class","new","instanceof"]),modules=new Set(["server","construct","gsnum","gs_table","gs_compute","gs_math","gs_string","gs_json","gs_csv","gs_path","gs_time","gs_random","gs_uuid","gs_validate","gs_env","gs_hash","gs_base64","gs_url","gs_file","gs_crypto","gs_db","gs_http","gs_log","gs_form","gs_object","gs_plot","gs_regex","gs_statistics","gs_test","gs_brain","gs_physics","gs_chemistry","gs_signal"]);const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));const token=/#.*$|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|\b[A-Za-z_][A-Za-z0-9_]*\b|(?:\d+\.?(?:\d*)|\.\d+)(?:[eE][+-]?\d+)?|&&|\|\||==|!=|<=|>=|[+*/%!=<>-]|[{}\[\]();,.]/gm;function paint(source){let out="",last=0,m;token.lastIndex=0;while((m=token.exec(source))){out+=esc(source.slice(last,m.index));const t=m[0],prev=source.slice(0,m.index).trimEnd(),next=source.slice(token.lastIndex).trimStart();let cls="";if(t[0]==="#")cls="gsve-comment";else if(t[0]==='"'||t[0]==="'")cls="gsve-string";else if(/^\d|^\.\d/.test(t))cls="gsve-number";else if(keywords.has(t))cls="gsve-keyword";else if(constants.has(t))cls="gsve-constant";else if(builtins.has(t))cls="gsve-builtin";else if(modules.has(t))cls="gsve-module";else if(/^[A-Za-z_]/.test(t)){if(prev.endsWith(".")&&next.startsWith("("))cls="gsve-member";else if(next.startsWith("("))cls="gsve-function";else if(next.startsWith(":"))cls="gsve-key";}else if(/^(?:&&|\|\||==|!=|<=|>=|[+*/%!=<>-])$/.test(t))cls="gsve-operator";else cls="gsve-punctuation";out+=cls?'<span class="'+cls+'">'+esc(t)+'</span>':esc(t);last=token.lastIndex;}return out+esc(source.slice(last));}document.querySelectorAll("pre").forEach(pre=>{const src=pre.textContent||"";if(/^\s*(?:#|import\b|from\b|define\b|func\b|if\s*\(|while\s*\(|for\s*\(|print\s*\(|return\b|break\s*;|continue\s*;)/m.test(src)){pre.classList.add("gsve-code");pre.innerHTML=paint(src);}});})();</script></body></html>
