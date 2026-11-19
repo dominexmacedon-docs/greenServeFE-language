@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#10151d">
+  <title>greenServeFE — Normal Program Runner</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/material-darker.min.css">
+  <style>
+    :root { color-scheme: dark; font-family: Inter, system-ui, sans-serif; background:#10151d; color:#e7edf5; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; background:radial-gradient(circle at 15% 0%,#1d3540 0,transparent 38%),#10151d; }
+    header { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:18px clamp(16px,4vw,48px); border-bottom:1px solid #293440; }
+    .brand { font-size:19px; font-weight:750; letter-spacing:.2px; } .brand span { color:#69d6a5; }
+    .sub { color:#93a1b2; font-size:13px; margin-top:4px; }
+    main { width:min(1200px,94vw); margin:28px auto; }
+    .toolbar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:14px; }
+    button { border:1px solid #354454; border-radius:8px; background:#1b2632; color:#e7edf5; padding:10px 15px; font-weight:650; cursor:pointer; }
+    button:hover { border-color:#69d6a5; } button.primary { background:#25865e; border-color:#25865e; color:white; } button:disabled { opacity:.6; cursor:wait; }
+    .hint { color:#91a0b1; font-size:13px; margin-left:auto; }
+    .workspace { display:grid; grid-template-columns:minmax(0,1.4fr) minmax(260px,.8fr); gap:14px; }
+    .panel { min-width:0; overflow:hidden; border:1px solid #2c3947; border-radius:12px; background:#151e28; }
+    .panel-title { padding:12px 15px; border-bottom:1px solid #2c3947; color:#aab8c7; font-size:13px; font-weight:700; }
+    .CodeMirror { height: min(68vh,680px); font:14px/1.6 Consolas,monospace; }
+    #source { display:none; }
+    #output { height:min(68vh,680px); overflow:auto; margin:0; padding:16px; white-space:pre-wrap; overflow-wrap:anywhere; color:#c6f3d8; font:13px/1.65 Consolas,monospace; }
+    footer { color:#718194; text-align:center; font-size:12px; padding:18px; }
+    @media(max-width:760px) { .workspace { grid-template-columns:1fr; } .CodeMirror,#output { height:42vh; } .hint { width:100%; margin-left:0; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div><div class="brand"><span>green</span>ServeFE</div><div class="sub">Standalone program executor</div></div>
+    <div class="sub">Developed by Dominex Macedon</div>
+  </header>
+  <main>
+    <div class="toolbar">
+      <button class="primary" id="run">▶ Run</button>
+      <button id="sample">Load sample</button>
+      <button id="clear">Clear</button>
+      <span class="hint">Ctrl + Enter to execute · Normal programs only</span>
+    </div>
+    <div class="workspace">
+      <section class="panel">
+        <div class="panel-title">program.gsve</div>
+        <textarea id="source" spellcheck="false"></textarea>
+      </section>
+      <section class="panel">
+        <div class="panel-title">Program output</div>
+        <pre id="output">Ready. Load the sample or write a greenServeFE program, then press Run.</pre>
+      </section>
+    </div>
+  </main>
+  <footer>greenServeFE Programming Language · Normal program runner</footer>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+  <script src="greenServeFE-wasm.js"></script>
+  <script>
+  (function () {
+    "use strict";
+    const sample = [
+      "# A normal standalone greenServeFE program",
+      "define total = 0;",
+      "for (n in [1, 2, 3, 4]) {",
+      "    total = total + n;",
+      "}",
+      "",
+      "func add(a, b) {",
+      "    return a + b;",
+      "}",
+      "",
+      "define result = add(total, 5);",
+      "show(\"total:\", total);",
+      "show(\"result:\", result);",
+      "show(\"greenServeFE is running\");"
+    ].join("\n");
+    const area = document.getElementById("source");
+    const output = document.getElementById("output");
+    const runButton = document.getElementById("run");
+    let editor = null;
+    let wasmBytes = null;
+    if (window.CodeMirror) {
+      CodeMirror.defineMode("gsve", function () {
+        const keywords = /^(?:define|if|else|for|in|while|func|return|break|continue|import|from)\b/;
+        const builtins = /^(?:print|show|interact|len|str|num|type|range|push|pop|keys|values|contains|clone|merge|has|class|new|instanceof)\b/;
+        return { token: function (stream) {
+          if (stream.sol() && stream.match(/\s*#.*$/)) return "comment";
+          if (stream.eatSpace()) return null;
+          if (stream.match(/"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'/)) return "string";
+          if (stream.match(/(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?/)) return "number";
+          if (stream.match(keywords)) return "keyword";
+          if (stream.match(builtins)) return "builtin";
+          if (stream.match(/^(?:true|false|null)\b/)) return "atom";
+          if (stream.match(/^[A-Za-z_][A-Za-z0-9_]*/)) return "variable";
+          if (stream.match(/^(?:==|!=|<=|>=|&&|\|\||[+\-*\/%=<>!])/)) return "operator";
+          if (stream.match(/^[{}()[\].,;:]/)) return "bracket";
+          stream.next(); return null;
+        }};
+      });
+      editor = CodeMirror.fromTextArea(area, {mode:"gsve",theme:"material-darker",lineNumbers:true,indentUnit:4,tabSize:4,lineWrapping:false,viewportMargin:20,extraKeys:{"Ctrl-Enter":runProgram,"Cmd-Enter":runProgram}});
+      editor.setValue(sample);
+    } else { area.style.display="block"; area.style.width="100%"; area.style.height="60vh"; area.value=sample; }
+    function sourceText(){ return editor ? editor.getValue() : area.value; }
+    function decodeBase64(data) {
+      const raw = atob(data), bytes = new Uint8Array(raw.length);
+      for(let i=0;i<raw.length;i++) bytes[i]=raw.charCodeAt(i);
+      return bytes;
+    }
+    async function loadWasm() {
+      if(wasmBytes) return wasmBytes;
+      const response = await fetch("greenServeFE-wasm.wasm");
+      if(!response.ok) throw new Error("Could not load greenServeFE-wasm.wasm.");
+      wasmBytes = new Uint8Array(await response.arrayBuffer());
+      return wasmBytes;
+    }
+    async function runProgram() {
+      const source = sourceText();
+      if(!source.trim()){ output.textContent="Write a program before running it."; return; }
+      if(/^\s*import\s+[A-Za-z_][A-Za-z0-9_]*/m.test(source)) {
+        output.textContent="Don't run modules here.\n\nThis page executes normal standalone greenServeFE programs only.";
+        return;
+      }
+      runButton.disabled=true; runButton.textContent="Running…"; output.textContent="Starting greenServeFE…";
+      const stdout=[], stderr=[];
+      try {
+        if(typeof window.createGreenServeFE!=="function") throw new Error("The greenServeFE WebAssembly loader did not start.");
+        const binary=await loadWasm();
+        const runtime=await window.createGreenServeFE({noInitialRun:true,wasmBinary:binary,print:line=>stdout.push(String(line)),printErr:line=>stderr.push(String(line))});
+        if(!runtime.FS || typeof runtime.FS.writeFile!=="function" || typeof runtime.callMain!=="function") throw new Error("The WebAssembly runtime is missing its file system or execution function.");
+        runtime.FS.writeFile("/program.gsve",source);
+        const code=runtime.callMain(["/program.gsve"]);
+        let text=stdout.join("\n");
+        if(stderr.length) text+=(text?"\n\n":"")+stderr.join("\n");
+        if(!text) text=code===0?"Program finished with no output.":"Program finished with exit code "+code+".";
+        else if(code!==0) text+="\n\nProcess exited with code "+code+".";
+        output.textContent=text;
+      } catch(error) { output.textContent="Runtime error: "+(error&&error.message?error.message:String(error))+(stderr.length?"\n\n"+stderr.join("\n"):""); }
+      finally { runButton.disabled=false; runButton.textContent="▶ Run"; }
+    }
+    runButton.addEventListener("click",runProgram);
+    document.getElementById("sample").addEventListener("click",function(){if(editor)editor.setValue(sample);else area.value=sample;output.textContent="Sample program loaded.";});
+    document.getElementById("clear").addEventListener("click",function(){if(editor)editor.setValue("");else area.value="";output.textContent="Editor cleared.";});
+    document.addEventListener("keydown",function(e){if((e.ctrlKey||e.metaKey)&&e.key==="Enter"){e.preventDefault();runProgram();}});
+  })();
+  </script>
+</body>
+</html>
